@@ -83,21 +83,6 @@ namespace JustFight {
     }
 
     class TankSystem : JobComponentSystem {
-        [BurstCompile]
-        struct MoveHealthBarJob : IJobForEach<TankToFollow, Translation> {
-            [ReadOnly] public ComponentDataFromEntity<LocalToWorld> localToWorldCmpts;
-            public void Execute ([ReadOnly] ref TankToFollow tankToFollowCmpt, ref Translation translationCmpt) {
-                translationCmpt.Value = localToWorldCmpts[tankToFollowCmpt.entity].Position + new float3 (-0.8f, 0, 0);
-            }
-        }
-
-        [BurstCompile]
-        struct ScaleHealthBarJob : IJobForEach<TankToFollow, NonUniformScale> {
-            [ReadOnly] public ComponentDataFromEntity<Health> healthCmpts;
-            public void Execute ([ReadOnly] ref TankToFollow tankToFollowCmpt, ref NonUniformScale scaleCmpt) {
-                scaleCmpt.Value.z = (float) healthCmpts[tankToFollowCmpt.entity].value / (float) healthCmpts[tankToFollowCmpt.entity].maxValue;
-            }
-        }
 
         [BurstCompile]
         struct InstantiateHealthBarJob : IJobForEachWithEntity<HealthBarPrefab, Translation> {
@@ -154,15 +139,13 @@ namespace JustFight {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var moveHealthBarJobHandle = new MoveHealthBarJob { localToWorldCmpts = GetComponentDataFromEntity<LocalToWorld> (true) }.Schedule (this, inputDeps);
-            var scaleHealthBarJobHandle = new ScaleHealthBarJob { healthCmpts = GetComponentDataFromEntity<Health> (true) }.Schedule (this, inputDeps);
-            var instantiateHealthBarJobHandle = new InstantiateHealthBarJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, moveHealthBarJobHandle);
+            var instantiateHealthBarJobHandle = new InstantiateHealthBarJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, inputDeps);
             var moveTankJobHandle = new MoveTankJob ().Schedule (this, jumpTankJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (instantiateHealthBarJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
-            return JobHandle.CombineDependencies (JobHandle.CombineDependencies (scaleHealthBarJobHandle, instantiateHealthBarJobHandle), JobHandle.CombineDependencies (destroyTankJobHandle, moveTankJobHandle));
+            return JobHandle.CombineDependencies (instantiateHealthBarJobHandle, destroyTankJobHandle, moveTankJobHandle);
         }
     }
 }
