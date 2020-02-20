@@ -15,7 +15,7 @@ namespace JustFight {
             public EntityCommandBuffer.Concurrent ecb;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthBarPrefab healthBarPrefabCmpt, [ReadOnly] ref TankTurretPrefab turretPrefabCmpt, [ReadOnly] ref Translation translationCmpt) {
                 var healthBarEntity = ecb.Instantiate (entityInQueryIndex, healthBarPrefabCmpt.entity);
-                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankToFollow { entity = entity, offset = new float3 (-0.8f, 0, 0) });
+                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankToFollow { entity = entity, offset = new float3 (-1.8f, 0, 0) });
                 ecb.RemoveComponent<HealthBarPrefab> (entityInQueryIndex, entity);
                 ecb.AddComponent (entityInQueryIndex, entity, new HealthBarInstance { entity = healthBarEntity });
 
