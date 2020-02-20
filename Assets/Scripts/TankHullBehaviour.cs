@@ -51,6 +51,16 @@ namespace JustFight {
     }
 
     [Serializable]
+    struct TankTurretPrefab : IComponentData {
+        public Entity entity;
+    }
+
+    [Serializable]
+    struct TankTurretInstance : IComponentData {
+        public Entity entity;
+    }
+
+    [Serializable]
     struct HealthBarPrefab : IComponentData {
         public Entity entity;
     }
@@ -61,12 +71,13 @@ namespace JustFight {
     }
 
     [RequiresEntityConversion]
-    class TankBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
+    class TankHullBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public int teamId = 0;
         public float jumpSpeed = 10;
         public float jumpRecoveryTime = 1.25f;
         public GameObject healthBarPrefab = null;
         public int maxHealth = 100;
+        public GameObject tankTurretPrefab = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponentData (entity, new TankTeam { id = teamId });
             dstManager.AddComponent<MoveInput> (entity);
@@ -76,23 +87,29 @@ namespace JustFight {
             dstManager.AddComponentData (entity, new JumpState { speed = jumpSpeed, recoveryTime = jumpRecoveryTime });
             dstManager.AddComponentData (entity, new Health { maxValue = maxHealth, value = maxHealth });
             dstManager.AddComponentData (entity, new HealthBarPrefab { entity = conversionSystem.GetPrimaryEntity (healthBarPrefab) });
+            dstManager.AddComponentData (entity, new TankTurretPrefab { entity = conversionSystem.GetPrimaryEntity (tankTurretPrefab) });
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
             referencedPrefabs.Add (healthBarPrefab);
+            referencedPrefabs.Add (tankTurretPrefab);
         }
     }
 
-    class TankSystem : JobComponentSystem {
+    class TankHullSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct InstantiateHealthBarJob : IJobForEachWithEntity<HealthBarPrefab, Translation> {
+        struct InstantiateHealthBarAndTankTurretJob : IJobForEachWithEntity<HealthBarPrefab, TankTurretPrefab, Translation> {
             public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthBarPrefab prefabCmpt, [ReadOnly] ref Translation translationCmpt) {
-                var healthBarEntity = ecb.Instantiate (entityInQueryIndex, prefabCmpt.entity);
-                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new Translation { Value = translationCmpt.Value + new float3 (-0.8f, 0, 0) });
-                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankToFollow { entity = entity });
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthBarPrefab healthBarPrefabCmpt, [ReadOnly] ref TankTurretPrefab turretPrefabCmpt, [ReadOnly] ref Translation translationCmpt) {
+                var healthBarEntity = ecb.Instantiate (entityInQueryIndex, healthBarPrefabCmpt.entity);
+                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankToFollow { entity = entity, offset = new float3 (-0.8f, 0, 0) });
                 ecb.RemoveComponent<HealthBarPrefab> (entityInQueryIndex, entity);
                 ecb.AddComponent (entityInQueryIndex, entity, new HealthBarInstance { entity = healthBarEntity });
+
+                var turretEntity = ecb.Instantiate (entityInQueryIndex, turretPrefabCmpt.entity);
+                ecb.SetComponent (entityInQueryIndex, turretEntity, new TankToFollow { entity = entity });
+                ecb.RemoveComponent<TankTurretPrefab> (entityInQueryIndex, entity);
+                ecb.AddComponent (entityInQueryIndex, entity, new TankTurretInstance { entity = turretEntity });
             }
         }
 
@@ -139,13 +156,13 @@ namespace JustFight {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var instantiateHealthBarJobHandle = new InstantiateHealthBarJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
+            var instantiateJobHandle = new InstantiateHealthBarAndTankTurretJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, inputDeps);
             var moveTankJobHandle = new MoveTankJob ().Schedule (this, jumpTankJobHandle);
-            entityCommandBufferSystem.AddJobHandleForProducer (instantiateHealthBarJobHandle);
+            entityCommandBufferSystem.AddJobHandleForProducer (instantiateJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
-            return JobHandle.CombineDependencies (instantiateHealthBarJobHandle, destroyTankJobHandle, moveTankJobHandle);
+            return JobHandle.CombineDependencies (instantiateJobHandle, destroyTankJobHandle, moveTankJobHandle);
         }
     }
 }

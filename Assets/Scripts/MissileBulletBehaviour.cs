@@ -12,9 +12,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct MissileBulletTag : IComponentData { }
-
     [RequiresEntityConversion]
     class MissileBulletBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {

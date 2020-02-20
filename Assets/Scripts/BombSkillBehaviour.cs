@@ -11,16 +11,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct BombSkill : IComponentData {
-        public float recoveryLeftTime;
-        public float recoveryTime;
-        public float forwardOffset;
-        public float radius;
-        public Entity bulletPrefab;
-        public int bulletNum;
-    }
-
     [RequiresEntityConversion]
     class BombSkillBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public float recoveryTime = 8;

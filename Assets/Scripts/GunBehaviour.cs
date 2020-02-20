@@ -11,18 +11,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct GunBullet : IComponentData {
-        public Entity bulletPrefab;
-        public float bulletShootSpeed;
-    }
-
-    [Serializable]
-    struct GunState : IComponentData {
-        public float recoveryLeftTime;
-        public float recoveryTime;
-    }
-
     [RequiresEntityConversion]
     class GunBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject bulletPrefab = null;

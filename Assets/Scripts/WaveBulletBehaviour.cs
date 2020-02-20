@@ -9,14 +9,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct WaveBulletState : IComponentData {
-        public float3 forward;
-        public int factor;
-        public float leftRecoveryTime;
-        public float recoveryTime;
-    }
-
     [RequiresEntityConversion]
     class WaveBulletBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {

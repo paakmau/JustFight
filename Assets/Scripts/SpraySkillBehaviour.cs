@@ -10,16 +10,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct SpraySkill : IComponentData {
-        public float skillRecoveryLeftTime;
-        public float skillRecoveryTime;
-        public float skillShootRecoveryleftTime;
-        public float skillShootRecoveryTime;
-        public float skillLeftTime;
-        public float skillLastTime;
-    }
-
     [RequiresEntityConversion]
     class SpraySkillBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
         public float skillRecoveryTime = 5;

@@ -230,15 +230,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5081766472777885058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52989d2e598e54214ac3d0684649d9da, type: 3}
+  m_Script: {fileID: 11500000, guid: dc6ba77d01fa5480ab1d3e721beacab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   teamId: 0
-  jumpSpeed: 2
+  jumpSpeed: 10
   jumpRecoveryTime: 1.25
   healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   maxHealth: 100
+  tankTurretPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
+    type: 3}
 --- !u!114 &-454929291753378249
 MonoBehaviour:
   m_ObjectHideFlags: 0

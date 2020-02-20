@@ -10,21 +10,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct BulletTeam : IComponentData {
-        public int id;
-    }
-
-    [Serializable]
-    struct BulletDamage : IComponentData {
-        public int value;
-    }
-
-    [Serializable]
-    struct BulletDestroyTime : IComponentData {
-        public float value;
-    }
-
     [RequiresEntityConversion]
     class BulletBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
         public int damage = 15;
