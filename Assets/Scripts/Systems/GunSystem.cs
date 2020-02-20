@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,23 +5,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace JustFight {
-
-    [RequiresEntityConversion]
-    class GunBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
-        public GameObject bulletPrefab = null;
-        public float bulletShootSpeed = 15;
-        public float shootRecoveryTime = 0.4f;
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new GunBullet { bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab), bulletShootSpeed = bulletShootSpeed });
-            dstManager.AddComponentData (entity, new GunState { recoveryTime = shootRecoveryTime });
-        }
-        public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
-            referencedPrefabs.Add (bulletPrefab);
-        }
-    }
 
     class GunSystem : JobComponentSystem {
 

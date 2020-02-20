@@ -4,5 +4,5 @@ using Unity.Entities;
 namespace JustFight {
 
     [Serializable]
-    struct HealthBarTag : IComponentData { }
+    struct HealthBar : IComponentData { }
 }

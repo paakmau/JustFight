@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,93 +5,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace JustFight {
-
-    [Serializable]
-    struct TankTeam : IComponentData {
-        public int id;
-    }
-
-    [Serializable]
-    struct MoveInput : IComponentData {
-        public float2 dir;
-    }
-
-    [Serializable]
-    struct JumpInput : IComponentData {
-        public bool isJump;
-    }
-
-    [Serializable]
-    struct ShootInput : IComponentData {
-        public bool isShoot;
-        public float2 dir;
-    }
-
-    [Serializable]
-    struct SkillInput : IComponentData {
-        public bool isCast;
-    }
-
-    [Serializable]
-    struct JumpState : IComponentData {
-        public float speed;
-        public float leftRecoveryTime;
-        public float recoveryTime;
-    }
-
-    [Serializable]
-    struct Health : IComponentData {
-        public int value;
-        public int maxValue;
-    }
-
-    [Serializable]
-    struct TankTurretPrefab : IComponentData {
-        public Entity entity;
-    }
-
-    [Serializable]
-    struct TankTurretInstance : IComponentData {
-        public Entity entity;
-    }
-
-    [Serializable]
-    struct HealthBarPrefab : IComponentData {
-        public Entity entity;
-    }
-
-    [Serializable]
-    struct HealthBarInstance : IComponentData {
-        public Entity entity;
-    }
-
-    [RequiresEntityConversion]
-    class TankHullBehaviour : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
-        public int teamId = 0;
-        public float jumpSpeed = 10;
-        public float jumpRecoveryTime = 1.25f;
-        public GameObject healthBarPrefab = null;
-        public int maxHealth = 100;
-        public GameObject tankTurretPrefab = null;
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new TankTeam { id = teamId });
-            dstManager.AddComponent<MoveInput> (entity);
-            dstManager.AddComponent<JumpInput> (entity);
-            dstManager.AddComponent<ShootInput> (entity);
-            dstManager.AddComponent<SkillInput> (entity);
-            dstManager.AddComponentData (entity, new JumpState { speed = jumpSpeed, recoveryTime = jumpRecoveryTime });
-            dstManager.AddComponentData (entity, new Health { maxValue = maxHealth, value = maxHealth });
-            dstManager.AddComponentData (entity, new HealthBarPrefab { entity = conversionSystem.GetPrimaryEntity (healthBarPrefab) });
-            dstManager.AddComponentData (entity, new TankTurretPrefab { entity = conversionSystem.GetPrimaryEntity (tankTurretPrefab) });
-        }
-        public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
-            referencedPrefabs.Add (healthBarPrefab);
-            referencedPrefabs.Add (tankTurretPrefab);
-        }
-    }
 
     class TankHullSystem : JobComponentSystem {
 

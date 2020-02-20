@@ -1,4 +1,3 @@
-using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,19 +5,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace JustFight {
-
-    [RequiresEntityConversion]
-    class SpraySkillBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
-        public float skillRecoveryTime = 5;
-        public float skillLastTime = 1.5f;
-        public float skillShootRecoveryTime = 0.15f;
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new SpraySkill { skillRecoveryTime = skillRecoveryTime, skillShootRecoveryTime = skillShootRecoveryTime, skillLastTime = skillLastTime });
-        }
-    }
 
     class SpraySkillSystem : JobComponentSystem {
 

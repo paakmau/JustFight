@@ -26,7 +26,7 @@ namespace JustFight {
     }
 
     [Serializable]
-    struct MissileBulletTag : IComponentData { }
+    struct MissileBullet : IComponentData { }
 
     [Serializable]
     struct WaveBulletState : IComponentData {

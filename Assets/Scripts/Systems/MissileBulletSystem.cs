@@ -12,22 +12,15 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [RequiresEntityConversion]
-    class MissileBulletBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponent<MissileBulletTag> (entity);
-        }
-    }
-
     [UpdateAfter (typeof (EndFramePhysicsSystem))]
     class MissileBulletSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct MissileJob : IJobForEach<MissileBulletTag, PhysicsVelocity, Rotation, LocalToWorld> {
+        struct MissileJob : IJobForEach<MissileBullet, PhysicsVelocity, Rotation, LocalToWorld> {
             public float dT;
             [ReadOnly] public CollisionWorld collisionWorld;
             [ReadOnly] public BlobAssetReference<Unity.Physics.Collider> sphereCollider;
-            public unsafe void Execute ([ReadOnly] ref MissileBulletTag missileBulletTargetCmpt, ref PhysicsVelocity velocityCmpt, ref Rotation rotationCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public unsafe void Execute ([ReadOnly] ref MissileBullet missileBulletTargetCmpt, ref PhysicsVelocity velocityCmpt, ref Rotation rotationCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 var pos = localToWorldCmpt.Position;
                 var forward = localToWorldCmpt.Forward;
                 var vL = math.length (velocityCmpt.Linear);

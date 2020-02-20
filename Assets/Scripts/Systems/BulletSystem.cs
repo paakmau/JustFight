@@ -1,4 +1,3 @@
-using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,19 +5,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
-using UnityEngine;
 
 namespace JustFight {
-
-    [RequiresEntityConversion]
-    class BulletBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
-        public int damage = 15;
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponent<BulletTeam> (entity);
-            dstManager.AddComponentData (entity, new BulletDamage { value = damage });
-            dstManager.AddComponentData (entity, new BulletDestroyTime { value = 10 });
-        }
-    }
 
     [UpdateAfter (typeof (EndFramePhysicsSystem))]
     // [UpdateBefore (typeof (EndFramePhysicsSystem))]

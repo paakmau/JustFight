@@ -9,20 +9,6 @@ using UnityEngine;
 
 namespace JustFight {
 
-    [Serializable]
-    struct EnemyAction : IComponentData {
-        public Unity.Mathematics.Random random;
-        public float2 moveDirction;
-        public float moveLeftTime;
-    }
-
-    [RequiresEntityConversion]
-    class EnemyActionBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new EnemyAction { random = new Unity.Mathematics.Random ((uint) System.DateTime.Now.Millisecond % 1000) });
-        }
-    }
-
     class EnemyActionSystem : JobComponentSystem {
         [BurstCompile]
         struct EnemyActionJob : IJobForEach<EnemyAction, MoveInput, ShootInput, SkillInput> {

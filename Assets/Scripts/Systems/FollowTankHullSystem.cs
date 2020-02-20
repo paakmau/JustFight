@@ -1,4 +1,3 @@
-using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,18 +5,9 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace JustFight {
 
-    [RequiresEntityConversion]
-    class FollowTankHullBehaviour : MonoBehaviour, IConvertGameObjectToEntity {
-        public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponent<TankToFollow> (entity);
-        }
-    }
-
-    // [UpdateAfter (typeof (TankHullSystem))]
     [UpdateInGroup (typeof (TransformSystemGroup))]
     class FollowTankHullSystem : JobComponentSystem {
 
