@@ -11,9 +11,9 @@ namespace JustFight {
     class TankHullSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct InstantiateHealthBarAndTankTurretJob : IJobForEachWithEntity<HealthBarPrefab, TankTurretPrefab, Translation> {
+        struct InstantiateHealthBarAndTankTurretJob : IJobForEachWithEntity<HealthBarPrefab, TankTurretPrefab, TankHullTeam> {
             public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthBarPrefab healthBarPrefabCmpt, [ReadOnly] ref TankTurretPrefab turretPrefabCmpt, [ReadOnly] ref Translation translationCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthBarPrefab healthBarPrefabCmpt, [ReadOnly] ref TankTurretPrefab turretPrefabCmpt, [ReadOnly] ref TankHullTeam teamCmpt) {
                 var healthBarEntity = ecb.Instantiate (entityInQueryIndex, healthBarPrefabCmpt.entity);
                 ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankToFollow { entity = entity, offset = new float3 (-1.8f, 0, 0) });
                 ecb.RemoveComponent<HealthBarPrefab> (entityInQueryIndex, entity);
@@ -21,6 +21,7 @@ namespace JustFight {
 
                 var turretEntity = ecb.Instantiate (entityInQueryIndex, turretPrefabCmpt.entity);
                 ecb.SetComponent (entityInQueryIndex, turretEntity, new TankToFollow { entity = entity });
+                ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = teamCmpt.id });
                 ecb.RemoveComponent<TankTurretPrefab> (entityInQueryIndex, entity);
                 ecb.AddComponent (entityInQueryIndex, entity, new TankTurretInstance { entity = turretEntity });
             }
@@ -55,7 +56,7 @@ namespace JustFight {
         [BurstCompile]
         struct MoveTankJob : IJobForEach<MoveInput, Rotation, PhysicsVelocity> {
             public void Execute ([ReadOnly] ref MoveInput moveInputCmpt, ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt) {
-                var dir = new float3 (moveInputCmpt.dir.x, 0, moveInputCmpt.dir.y);
+                var dir = moveInputCmpt.dir;
                 if (dir.x != 0 || dir.z != 0)
                     rotationCmpt.Value = quaternion.LookRotation (dir, math.up ());
                 dir *= 4;

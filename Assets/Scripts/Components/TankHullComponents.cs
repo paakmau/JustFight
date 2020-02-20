@@ -5,29 +5,18 @@ using Unity.Mathematics;
 namespace JustFight {
 
     [Serializable]
-    struct TankTeam : IComponentData {
+    struct TankHullTeam : IComponentData {
         public int id;
     }
 
     [Serializable]
     struct MoveInput : IComponentData {
-        public float2 dir;
+        public float3 dir;
     }
 
     [Serializable]
     struct JumpInput : IComponentData {
         public bool isJump;
-    }
-
-    [Serializable]
-    struct ShootInput : IComponentData {
-        public bool isShoot;
-        public float2 dir;
-    }
-
-    [Serializable]
-    struct SkillInput : IComponentData {
-        public bool isCast;
     }
 
     [Serializable]

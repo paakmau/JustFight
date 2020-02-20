@@ -30,10 +30,10 @@ namespace JustFight {
             }
         }
 
-        private EntityQuery m_Group;
+        private EntityQuery group;
 
         protected override void OnCreate () {
-            m_Group = GetEntityQuery (
+            group = GetEntityQuery (
                 ComponentType.ReadOnly<TankToFollow> (),
                 ComponentType.ReadOnly<Rotation> (),
                 typeof (LocalToWorld)
@@ -46,7 +46,7 @@ namespace JustFight {
                     tankToFollowType = GetArchetypeChunkComponentType<TankToFollow> (true),
                     rotationType = GetArchetypeChunkComponentType<Rotation> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
-            }.Schedule (m_Group, inputDeps);
+            }.Schedule (group, inputDeps);
             return moveJobHandle;
         }
     }

@@ -11,16 +11,16 @@ namespace JustFight {
     class BombSkillSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct SkillJob : IJobForEachWithEntity<TankTeam, ShootInput, SkillInput, BombSkill, LocalToWorld> {
+        struct SkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, SkillInput, BombSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             public float dT;
             public Unity.Mathematics.Random rand;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref SkillInput skillInputCmpt, ref BombSkill skillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref SkillInput skillInputCmpt, ref BombSkill skillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (skillCmpt.recoveryLeftTime <= 0) {
                     if (skillInputCmpt.isCast) {
                         skillCmpt.recoveryLeftTime += skillCmpt.recoveryTime;
                         var offset = shootInputCmpt.dir * skillCmpt.forwardOffset;
-                        var center = localToWorldCmpt.Position + new float3 (offset.x, 6, offset.y);
+                        var center = localToWorldCmpt.Position + offset + new float3 (0, 6, 0);
                         for (int i = 0; i < skillCmpt.bulletNum; i++) {
                             var bulletEntity = ecb.Instantiate (entityInQueryIndex, skillCmpt.bulletPrefab);
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });

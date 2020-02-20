@@ -2,6 +2,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
@@ -11,7 +12,9 @@ namespace JustFight {
 
         [BurstCompile]
         struct RotateTurretJob : IJobForEach<ShootInput, Rotation> {
-            public void Execute ([ReadOnly] ref ShootInput shootInputCmpt, ref Rotation rotationCmpt) { }
+            public void Execute ([ReadOnly] ref ShootInput shootInputCmpt, ref Rotation rotationCmpt) {
+                rotationCmpt.Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ());
+            }
         }
 
         protected override JobHandle OnUpdate (JobHandle inputDeps) {

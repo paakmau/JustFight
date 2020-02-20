@@ -13,7 +13,7 @@ namespace JustFight {
     class BulletSystem : JobComponentSystem {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
-            public ComponentDataFromEntity<TankTeam> tankTeamGroup;
+            public ComponentDataFromEntity<TankHullTeam> tankTeamGroup;
             public ComponentDataFromEntity<BulletTeam> bulletTeamGroup;
             public ComponentDataFromEntity<BulletDamage> bulletDamageGroup;
             public ComponentDataFromEntity<BulletDestroyTime> bulletDestroyTimeGroup;
@@ -71,7 +71,7 @@ namespace JustFight {
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var hitJobHandle = new HitJob {
-                tankTeamGroup = GetComponentDataFromEntity<TankTeam> (), bulletTeamGroup = GetComponentDataFromEntity<BulletTeam> (), bulletDamageGroup = GetComponentDataFromEntity<BulletDamage> (), bulletDestroyTimeGroup = GetComponentDataFromEntity<BulletDestroyTime> (), healthGroup = GetComponentDataFromEntity<Health> ()
+                tankTeamGroup = GetComponentDataFromEntity<TankHullTeam> (), bulletTeamGroup = GetComponentDataFromEntity<BulletTeam> (), bulletDamageGroup = GetComponentDataFromEntity<BulletDamage> (), bulletDestroyTimeGroup = GetComponentDataFromEntity<BulletDestroyTime> (), healthGroup = GetComponentDataFromEntity<Health> ()
             }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, inputDeps);
             endFramePhysicsSystem.HandlesToWaitFor.Add (hitJobHandle);
             var destroyJobHandle = new DestroyJob {

@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace JustFight {
     [Serializable]
-    struct Self : IComponentData { }
+    struct SelfHull : IComponentData { }
+
+    [Serializable]
+    struct SelfTurret : IComponentData { }
 
     class FollowCamera : IComponentData {
         public Transform transform;

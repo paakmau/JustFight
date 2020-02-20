@@ -4,10 +4,10 @@ using UnityEngine;
 namespace JustFight {
 
     [RequiresEntityConversion]
-    class PlayerControllerAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
+    class SelfHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public Transform followCameraTransform = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new Self ());
+            dstManager.AddComponentData (entity, new SelfHull ());
             dstManager.AddComponentObject (entity, new FollowCamera { transform = followCameraTransform });
         }
     }

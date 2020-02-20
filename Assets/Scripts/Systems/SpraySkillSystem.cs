@@ -11,10 +11,10 @@ namespace JustFight {
     class SpraySkillSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct SkillJob : IJobForEachWithEntity<TankTeam, ShootInput, SkillInput, SpraySkill, GunBullet, LocalToWorld> {
+        struct SkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, SkillInput, SpraySkill, GunBullet, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref SkillInput skillInputCmpt, ref SpraySkill skillCmpt, [ReadOnly] ref GunBullet bulletCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref SkillInput skillInputCmpt, ref SpraySkill skillCmpt, [ReadOnly] ref GunBullet bulletCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (skillCmpt.skillRecoveryLeftTime <= 0) {
                     if (skillCmpt.skillLeftTime > 0) {
                         // 技能正在发动
@@ -22,10 +22,9 @@ namespace JustFight {
                         if (skillCmpt.skillShootRecoveryleftTime < 0) {
                             skillCmpt.skillShootRecoveryleftTime += skillCmpt.skillShootRecoveryTime;
                             var bulletEntity = ecb.Instantiate (entityInQueryIndex, bulletCmpt.bulletPrefab);
-                            var forwardDir = new float3 (shootInputCmpt.dir.x, 0, shootInputCmpt.dir.y);
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (forwardDir, math.up ()) });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + forwardDir * 1f });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = forwardDir * bulletCmpt.bulletShootSpeed * 0.7f });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + shootInputCmpt.dir * 1f });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * bulletCmpt.bulletShootSpeed * 0.7f });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                         }
                         skillCmpt.skillLeftTime -= dT;
