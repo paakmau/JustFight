@@ -30,7 +30,13 @@ namespace JustFight {
 
     [Serializable]
     struct ShadowSkill : IComponentData {
-        public Entity shadowPrefab;
+        public Entity shadowHullPrefab;
+        public Entity shadowTurretPrefab;
+        public float skillLeftTime;
         public float skillLastTime;
+        public Entity shadowHullInstanceA;
+        public Entity shadowHullInstanceB;
+        public Entity shadowTurretInstanceA;
+        public Entity shadowTurretInstanceB;
     }
 }

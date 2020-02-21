@@ -331,9 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3eb4a778d0041a9b37cf4eb4a65288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
+  hullPrefab: {fileID: 624050664395741090, guid: ac9fffc0d8afe441393568ef015c37bc,
     type: 3}
-  turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
+  turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
@@ -354,7 +354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &604302122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,7 +623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1556891379
 MonoBehaviour:
   m_ObjectHideFlags: 0

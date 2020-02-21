@@ -1,14 +1,13 @@
 using Unity.Entities;
-using Unity.Transforms;
 using UnityEngine;
+using Unity.Transforms;
 
 namespace JustFight {
 
     [RequiresEntityConversion]
-    class FollowTankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
+    class ShadowTurretAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponent<TankHullToFollow> (entity);
-            dstManager.RemoveComponent<Translation> (entity);
+            dstManager.AddComponent<ShadowTurret> (entity);
         }
     }
 }

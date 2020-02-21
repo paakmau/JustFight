@@ -9,7 +9,7 @@ namespace JustFight {
         public float skillLastTime = 2.5f;
         public float skillShootRecoveryTime = 0.15f;
         public float skillShootSpeed = 16;
-        public GameObject bulletPrefab;
+        public GameObject bulletPrefab = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponentData (entity, new SpraySkill {
                 skillShootRecoveryTime = skillShootRecoveryTime,

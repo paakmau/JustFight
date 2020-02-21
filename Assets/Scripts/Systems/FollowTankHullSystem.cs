@@ -25,8 +25,7 @@ namespace JustFight {
                 var chunkLocalToWorld = chunk.GetNativeArray (localToWorldType);
                 var hasNonUniformScale = chunk.Has (nonUniformScaleType);
                 for (int i = 0; i < chunk.Count; i++) {
-                    var tankEntitiy = chunkTankToFollow[i].entity;
-                    var translation = translationFromEntity[tankEntitiy].Value + chunkTankToFollow[i].offset;
+                    var translation = translationFromEntity[chunkTankToFollow[i].entity].Value + chunkTankToFollow[i].offset;
                     var rotation = chunkRotation[i].Value;
                     if (hasNonUniformScale) {
                         chunkLocalToWorld[i] = new LocalToWorld { Value = math.mul (new float4x4 (rotation, translation), float4x4.Scale (chunkNonUniformScale[i].Value)) };

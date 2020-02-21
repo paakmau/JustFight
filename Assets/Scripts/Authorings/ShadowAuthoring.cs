@@ -5,10 +5,11 @@ using UnityEngine;
 namespace JustFight {
 
     [RequiresEntityConversion]
-    class FollowTankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
+    class ShadowAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponent<TankHullToFollow> (entity);
+            dstManager.AddComponent<Shadow> (entity);
             dstManager.RemoveComponent<Translation> (entity);
+            dstManager.RemoveChunkComponent<Rotation> (entity);
         }
     }
 }
