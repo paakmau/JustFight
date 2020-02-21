@@ -20,6 +20,11 @@ namespace JustFight {
     }
 
     [Serializable]
+    struct MoveSpeed : IComponentData {
+        public float value;
+    }
+
+    [Serializable]
     struct JumpState : IComponentData {
         public float speed;
         public float leftRecoveryTime;

@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recoveryTime: 8
-  bombForwarOffset: 3
+  bombForwarOffset: 6
   bombRadius: 3
   bulletNum: 15
   bulletPrefab: {fileID: 4476946314682438583, guid: 1ab3df116a023429da8d9e4a9cfba38e,

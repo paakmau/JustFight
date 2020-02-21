@@ -6,6 +6,7 @@ namespace JustFight {
 
     [RequiresEntityConversion]
     class TankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
+        public float moveSpeed = 7;
         public float jumpSpeed = 10;
         public float jumpRecoveryTime = 1.25f;
         public GameObject healthBarPrefab = null;
@@ -14,6 +15,7 @@ namespace JustFight {
             dstManager.AddComponent<TankHullTeam> (entity);
             dstManager.AddComponent<MoveInput> (entity);
             dstManager.AddComponent<JumpInput> (entity);
+            dstManager.AddComponentData (entity, new MoveSpeed { value = moveSpeed });
             dstManager.AddComponentData (entity, new JumpState { speed = jumpSpeed, recoveryTime = jumpRecoveryTime });
             dstManager.AddComponentData (entity, new Health { maxValue = maxHealth, value = maxHealth });
             dstManager.AddComponentData (entity, new HealthBarPrefab { entity = conversionSystem.GetPrimaryEntity (healthBarPrefab) });

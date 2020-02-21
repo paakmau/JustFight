@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc6ba77d01fa5480ab1d3e721beacab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 7
   jumpSpeed: 10
   jumpRecoveryTime: 1.5
   healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,

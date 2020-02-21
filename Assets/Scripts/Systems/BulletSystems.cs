@@ -10,7 +10,6 @@ namespace JustFight {
 
     [UpdateBefore (typeof (BuildPhysicsWorld))]
     class BulletLiftTimeSystem : JobComponentSystem {
-        // TODO: 需要解决Collider Filter初始化
 
         [BurstCompile]
         struct DestroyJob : IJobForEachWithEntity<BulletDestroyTime> {

@@ -62,12 +62,12 @@ namespace JustFight {
         }
 
         [BurstCompile]
-        struct MoveTankJob : IJobForEach<MoveInput, Rotation, PhysicsVelocity> {
-            public void Execute ([ReadOnly] ref MoveInput moveInputCmpt, ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt) {
+        struct MoveTankJob : IJobForEach<MoveSpeed, MoveInput, Rotation, PhysicsVelocity> {
+            public void Execute ([ReadOnly] ref MoveSpeed moveSpeedCmpt, [ReadOnly] ref MoveInput moveInputCmpt, ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt) {
                 var dir = moveInputCmpt.dir;
                 if (dir.x != 0 || dir.z != 0)
                     rotationCmpt.Value = quaternion.LookRotation (dir, math.up ());
-                dir *= 4;
+                dir *= moveSpeedCmpt.value;
                 dir.y = velocityCmpt.Linear.y;
                 velocityCmpt.Linear = dir;
             }
