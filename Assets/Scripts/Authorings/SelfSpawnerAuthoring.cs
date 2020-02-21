@@ -8,7 +8,7 @@ namespace JustFight {
     class SelfSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject hullPrefab = null;
         public GameObject turretPrefab = null;
-        public int teamId = 0;
+        public int teamId = 1;
         public Transform followCameraTransform = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             var selfSpawnerCmpt = new SelfSpawner {

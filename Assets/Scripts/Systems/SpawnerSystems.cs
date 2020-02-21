@@ -6,7 +6,6 @@ using Unity.Transforms;
 
 namespace JustFight {
     // TODO: Add self recover feature combine the two system
-    // TODO: dstManager.SetComponentData (entity, new Rotation { Value = quaternion.identity });
     class EnemySpawnerSystem : JobComponentSystem {
         [BurstCompile]
         struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {

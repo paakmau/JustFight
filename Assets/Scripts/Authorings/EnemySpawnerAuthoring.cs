@@ -9,7 +9,7 @@ namespace JustFight {
         public GameObject hullPrefab = null;
         public GameObject turretPrefab = null;
         public float restTimePerSpawn = 3f;
-        public int teamId = 0;
+        public int teamId = 1;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             var enemySpawnCmpt = new EnemySpawner {
                 hullPrefab = conversionSystem.GetPrimaryEntity (hullPrefab),

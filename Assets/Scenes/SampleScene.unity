@@ -333,7 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
     type: 3}
-  turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
+  turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
@@ -354,7 +354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &604302122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +371,7 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
-  restTimePerSpawn: 1000
+  restTimePerSpawn: 12
   teamId: 3
 --- !u!114 &604302123
 MonoBehaviour:
@@ -636,11 +636,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 8201406888106953687, guid: 4b05cec68050943cd95378d3fc0fbb90,
+  hullPrefab: {fileID: 3203638689423926593, guid: bf60c5e2973284a39875e80aefc5e9eb,
     type: 3}
-  turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
+  turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
     type: 3}
-  restTimePerSpawn: 10000
+  restTimePerSpawn: 12
   teamId: 2
 --- !u!114 &1556891380
 MonoBehaviour:

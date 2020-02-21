@@ -8,7 +8,6 @@ using Unity.Physics.Systems;
 
 namespace JustFight {
 
-    [UpdateBefore (typeof (BuildPhysicsWorld))]
     class BulletLiftTimeSystem : JobComponentSystem {
 
         [BurstCompile]
@@ -22,17 +21,6 @@ namespace JustFight {
             }
         }
 
-        [BurstCompile]
-        struct ModifyFilterJob : IJobForEachWithEntity<BulletTeam, PhysicsCollider> {
-            public EntityCommandBuffer.Concurrent ecb;
-            public unsafe void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref BulletTeam teamCmpt, ref PhysicsCollider colliderCmpt) {
-                var filter = colliderCmpt.Value.Value.Filter;
-                filter.GroupIndex = -teamCmpt.id;
-                colliderCmpt.Value.Value.Filter = filter;
-                ecb.RemoveComponent<BulletTeam> (entityInQueryIndex, entity);
-            }
-        }
-
         BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
@@ -42,12 +30,8 @@ namespace JustFight {
             var destroyJobHandle = new DestroyJob {
                 ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime
             }.Schedule (this, inputDeps);
-            var modifyFilterJobHandle = new ModifyFilterJob {
-                ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ()
-            }.Schedule (this, inputDeps);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyJobHandle);
-            entityCommandBufferSystem.AddJobHandleForProducer (modifyFilterJobHandle);
-            return JobHandle.CombineDependencies (destroyJobHandle, modifyFilterJobHandle);
+            return destroyJobHandle;
         }
     }
 
@@ -55,30 +39,32 @@ namespace JustFight {
     class BulletHitSystem : JobComponentSystem {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
-            public ComponentDataFromEntity<BulletDamage> bulletDamageGroup;
-            public ComponentDataFromEntity<BulletDestroyTime> bulletDestroyTimeGroup;
-            public ComponentDataFromEntity<Health> healthGroup;
+            public ComponentDataFromEntity<TankHullTeam> hullTeamFromEntity;
+            public ComponentDataFromEntity<BulletTeam> bulletTeamFromEntity;
+            public ComponentDataFromEntity<BulletDamage> bulletDamageFromEntity;
+            public ComponentDataFromEntity<BulletDestroyTime> bulletDestroyTimeFromEntity;
+            public ComponentDataFromEntity<Health> healthFromEntity;
             void DisableBullet (Entity bulletEntity) {
-                bulletDamageGroup[bulletEntity] = new BulletDamage { value = 0 };
-                var destroyTimeCmpt = bulletDestroyTimeGroup[bulletEntity];
+                bulletDamageFromEntity[bulletEntity] = new BulletDamage { value = 0 };
+                var destroyTimeCmpt = bulletDestroyTimeFromEntity[bulletEntity];
                 destroyTimeCmpt.value = math.min (destroyTimeCmpt.value, 0.6f);
-                bulletDestroyTimeGroup[bulletEntity] = destroyTimeCmpt;
+                bulletDestroyTimeFromEntity[bulletEntity] = destroyTimeCmpt;
             }
             public void Execute (CollisionEvent collisionEvent) {
                 // TODO: shit
                 var entityA = collisionEvent.Entities.EntityA;
                 var entityB = collisionEvent.Entities.EntityB;
-                bool isEntityABullet = bulletDamageGroup.Exists (entityA);
-                bool isEntityBBullet = bulletDamageGroup.Exists (entityB);
+                bool isEntityABullet = bulletDamageFromEntity.Exists (entityA);
+                bool isEntityBBullet = bulletDamageFromEntity.Exists (entityB);
                 var bulletEntity = isEntityABullet ? entityA : entityB;
-                var tankEntity = isEntityABullet ? entityB : entityA;
+                var hullEntity = isEntityABullet ? entityB : entityA;
                 var bulletBodyId = isEntityABullet ? collisionEvent.BodyIndices.BodyAIndex : collisionEvent.BodyIndices.BodyBIndex;
 
-                if (healthGroup.Exists (tankEntity)) {
-                    var dmgCmpt = bulletDamageGroup[bulletEntity];
-                    var healthCmpt = healthGroup[tankEntity];
+                if (healthFromEntity.Exists (hullEntity) && bulletTeamFromEntity[bulletEntity].id != hullTeamFromEntity[hullEntity].id) {
+                    var dmgCmpt = bulletDamageFromEntity[bulletEntity];
+                    var healthCmpt = healthFromEntity[hullEntity];
                     healthCmpt.value -= dmgCmpt.value;
-                    healthGroup[tankEntity] = healthCmpt;
+                    healthFromEntity[hullEntity] = healthCmpt;
                 }
                 if (isEntityABullet) DisableBullet (entityA);
                 if (isEntityBBullet) DisableBullet (entityB);
@@ -92,7 +78,11 @@ namespace JustFight {
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var hitJobHandle = new HitJob {
-                bulletDamageGroup = GetComponentDataFromEntity<BulletDamage> (), bulletDestroyTimeGroup = GetComponentDataFromEntity<BulletDestroyTime> (), healthGroup = GetComponentDataFromEntity<Health> ()
+                hullTeamFromEntity = GetComponentDataFromEntity<TankHullTeam> (),
+                    bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> (),
+                    bulletDamageFromEntity = GetComponentDataFromEntity<BulletDamage> (),
+                    bulletDestroyTimeFromEntity = GetComponentDataFromEntity<BulletDestroyTime> (),
+                    healthFromEntity = GetComponentDataFromEntity<Health> ()
             }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, inputDeps);
             return hitJobHandle;
         }

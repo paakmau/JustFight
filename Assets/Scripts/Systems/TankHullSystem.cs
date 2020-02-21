@@ -36,17 +36,6 @@ namespace JustFight {
         }
 
         [BurstCompile]
-        struct ModifyFilterJob : IJobForEachWithEntity<TankHullTeam, PhysicsCollider> {
-            public EntityCommandBuffer.Concurrent ecb;
-            public unsafe void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankHullTeam teamCmpt, ref PhysicsCollider colliderCmpt) {
-                var filter = colliderCmpt.Value.Value.Filter;
-                filter.GroupIndex = -teamCmpt.id;
-                colliderCmpt.Value.Value.Filter = filter;
-                ecb.RemoveComponent<TankHullTeam> (entityInQueryIndex, entity);
-            }
-        }
-
-        [BurstCompile]
         struct JumpTankJob : IJobForEach<JumpInput, JumpState, PhysicsVelocity> {
             public float dT;
             public void Execute ([ReadOnly] ref JumpInput jumpInputCmpt, ref JumpState jumpStateCmpt, ref PhysicsVelocity velocityCmpt) {
@@ -80,12 +69,11 @@ namespace JustFight {
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var instantiateJobHandle = new InstantiateHealthBarJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
-            var modifyFilterJobHandle = new ModifyFilterJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, inputDeps);
             var moveTankJobHandle = new MoveTankJob ().Schedule (this, jumpTankJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (instantiateJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
-            return JobHandle.CombineDependencies (JobHandle.CombineDependencies (instantiateJobHandle, destroyTankJobHandle), JobHandle.CombineDependencies (modifyFilterJobHandle, moveTankJobHandle));
+            return JobHandle.CombineDependencies (instantiateJobHandle, destroyTankJobHandle, moveTankJobHandle);
         }
     }
 }

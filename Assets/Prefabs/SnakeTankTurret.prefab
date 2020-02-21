@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8256372390568626931, guid: faaf6340ef494435991c6cf91784bba1,
     type: 3}
-  bulletShootSpeed: 7
+  bulletShootSpeed: 8
   shootRecoveryTime: 0.55
 --- !u!114 &5878713794976838021
 MonoBehaviour:
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recoveryTime: 8
   bombForwarOffset: 6
-  bombRadius: 3
-  bulletNum: 15
+  bombRadius: 4.5
+  bulletNum: 20
   bulletPrefab: {fileID: 4476946314682438583, guid: 1ab3df116a023429da8d9e4a9cfba38e,
     type: 3}
