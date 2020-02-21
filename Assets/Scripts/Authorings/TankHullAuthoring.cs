@@ -11,7 +11,6 @@ namespace JustFight {
         public float jumpRecoveryTime = 1.25f;
         public GameObject healthBarPrefab = null;
         public int maxHealth = 100;
-        public GameObject tankTurretPrefab = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponentData (entity, new TankHullTeam { id = teamId });
             dstManager.AddComponent<MoveInput> (entity);
@@ -19,11 +18,10 @@ namespace JustFight {
             dstManager.AddComponentData (entity, new JumpState { speed = jumpSpeed, recoveryTime = jumpRecoveryTime });
             dstManager.AddComponentData (entity, new Health { maxValue = maxHealth, value = maxHealth });
             dstManager.AddComponentData (entity, new HealthBarPrefab { entity = conversionSystem.GetPrimaryEntity (healthBarPrefab) });
-            dstManager.AddComponentData (entity, new TankTurretPrefab { entity = conversionSystem.GetPrimaryEntity (tankTurretPrefab) });
+            dstManager.AddComponent<TankTurretInstance> (entity);
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
             referencedPrefabs.Add (healthBarPrefab);
-            referencedPrefabs.Add (tankTurretPrefab);
         }
     }
 }

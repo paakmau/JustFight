@@ -14,7 +14,7 @@ namespace JustFight {
         [BurstCompile]
         struct MoveJob : IJobChunk {
             [ReadOnly] public ComponentDataFromEntity<Translation> translationFromEntity;
-            [ReadOnly] public ArchetypeChunkComponentType<TankToFollow> tankToFollowType;
+            [ReadOnly] public ArchetypeChunkComponentType<TankHullToFollow> tankToFollowType;
             [ReadOnly] public ArchetypeChunkComponentType<Rotation> rotationType;
             public ArchetypeChunkComponentType<LocalToWorld> localToWorldType;
             public void Execute (ArchetypeChunk chunk, int chunkIndex, int entityOffset) {
@@ -34,7 +34,7 @@ namespace JustFight {
 
         protected override void OnCreate () {
             group = GetEntityQuery (
-                ComponentType.ReadOnly<TankToFollow> (),
+                ComponentType.ReadOnly<TankHullToFollow> (),
                 ComponentType.ReadOnly<Rotation> (),
                 typeof (LocalToWorld)
             );
@@ -43,7 +43,7 @@ namespace JustFight {
         protected override JobHandle OnUpdate (Unity.Jobs.JobHandle inputDeps) {
             var moveJobHandle = new MoveJob {
                 translationFromEntity = GetComponentDataFromEntity<Translation> (true),
-                    tankToFollowType = GetArchetypeChunkComponentType<TankToFollow> (true),
+                    tankToFollowType = GetArchetypeChunkComponentType<TankHullToFollow> (true),
                     rotationType = GetArchetypeChunkComponentType<Rotation> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
             }.Schedule (group, inputDeps);

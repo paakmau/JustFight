@@ -5,7 +5,7 @@ using Unity.Transforms;
 
 namespace JustFight {
     [Serializable][WriteGroup (typeof (LocalToWorld))]
-    struct TankToFollow : IComponentData {
+    struct TankHullToFollow : IComponentData {
         public Entity entity;
         public float3 offset;
     }

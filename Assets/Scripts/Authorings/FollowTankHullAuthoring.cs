@@ -6,7 +6,7 @@ namespace JustFight {
     [RequiresEntityConversion]
     class FollowTankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponent<TankToFollow> (entity);
+            dstManager.AddComponent<TankHullToFollow> (entity);
         }
     }
 }

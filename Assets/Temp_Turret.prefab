@@ -16,9 +16,8 @@ GameObject:
   - component: {fileID: 331193651574331779}
   - component: {fileID: 4598535004072583757}
   - component: {fileID: 1481432633502761121}
-  - component: {fileID: 929212445826888874}
   m_Layer: 0
-  m_Name: Self_Turret
+  m_Name: Temp_Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,16 +152,3 @@ MonoBehaviour:
   skillRecoveryTime: 5
   skillLastTime: 1.5
   skillShootRecoveryTime: 0.15
---- !u!114 &929212445826888874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3841780975285854310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0df33636d97e44f4938bbceea57ef42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  followCameraTransform: {fileID: 0}

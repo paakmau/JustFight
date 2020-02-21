@@ -33,11 +33,6 @@ namespace JustFight {
     }
 
     [Serializable]
-    struct TankTurretPrefab : IComponentData {
-        public Entity entity;
-    }
-
-    [Serializable]
     struct TankTurretInstance : IComponentData {
         public Entity entity;
     }

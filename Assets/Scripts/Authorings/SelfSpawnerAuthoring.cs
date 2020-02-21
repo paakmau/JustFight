@@ -5,19 +5,19 @@ using UnityEngine;
 namespace JustFight {
 
     [RequiresEntityConversion]
-    class EnemySpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
+    class SelfSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject hullPrefab = null;
         public GameObject turretPrefab = null;
-        public float restTimePerSpawn = 3f;
         public int teamId = 0;
+        public Transform followCameraTransform = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            var enemySpawnCmpt = new EnemySpawner {
+            var selfSpawnerCmpt = new SelfSpawner {
                 hullPrefab = conversionSystem.GetPrimaryEntity (hullPrefab),
                 turretPrefab = conversionSystem.GetPrimaryEntity (turretPrefab),
-                restTimePerSpawn = restTimePerSpawn,
-                teamId = teamId
+                teamId = teamId,
+                followCameraTransform = followCameraTransform
             };
-            dstManager.AddComponentData (entity, enemySpawnCmpt);
+            dstManager.AddComponentData (entity, selfSpawnerCmpt);
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
             referencedPrefabs.Add (hullPrefab);
