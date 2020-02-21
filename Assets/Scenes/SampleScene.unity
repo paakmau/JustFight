@@ -331,9 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3eb4a778d0041a9b37cf4eb4a65288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 2495022200313973118, guid: d647c0fa37ca940c3ba4e96f4349da35,
+  hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
     type: 3}
-  turretPrefab: {fileID: 3841780975285854310, guid: e2ec7c1024e8a4a0ba1725f35a9f1ba1,
+  turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
     type: 3}
   teamId: 0
   followCameraTransform: {fileID: 1380572160}
@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 604302123}
   - component: {fileID: 604302122}
   m_Layer: 0
-  m_Name: Spawner (3)
+  m_Name: SnakeEnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -367,12 +367,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 2495022200313973118, guid: d647c0fa37ca940c3ba4e96f4349da35,
+  hullPrefab: {fileID: 3203638689423926593, guid: bf60c5e2973284a39875e80aefc5e9eb,
     type: 3}
-  turretPrefab: {fileID: 3841780975285854310, guid: e2ec7c1024e8a4a0ba1725f35a9f1ba1,
+  turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
     type: 3}
   restTimePerSpawn: 8
-  teamId: 1
+  teamId: 2
 --- !u!114 &604302123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,7 +618,7 @@ GameObject:
   - component: {fileID: 1556891380}
   - component: {fileID: 1556891379}
   m_Layer: 0
-  m_Name: Spawner (2)
+  m_Name: BerserkerEnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -636,9 +636,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 2495022200313973118, guid: d647c0fa37ca940c3ba4e96f4349da35,
+  hullPrefab: {fileID: 8201406888106953687, guid: 4b05cec68050943cd95378d3fc0fbb90,
     type: 3}
-  turretPrefab: {fileID: 3841780975285854310, guid: e2ec7c1024e8a4a0ba1725f35a9f1ba1,
+  turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
     type: 3}
   restTimePerSpawn: 10
   teamId: 1
