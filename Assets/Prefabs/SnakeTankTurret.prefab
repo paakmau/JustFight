@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2483371157651610225}
   - component: {fileID: 6962358664401173147}
   - component: {fileID: 6617654509340410197}
+  - component: {fileID: 5878713794976838021}
   m_Layer: 0
   m_Name: SnakeTankTurret
   m_TagString: Untagged
@@ -62,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: f889f7d57605d41b49d8b065b6d8c13d, type: 3}
+  - {fileID: 2100000, guid: 78b077560bc364b9aa11236d5d633b63, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -132,7 +133,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c46ca982c9d58442e9080e4c53b523f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 8567766088047723228, guid: 51fcc58f1935147fab7cde404fbbf85b,
+  bulletPrefab: {fileID: 8256372390568626931, guid: faaf6340ef494435991c6cf91784bba1,
     type: 3}
   bulletShootSpeed: 7
   shootRecoveryTime: 0.55
+--- !u!114 &5878713794976838021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5861252393933013886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5c194fbff5140c7b828af0be52b2d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoveryTime: 8
+  bombForwarOffset: 3
+  bombRadius: 3
+  bulletNum: 15
+  bulletPrefab: {fileID: 4476946314682438583, guid: 1ab3df116a023429da8d9e4a9cfba38e,
+    type: 3}

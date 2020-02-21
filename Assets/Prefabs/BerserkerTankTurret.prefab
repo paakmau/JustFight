@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2314842973414146290}
   - component: {fileID: 3070893245364863704}
   m_Layer: 0
-  m_Name: Berserker_Turret
+  m_Name: BerserkerTankTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: f889f7d57605d41b49d8b065b6d8c13d, type: 3}
+  - {fileID: 2100000, guid: 0c78b40109a094a1b8e1f8a6fa0875cc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

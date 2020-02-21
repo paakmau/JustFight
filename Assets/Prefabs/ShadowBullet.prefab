@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 416368331431762899}
   - component: {fileID: 1397564866057495653}
   m_Layer: 0
-  m_Name: NormalBullet 1
+  m_Name: ShadowBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: ba385d04fc2be49cfae005fa021f2d8a, type: 3}
+  - {fileID: 2100000, guid: ce827a4ba311b435bb2f3efe6fd8eeaa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
