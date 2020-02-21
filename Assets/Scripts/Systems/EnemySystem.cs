@@ -29,8 +29,10 @@ namespace JustFight {
                 turretCmpt.rotateLeftTime -= dT;
                 if (turretCmpt.rotateLeftTime <= 0) {
                     turretCmpt.rotateLeftTime += turretCmpt.random.NextFloat (0.2f, 0.4f);
-                    shootInputCmpt.isShoot = true;
-                    skillInputCmpt.isCast = true;
+                    turretCmpt.rotateDirection = turretCmpt.random.NextBool();
+                    shootInputCmpt.isShoot = turretCmpt.random.NextBool();
+                    skillInputCmpt.isCast = turretCmpt.random.NextBool();
+                    // To avoid floating-point error 
                     shootInputCmpt.dir.y = 0;
                     shootInputCmpt.dir = math.normalize (shootInputCmpt.dir);
                 }
