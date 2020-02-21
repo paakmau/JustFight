@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3789a1efd8942079c7a977822673d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoveryTime: 1
+  recoveryTime: 10
 --- !u!114 &7958849646461479103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,4 +167,4 @@ MonoBehaviour:
     type: 3}
   shadowTurretPrefab: {fileID: 8050453458525408637, guid: 3a0345cf4f4c9403dacc19ddaa9feeeb,
     type: 3}
-  skillLastTime: 1000
+  skillLastTime: 5

@@ -77,25 +77,30 @@ namespace JustFight {
                     // 技能正在发动
                     shadowSkillCmpt.skillLeftTime -= dT;
                     if (shadowSkillCmpt.skillLeftTime <= 0) {
-                        // TODO: Shadow entities can't be destroyed here!
-                        // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA);
-                        // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB);
-                        // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceA);
-                        // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceB);
+                        ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA);
+                        ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB);
+                        ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceA);
+                        ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceB);
                     }
                 } else if (skillCmpt.isCastTrigger) {
                     shadowSkillCmpt.skillLeftTime = shadowSkillCmpt.skillLastTime;
                     var offset = math.normalize (math.cross (localToWorldCmpt.Forward, math.up ())) * 3;
-                    shadowSkillCmpt.shadowHullInstanceA = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowHullPrefab);
-                    shadowSkillCmpt.shadowHullInstanceB = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowHullPrefab);
-                    shadowSkillCmpt.shadowTurretInstanceA = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowTurretPrefab);
-                    shadowSkillCmpt.shadowTurretInstanceB = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowTurretPrefab);
-                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = offset });
-                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = -offset });
-                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = offset });
-                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = -offset });
-                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA, new ShadowTurret { turretEntity = entity });
-                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB, new ShadowTurret { turretEntity = entity });
+                    var hullInstanceA = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowHullPrefab);
+                    var hullInstanceB = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowHullPrefab);
+                    var turretInstanceA = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowTurretPrefab);
+                    var turretInstanceB = ecb.Instantiate (entityInQueryIndex, shadowSkillCmpt.shadowTurretPrefab);
+                    ecb.SetComponent (entityInQueryIndex, hullInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = offset });
+                    ecb.SetComponent (entityInQueryIndex, hullInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = -offset });
+                    ecb.SetComponent (entityInQueryIndex, turretInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = offset });
+                    ecb.SetComponent (entityInQueryIndex, turretInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = -offset });
+                    ecb.SetComponent (entityInQueryIndex, turretInstanceA, new ShadowTurret { turretEntity = entity });
+                    ecb.SetComponent (entityInQueryIndex, turretInstanceB, new ShadowTurret { turretEntity = entity });
+                    var newShadowSkillCmpt = shadowSkillCmpt;
+                    newShadowSkillCmpt.shadowHullInstanceA = hullInstanceA;
+                    newShadowSkillCmpt.shadowHullInstanceB = hullInstanceB;
+                    newShadowSkillCmpt.shadowTurretInstanceA = turretInstanceA;
+                    newShadowSkillCmpt.shadowTurretInstanceB = turretInstanceB;
+                    ecb.SetComponent (entityInQueryIndex, entity, newShadowSkillCmpt); // TODO: Here found a bug in Unity.
                 }
             }
         }
