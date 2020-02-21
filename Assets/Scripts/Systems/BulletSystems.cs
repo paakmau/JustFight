@@ -13,7 +13,7 @@ namespace JustFight {
         [BurstCompile]
         struct DestroyJob : IJobForEachWithEntity<BulletDestroyTime> {
             public EntityCommandBuffer.Concurrent ecb;
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, ref BulletDestroyTime destroyTimeCmpt) {
                 destroyTimeCmpt.value -= dT;
                 if (destroyTimeCmpt.value <= 0)

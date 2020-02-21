@@ -10,7 +10,7 @@ namespace JustFight {
     class EnemySystem : JobComponentSystem {
         [BurstCompile]
         struct EnemyHullJob : IJobForEach<EnemyHull, MoveInput> {
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (ref EnemyHull hullCmp, ref MoveInput moveInputCmpt) {
                 hullCmp.moveLeftTime -= dT;
                 if (hullCmp.moveLeftTime <= 0) {
@@ -24,7 +24,7 @@ namespace JustFight {
 
         [BurstCompile]
         struct EnemyTurretJob : IJobForEach<EnemyTurret, ShootInput, SkillInput> {
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (ref EnemyTurret turretCmpt, ref ShootInput shootInputCmpt, ref SkillInput skillInputCmpt) {
                 turretCmpt.rotateLeftTime -= dT;
                 if (turretCmpt.rotateLeftTime <= 0) {

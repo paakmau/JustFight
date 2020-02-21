@@ -37,7 +37,7 @@ namespace JustFight {
 
         [BurstCompile]
         struct JumpTankJob : IJobForEach<JumpInput, JumpState, PhysicsVelocity> {
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute ([ReadOnly] ref JumpInput jumpInputCmpt, ref JumpState jumpStateCmpt, ref PhysicsVelocity velocityCmpt) {
                 if (jumpStateCmpt.leftRecoveryTime > 0) {
                     jumpStateCmpt.leftRecoveryTime -= dT;

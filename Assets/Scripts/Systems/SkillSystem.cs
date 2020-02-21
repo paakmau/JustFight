@@ -12,7 +12,7 @@ namespace JustFight {
 
         [BurstCompile]
         struct SkillJob : IJobForEach<SkillInput, Skill> {
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute ([ReadOnly] ref SkillInput inputCmpt, ref Skill skillCmpt) {
                 skillCmpt.isCastTrigger = false;
                 if (skillCmpt.leftTime < 0) {
@@ -27,7 +27,7 @@ namespace JustFight {
         [BurstCompile]
         struct SpraySkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, SpraySkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref SpraySkill spraySkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (spraySkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
@@ -51,7 +51,7 @@ namespace JustFight {
         [BurstCompile]
         struct BombSkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, BombSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
-            public float dT;
+            [ReadOnly] public float dT;
             public Unity.Mathematics.Random rand;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BombSkill bombSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (skillCmpt.isCastTrigger) {
@@ -70,13 +70,14 @@ namespace JustFight {
 
         [BurstCompile]
         struct ShadowSkillJob : IJobForEachWithEntity<TankTurretTeam, Skill, ShadowSkill, LocalToWorld, TankHullToFollow> {
-            public float dT;
+            [ReadOnly] public float dT;
             public EntityCommandBuffer.Concurrent ecb;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref Skill skillCmpt, ref ShadowSkill shadowSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt, [ReadOnly] ref TankHullToFollow tankHullToFollowCmpt) {
                 if (shadowSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     shadowSkillCmpt.skillLeftTime -= dT;
                     if (shadowSkillCmpt.skillLeftTime <= 0) {
+                        // TODO: Shadow entities can't be destroyed here!
                         // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA);
                         // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB);
                         // ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceA);
@@ -93,6 +94,8 @@ namespace JustFight {
                     ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowHullInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = -offset });
                     ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = offset });
                     ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = -offset });
+                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA, new ShadowTurret { turretEntity = entity });
+                    ecb.SetComponent (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB, new ShadowTurret { turretEntity = entity });
                 }
             }
         }
@@ -112,6 +115,7 @@ namespace JustFight {
             var spraySkillJobHandle = new SpraySkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
             entityCommandBufferSystem.AddJobHandleForProducer (spraySkillJobHandle);
             var shadowSkillJobHandle = new ShadowSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
+            entityCommandBufferSystem.AddJobHandleForProducer (shadowSkillJobHandle);
             return JobHandle.CombineDependencies (bombSkillJobHandle, spraySkillJobHandle, shadowSkillJobHandle);
         }
     }

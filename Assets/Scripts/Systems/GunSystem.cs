@@ -13,7 +13,7 @@ namespace JustFight {
         [BurstCompile]
         struct ShootJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, GunState, GunBullet, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, ref GunState gunStateCmpt, [ReadOnly] ref GunBullet bulletCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (gunStateCmpt.recoveryLeftTime <= 0) {
                     if (shootInputCmpt.isShoot) {

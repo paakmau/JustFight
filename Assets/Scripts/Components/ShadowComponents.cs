@@ -13,5 +13,7 @@ namespace JustFight {
     }
 
     [Serializable]
-    struct ShadowTurret : IComponentData { }
+    struct ShadowTurret : IComponentData {
+        public Entity turretEntity;
+    }
 }

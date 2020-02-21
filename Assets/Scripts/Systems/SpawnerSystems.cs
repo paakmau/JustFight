@@ -10,7 +10,7 @@ namespace JustFight {
         [BurstCompile]
         struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
             public EntityCommandBuffer.Concurrent ecb;
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, [ReadOnly] ref Rotation rotationCmpt, ref EnemySpawner spawnerCmpt) {
                 spawnerCmpt.leftRestTime -= dT;
                 if (spawnerCmpt.leftRestTime <= 0) {

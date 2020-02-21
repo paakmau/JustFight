@@ -15,7 +15,7 @@ namespace JustFight {
 
         [BurstCompile]
         struct MissileJob : IJobForEach<MissileBullet, PhysicsVelocity, Rotation, LocalToWorld> {
-            public float dT;
+            [ReadOnly] public float dT;
             [ReadOnly] public CollisionWorld collisionWorld;
             [ReadOnly] public BlobAssetReference<Unity.Physics.Collider> sphereCollider;
             public unsafe void Execute ([ReadOnly] ref MissileBullet missileBulletTargetCmpt, ref PhysicsVelocity velocityCmpt, ref Rotation rotationCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {

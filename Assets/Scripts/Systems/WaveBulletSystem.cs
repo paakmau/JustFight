@@ -11,7 +11,7 @@ namespace JustFight {
 
         [BurstCompile]
         struct WaveJob : IJobForEach<WaveBulletState, PhysicsVelocity> {
-            public float dT;
+            [ReadOnly] public float dT;
             public void Execute (ref WaveBulletState stateCmpt, ref PhysicsVelocity velocityCmpt) {
                 if (stateCmpt.leftRecoveryTime <= 0) {
                     stateCmpt.leftRecoveryTime = stateCmpt.recoveryTime;

@@ -167,4 +167,4 @@ MonoBehaviour:
     type: 3}
   shadowTurretPrefab: {fileID: 8050453458525408637, guid: 3a0345cf4f4c9403dacc19ddaa9feeeb,
     type: 3}
-  skillLastTime: 100
+  skillLastTime: 1000
