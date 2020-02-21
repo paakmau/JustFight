@@ -7,7 +7,7 @@ using Unity.Physics;
 
 namespace JustFight {
 
-    class EnemSystem : JobComponentSystem {
+    class EnemySystem : JobComponentSystem {
         [BurstCompile]
         struct EnemyHullJob : IJobForEach<EnemyHull, MoveInput> {
             public float dT;
@@ -31,6 +31,8 @@ namespace JustFight {
                     turretCmpt.rotateLeftTime += turretCmpt.random.NextFloat (0.2f, 0.4f);
                     shootInputCmpt.isShoot = true;
                     skillInputCmpt.isCast = true;
+                    shootInputCmpt.dir.y = 0;
+                    shootInputCmpt.dir = math.normalize (shootInputCmpt.dir);
                 }
                 shootInputCmpt.dir = math.rotate (quaternion.AxisAngle (math.up (), turretCmpt.rotateDirection ? 0.05f : -0.05f), shootInputCmpt.dir);
             }

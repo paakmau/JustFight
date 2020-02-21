@@ -5,22 +5,25 @@ using Unity.Jobs;
 using Unity.Transforms;
 
 namespace JustFight {
-
+    // TODO: Add self recover feature combine the two system
+    // TODO: dstManager.SetComponentData (entity, new Rotation { Value = quaternion.identity });
     class EnemySpawnerSystem : JobComponentSystem {
         [BurstCompile]
-        struct EnemySpawnerJob : IJobForEachWithEntity<Translation, EnemySpawner> {
+        struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
             public EntityCommandBuffer.Concurrent ecb;
             public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, ref EnemySpawner spawnerCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, [ReadOnly] ref Rotation rotationCmpt, ref EnemySpawner spawnerCmpt) {
                 spawnerCmpt.leftRestTime -= dT;
                 if (spawnerCmpt.leftRestTime <= 0) {
                     spawnerCmpt.leftRestTime += spawnerCmpt.restTimePerSpawn;
                     var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
                     ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);
+                    ecb.SetComponent (entityInQueryIndex, hullEntity, rotationCmpt);
                     ecb.SetComponent (entityInQueryIndex, hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
                     ecb.AddComponent (entityInQueryIndex, hullEntity, new EnemyHull { random = new Unity.Mathematics.Random ((uint) (dT * 10000)) });
 
                     var turretEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.turretPrefab);
+                    ecb.SetComponent (entityInQueryIndex, turretEntity, rotationCmpt);
                     ecb.SetComponent (entityInQueryIndex, turretEntity, new TankHullToFollow { entity = hullEntity });
                     ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
                     ecb.AddComponent (entityInQueryIndex, turretEntity, new EnemyTurret { random = new Unity.Mathematics.Random ((uint) (dT * 1000)) });
@@ -43,14 +46,16 @@ namespace JustFight {
     class SelfSpawnerSystem : ComponentSystem {
 
         protected override void OnUpdate () {
-            Entities.WithAllReadOnly<Translation> ().ForEach ((Entity entity, SelfSpawner spawnerCmpt, ref Translation translationCmpt) => {
+            Entities.WithAllReadOnly (typeof (Translation), typeof (Rotation)).ForEach ((Entity entity, SelfSpawner spawnerCmpt, ref Translation translationCmpt, ref Rotation rotationCmpt) => {
                 var hullEntity = EntityManager.Instantiate (spawnerCmpt.hullPrefab);
                 EntityManager.SetComponentData (hullEntity, translationCmpt);
+                EntityManager.SetComponentData (hullEntity, rotationCmpt);
                 EntityManager.SetComponentData (hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
                 EntityManager.AddComponentData (hullEntity, new SelfHull ());
                 EntityManager.AddComponentObject (hullEntity, new FollowCamera { transform = spawnerCmpt.followCameraTransform });
 
                 var turretEntity = EntityManager.Instantiate (spawnerCmpt.turretPrefab);
+                EntityManager.SetComponentData (turretEntity, rotationCmpt);
                 EntityManager.SetComponentData (turretEntity, new TankHullToFollow { entity = hullEntity });
                 EntityManager.SetComponentData (turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
                 EntityManager.AddComponentData (turretEntity, new SelfTurret ());
