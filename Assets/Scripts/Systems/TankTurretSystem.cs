@@ -13,7 +13,8 @@ namespace JustFight {
         [BurstCompile]
         struct RotateTurretJob : IJobForEach<ShootInput, Rotation> {
             public void Execute ([ReadOnly] ref ShootInput shootInputCmpt, ref Rotation rotationCmpt) {
-                rotationCmpt.Value = quaternion.LookRotationSafe (shootInputCmpt.dir, math.up ());
+                if (shootInputCmpt.dir.x != 0 || shootInputCmpt.dir.z != 0)
+                    rotationCmpt.Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ());
             }
         }
 

@@ -367,10 +367,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 0}
-  turretPrefab: {fileID: 0}
-  restTimePerSpawn: 8
-  teamId: 0
+  hullPrefab: {fileID: 2495022200313973118, guid: d647c0fa37ca940c3ba4e96f4349da35,
+    type: 3}
+  turretPrefab: {fileID: 3841780975285854310, guid: e2ec7c1024e8a4a0ba1725f35a9f1ba1,
+    type: 3}
+  restTimePerSpawn: 10000
+  teamId: 1
 --- !u!114 &604302123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +394,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 604302121}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.67, y: 0.7, z: 2.83}
+  m_LocalPosition: {x: 6.67, y: 1, z: 2.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

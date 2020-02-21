@@ -18,14 +18,14 @@ namespace JustFight {
                     var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
                     ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);
                     ecb.SetComponent (entityInQueryIndex, hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
-                    // ecb.SetComponent (entityInQueryIndex, turretEntity, new EnemyAction { });
+                    ecb.AddComponent (entityInQueryIndex, hullEntity, new EnemyHull { random = new Unity.Mathematics.Random ((uint) (dT * 10000)) });
 
                     var turretEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.turretPrefab);
                     ecb.SetComponent (entityInQueryIndex, turretEntity, new TankHullToFollow { entity = hullEntity });
                     ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
-                    // ecb.SetComponent (entityInQueryIndex, turretEntity, new EnemyAction { });
+                    ecb.AddComponent (entityInQueryIndex, turretEntity, new EnemyTurret { random = new Unity.Mathematics.Random ((uint) (dT * 1000)) });
 
-                    ecb.SetComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
+                    ecb.AddComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
                 }
             }
         }

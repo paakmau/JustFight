@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace JustFight {
 
-    class PlayerControllerSystem : ComponentSystem {
+    class SelfSystem : ComponentSystem {
         protected override void OnUpdate () {
             float3 moveDir = float3.zero;
             if (Input.GetKey (KeyCode.A))
