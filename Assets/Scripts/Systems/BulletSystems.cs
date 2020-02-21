@@ -28,7 +28,7 @@ namespace JustFight {
             public EntityCommandBuffer.Concurrent ecb;
             public unsafe void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref BulletTeam teamCmpt, ref PhysicsCollider colliderCmpt) {
                 var filter = colliderCmpt.Value.Value.Filter;
-                filter.GroupIndex = teamCmpt.id;
+                filter.GroupIndex = -teamCmpt.id;
                 colliderCmpt.Value.Value.Filter = filter;
                 ecb.RemoveComponent<BulletTeam> (entityInQueryIndex, entity);
             }

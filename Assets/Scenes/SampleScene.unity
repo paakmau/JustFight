@@ -335,7 +335,7 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
     type: 3}
-  teamId: 0
+  teamId: 1
   followCameraTransform: {fileID: 1380572160}
 --- !u!1 &604302121
 GameObject:
@@ -623,7 +623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1556891379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,7 +640,7 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
     type: 3}
-  restTimePerSpawn: 10
+  restTimePerSpawn: 10000
   teamId: 1
 --- !u!114 &1556891380
 MonoBehaviour:

@@ -4,10 +4,12 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
+using Unity.Physics.Systems;
 using Unity.Transforms;
 
 namespace JustFight {
 
+    [UpdateBefore (typeof (BuildPhysicsWorld))]
     class TankHullSystem : JobComponentSystem {
 
         [BurstCompile]
@@ -38,7 +40,7 @@ namespace JustFight {
             public EntityCommandBuffer.Concurrent ecb;
             public unsafe void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankHullTeam teamCmpt, ref PhysicsCollider colliderCmpt) {
                 var filter = colliderCmpt.Value.Value.Filter;
-                filter.GroupIndex = teamCmpt.id;
+                filter.GroupIndex = -teamCmpt.id;
                 colliderCmpt.Value.Value.Filter = filter;
                 ecb.RemoveComponent<TankHullTeam> (entityInQueryIndex, entity);
             }
