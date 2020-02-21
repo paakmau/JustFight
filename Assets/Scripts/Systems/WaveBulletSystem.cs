@@ -12,7 +12,7 @@ namespace JustFight {
         [BurstCompile]
         struct WaveJob : IJobForEach<WaveBulletState, PhysicsVelocity> {
             public float dT;
-            public unsafe void Execute (ref WaveBulletState stateCmpt, ref PhysicsVelocity velocityCmpt) {
+            public void Execute (ref WaveBulletState stateCmpt, ref PhysicsVelocity velocityCmpt) {
                 if (stateCmpt.leftRecoveryTime <= 0) {
                     stateCmpt.leftRecoveryTime = stateCmpt.recoveryTime;
                     float impulse = 5;

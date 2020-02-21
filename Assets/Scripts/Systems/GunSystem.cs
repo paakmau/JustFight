@@ -23,7 +23,6 @@ namespace JustFight {
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + shootInputCmpt.dir * 1.6f });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * bulletCmpt.bulletShootSpeed });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
-                        // TODO: 修改子弹分组避免发射时与自身碰撞
                     }
                 } else gunStateCmpt.recoveryLeftTime -= dT;
             }
