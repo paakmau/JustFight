@@ -248,4 +248,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 7
   jumpSpeed: 10
-  jumpRecoveryTime: 1.5
+  jumpRecoveryTime: 2

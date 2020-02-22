@@ -7,7 +7,7 @@ namespace JustFight {
     class TankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public float moveSpeed = 7;
         public float jumpSpeed = 10;
-        public float jumpRecoveryTime = 1.25f;
+        public float jumpRecoveryTime = 2f;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponent<TankHullTeam> (entity);
             dstManager.AddComponent<MoveInput> (entity);
