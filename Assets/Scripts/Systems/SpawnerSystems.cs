@@ -5,7 +5,7 @@ using Unity.Jobs;
 using Unity.Transforms;
 
 namespace JustFight {
-    // TODO: Add self recover feature combine the two system
+    // TODO: Add self recover feature and combine the two system
     class EnemySpawnerSystem : JobComponentSystem {
         [BurstCompile]
         struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
@@ -13,22 +13,25 @@ namespace JustFight {
             [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, [ReadOnly] ref Rotation rotationCmpt, ref EnemySpawner spawnerCmpt) {
                 spawnerCmpt.leftRestTime -= dT;
-                if (spawnerCmpt.leftRestTime <= 0) {
-                    spawnerCmpt.leftRestTime += spawnerCmpt.restTimePerSpawn;
-                    var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
-                    ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);
-                    ecb.SetComponent (entityInQueryIndex, hullEntity, rotationCmpt);
-                    ecb.SetComponent (entityInQueryIndex, hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
-                    ecb.AddComponent (entityInQueryIndex, hullEntity, new EnemyHull { random = new Unity.Mathematics.Random ((uint) (dT * 10000)) });
+                if (spawnerCmpt.enemyNum > 0) {
+                    if (spawnerCmpt.leftRestTime <= 0) {
+                        spawnerCmpt.enemyNum--;
+                        spawnerCmpt.leftRestTime += spawnerCmpt.restTimePerSpawn;
+                        var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
+                        ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);
+                        ecb.SetComponent (entityInQueryIndex, hullEntity, rotationCmpt);
+                        ecb.SetComponent (entityInQueryIndex, hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
+                        ecb.AddComponent (entityInQueryIndex, hullEntity, new EnemyHull { random = new Unity.Mathematics.Random ((uint) (dT * 10000)) });
 
-                    var turretEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.turretPrefab);
-                    ecb.SetComponent (entityInQueryIndex, turretEntity, rotationCmpt);
-                    ecb.SetComponent (entityInQueryIndex, turretEntity, new TankHullToFollow { entity = hullEntity });
-                    ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
-                    ecb.AddComponent (entityInQueryIndex, turretEntity, new EnemyTurret { random = new Unity.Mathematics.Random ((uint) (dT * 1000)) });
+                        var turretEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.turretPrefab);
+                        ecb.SetComponent (entityInQueryIndex, turretEntity, rotationCmpt);
+                        ecb.SetComponent (entityInQueryIndex, turretEntity, new TankHullToFollow { entity = hullEntity });
+                        ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
+                        ecb.AddComponent (entityInQueryIndex, turretEntity, new EnemyTurret { random = new Unity.Mathematics.Random ((uint) (dT * 1000)) });
 
-                    ecb.AddComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
-                }
+                        ecb.AddComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
+                    }
+                } else ecb.DestroyEntity (entityInQueryIndex, entity);
             }
         }
         BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;

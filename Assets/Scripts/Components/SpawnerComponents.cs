@@ -14,6 +14,7 @@ namespace JustFight {
     struct EnemySpawner : IComponentData {
         public Entity hullPrefab;
         public Entity turretPrefab;
+        public int enemyNum;
         public float restTimePerSpawn;
         public float leftRestTime;
         public int teamId;
