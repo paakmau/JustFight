@@ -13,17 +13,26 @@ namespace JustFight {
 
         [BurstCompile]
         struct ShadowMoveJob : IJobChunk {
+            public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public ComponentDataFromEntity<Translation> translationFromEntity;
             [ReadOnly] public ComponentDataFromEntity<Rotation> rotationFromEntity;
+            [ReadOnly] public ArchetypeChunkEntityType entityType;
             [ReadOnly] public ArchetypeChunkComponentType<Shadow> shadowType;
             public ArchetypeChunkComponentType<LocalToWorld> localToWorldType;
             public void Execute (ArchetypeChunk chunk, int chunkIndex, int entityOffset) {
+                var chunkEntity = chunk.GetNativeArray (entityType);
                 var chunkShadow = chunk.GetNativeArray (shadowType);
                 var chunkLocalToWorld = chunk.GetNativeArray (localToWorldType);
                 for (int i = 0; i < chunk.Count; i++) {
-                    var translation = translationFromEntity[chunkShadow[i].translationEntity].Value;
-                    var rotation = rotationFromEntity[chunkShadow[i].rotationEntity].Value;
-                    chunkLocalToWorld[i] = new LocalToWorld { Value = math.mul (float4x4.Translate (chunkShadow[i].offset), new float4x4 (rotation, translation)) };
+                    var isTranslationEntityValid = translationFromEntity.Exists (chunkShadow[i].translationEntity);
+                    var isRotationEntityValid = rotationFromEntity.Exists (chunkShadow[i].rotationEntity);
+                    if (isTranslationEntityValid && isRotationEntityValid) {
+                        var translation = translationFromEntity[chunkShadow[i].translationEntity].Value;
+                        var rotation = rotationFromEntity[chunkShadow[i].rotationEntity].Value;
+                        chunkLocalToWorld[i] = new LocalToWorld { Value = math.mul (float4x4.Translate (chunkShadow[i].offset), new float4x4 (rotation, translation)) };
+                    } else {
+                        ecb.DestroyEntity (chunkIndex, chunkEntity[i]);
+                    }
                 }
             }
         }
@@ -35,18 +44,23 @@ namespace JustFight {
             [ReadOnly] public ComponentDataFromEntity<ShootInput> shootInputFromEntity;
             [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, [ReadOnly] ref GunBullet bulletCmpt, ref GunState gunStateCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
-                var shootInputCmpt = shootInputFromEntity[shadowTurretCmpt.turretEntity];
-                if (gunStateCmpt.recoveryLeftTime < 0) {
-                    if (shootInputCmpt.isShoot) {
-                        gunStateCmpt.recoveryLeftTime += gunStateCmpt.recoveryTime;
-                        var teamId = tankTurretTeamFromEntity[shadowTurretCmpt.turretEntity].id;
-                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, bulletCmpt.bulletPrefab);
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + localToWorldCmpt.Forward * 1.7f });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * bulletCmpt.bulletShootSpeed });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamId });
-                    }
-                } else gunStateCmpt.recoveryLeftTime -= dT;
+                var isTurretEntityValid = shootInputFromEntity.Exists (shadowTurretCmpt.turretEntity);
+                if (!isTurretEntityValid)
+                    ecb.DestroyEntity (entityInQueryIndex, entity);
+                else {
+                    if (gunStateCmpt.recoveryLeftTime < 0) {
+                        var shootInputCmpt = shootInputFromEntity[shadowTurretCmpt.turretEntity];
+                        if (shootInputCmpt.isShoot) {
+                            gunStateCmpt.recoveryLeftTime += gunStateCmpt.recoveryTime;
+                            var teamId = tankTurretTeamFromEntity[shadowTurretCmpt.turretEntity].id;
+                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, bulletCmpt.bulletPrefab);
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + localToWorldCmpt.Forward * 1.7f });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * bulletCmpt.bulletShootSpeed });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamId });
+                        }
+                    } else gunStateCmpt.recoveryLeftTime -= dT;
+                }
             }
         }
 
@@ -65,8 +79,10 @@ namespace JustFight {
 
         protected override JobHandle OnUpdate (Unity.Jobs.JobHandle inputDeps) {
             var moveJobHandle = new ShadowMoveJob {
-                translationFromEntity = GetComponentDataFromEntity<Translation> (true),
+                ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
+                    translationFromEntity = GetComponentDataFromEntity<Translation> (true),
                     rotationFromEntity = GetComponentDataFromEntity<Rotation> (true),
+                    entityType = GetArchetypeChunkEntityType (),
                     shadowType = GetArchetypeChunkComponentType<Shadow> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
             }.Schedule (group, inputDeps);

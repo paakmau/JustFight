@@ -56,9 +56,10 @@ namespace JustFight {
                 var dir = moveInputCmpt.dir;
                 if (dir.x != 0 || dir.z != 0)
                     rotationCmpt.Value = quaternion.LookRotation (dir, math.up ());
-                dir *= moveSpeedCmpt.value;
-                dir.y = velocityCmpt.Linear.y;
-                velocityCmpt.Linear = dir;
+                var v = moveSpeedCmpt.value * dir;
+                v.y = velocityCmpt.Linear.y;
+                velocityCmpt.Linear = v;
+                // TODO: 需要参考UnityPhysicsSample中的CharacterController
             }
         }
 

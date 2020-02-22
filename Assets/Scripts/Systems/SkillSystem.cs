@@ -100,7 +100,7 @@ namespace JustFight {
                     newShadowSkillCmpt.shadowHullInstanceB = hullInstanceB;
                     newShadowSkillCmpt.shadowTurretInstanceA = turretInstanceA;
                     newShadowSkillCmpt.shadowTurretInstanceB = turretInstanceB;
-                    ecb.SetComponent (entityInQueryIndex, entity, newShadowSkillCmpt); // TODO: Here found a bug in Unity.
+                    ecb.SetComponent (entityInQueryIndex, entity, newShadowSkillCmpt);
                 }
             }
         }
