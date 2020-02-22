@@ -434,6 +434,7 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
+  enemyNum: 1
   restTimePerSpawn: 12
   teamId: 3
 --- !u!114 &604302123
@@ -766,6 +767,7 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
     type: 3}
+  enemyNum: 3
   restTimePerSpawn: 10
   teamId: 2
 --- !u!114 &1556891380
@@ -842,6 +844,7 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
     type: 3}
+  enemyNum: 1
   restTimePerSpawn: 15
   teamId: 4
 --- !u!114 &1906609824
