@@ -1,18 +1,28 @@
 using System;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace JustFight.Weapon {
 
     [Serializable]
-    struct GunBullet : IComponentData {
-        public Entity bulletPrefab;
-        public float bulletShootSpeed;
+    struct WeaponState : IComponentData {
+        public float recoveryLeftTime;
+        public float recoveryTime;
     }
 
     [Serializable]
-    struct GunState : IComponentData {
-        public float recoveryLeftTime;
-        public float recoveryTime;
+    struct TankGun : IComponentData {
+        public Entity bulletPrefab;
+        public float bulletShootSpeed;
+        public float3 offset;
+    }
+
+    [Serializable]
+    struct DoubleTankGun : IComponentData {
+        public Entity bulletPrefab;
+        public float bulletShootSpeed;
+        public float3 offsetA;
+        public float3 offsetB;
     }
 
 }

@@ -1,17 +1,21 @@
 using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace JustFight.Weapon {
 
     [RequiresEntityConversion]
-    class GunAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
+    class TankGunAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject bulletPrefab = null;
         public float bulletShootSpeed = 15;
-        public float shootRecoveryTime = 0.4f;
+        public float3 offset = default;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new GunBullet { bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab), bulletShootSpeed = bulletShootSpeed });
-            dstManager.AddComponentData (entity, new GunState { recoveryTime = shootRecoveryTime });
+            dstManager.AddComponentData (entity, new TankGun {
+                bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab),
+                    bulletShootSpeed = bulletShootSpeed,
+                    offset = offset
+            });
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
             referencedPrefabs.Add (bulletPrefab);

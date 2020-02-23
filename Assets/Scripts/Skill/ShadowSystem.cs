@@ -41,29 +41,29 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct ShadowShootJob : IJobForEachWithEntity<ShadowTurret, GunBullet, GunState, LocalToWorld> {
+        struct ShadowShootJob : IJobForEachWithEntity<ShadowTurret, TankGun, WeaponState, LocalToWorld> {
             // TODO: 如果武器多样化，此处不可扩展，需要修改为拷贝ShootInput
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public ComponentDataFromEntity<TankTurretTeam> tankTurretTeamFromEntity;
             [ReadOnly] public ComponentDataFromEntity<ShootInput> shootInputFromEntity;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, [ReadOnly] ref GunBullet bulletCmpt, ref GunState gunStateCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, [ReadOnly] ref TankGun gunCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 var isTurretEntityValid = shootInputFromEntity.Exists (shadowTurretCmpt.turretEntity);
                 if (!isTurretEntityValid)
                     ecb.DestroyEntity (entityInQueryIndex, entity);
                 else {
-                    if (gunStateCmpt.recoveryLeftTime < 0) {
+                    if (weaponStateCmpt.recoveryLeftTime < 0) {
                         var shootInputCmpt = shootInputFromEntity[shadowTurretCmpt.turretEntity];
                         if (shootInputCmpt.isShoot) {
-                            gunStateCmpt.recoveryLeftTime += gunStateCmpt.recoveryTime;
+                            weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
                             var teamId = tankTurretTeamFromEntity[shadowTurretCmpt.turretEntity].id;
-                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, bulletCmpt.bulletPrefab);
+                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + localToWorldCmpt.Forward * 1.7f });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * bulletCmpt.bulletShootSpeed });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamId });
                         }
-                    } else gunStateCmpt.recoveryLeftTime -= dT;
+                    } else weaponStateCmpt.recoveryLeftTime -= dT;
                 }
             }
         }

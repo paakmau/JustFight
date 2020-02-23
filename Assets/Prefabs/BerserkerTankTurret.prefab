@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 6467147300275870679}
   - component: {fileID: 6467147300275870678}
   - component: {fileID: 1969793277731879740}
-  - component: {fileID: 2314842973414146290}
+  - component: {fileID: -4655809736843261193}
+  - component: {fileID: -8145733740648218302}
   - component: {fileID: 1009405463449992596}
   - component: {fileID: 3070893245364863704}
   m_Layer: 0
@@ -122,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff2311960776468c8444b379bb899d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2314842973414146290
+--- !u!114 &-4655809736843261193
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,13 +132,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 3070893245364863705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c46ca982c9d58442e9080e4c53b523f3, type: 3}
+  m_Script: {fileID: 11500000, guid: ae41dab1449b24505a784c46267069cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootRecoveryTime: 0.4
+--- !u!114 &-8145733740648218302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3070893245364863705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 695f991396e914c70a9ff914c29f2fac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 3128932738226271672, guid: dd4aa043508c043e4b7d3dc996c450d5,
     type: 3}
-  bulletShootSpeed: 9
-  shootRecoveryTime: 0.6
+  bulletShootSpeed: 14
+  offsetA:
+    x: -0.8
+    y: 0.57
+    z: 1.4
+  offsetB:
+    x: 0.8
+    y: 0.57
+    z: 1.4
 --- !u!114 &1009405463449992596
 MonoBehaviour:
   m_ObjectHideFlags: 0
