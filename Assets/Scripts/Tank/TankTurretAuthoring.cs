@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace JustFight.TankTurret {
+namespace JustFight.Tank {
 
     [RequiresEntityConversion]
     class TankTurretAuthoring : MonoBehaviour, IConvertGameObjectToEntity {

@@ -1,5 +1,3 @@
-using JustFight.Health;
-using JustFight.Transforms;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,7 +7,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-namespace JustFight.TankHull {
+namespace JustFight.Tank {
 
     [UpdateBefore (typeof (BuildPhysicsWorld))]
     class TankHullSystem : JobComponentSystem {

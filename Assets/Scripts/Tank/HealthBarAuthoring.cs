@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace JustFight.Health {
+namespace JustFight.Tank {
 
     [RequiresEntityConversion]
     class HealthBarAuthoring : MonoBehaviour, IConvertGameObjectToEntity {

@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace JustFight.Transforms {
+namespace JustFight.Tank {
 
     [RequiresEntityConversion]
     class FollowTankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {

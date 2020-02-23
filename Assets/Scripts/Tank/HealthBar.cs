@@ -1,7 +1,7 @@
 using System;
 using Unity.Entities;
 
-namespace JustFight.Health {
+namespace JustFight.Tank {
 
     [Serializable]
     struct HealthBar : IComponentData { }

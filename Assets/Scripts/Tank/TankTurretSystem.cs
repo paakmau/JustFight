@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace JustFight.TankTurret {
+namespace JustFight.Tank {
 
     class TankTurretSystem : JobComponentSystem {
 

@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace JustFight.Transforms {
+namespace JustFight.Tank {
 
     [UpdateInGroup (typeof (TransformSystemGroup))]
     class FollowTankHullSystem : JobComponentSystem {

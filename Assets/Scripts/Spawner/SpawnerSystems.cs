@@ -1,8 +1,6 @@
 using JustFight.Enemy;
 using JustFight.Player;
-using JustFight.TankHull;
-using JustFight.TankTurret;
-using JustFight.Transforms;
+using JustFight.Tank;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.Health {
+namespace JustFight.Tank {
 
     [RequiresEntityConversion]
     class HealthAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {

@@ -1,5 +1,4 @@
-using JustFight.Health;
-using JustFight.TankHull;
+using JustFight.Tank;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

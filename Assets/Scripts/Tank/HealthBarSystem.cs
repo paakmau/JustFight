@@ -1,4 +1,3 @@
-using JustFight.Transforms;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,7 +5,7 @@ using Unity.Jobs;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace JustFight.Health {
+namespace JustFight.Tank {
 
     class HealthBarSystem : JobComponentSystem {
 

@@ -1,5 +1,4 @@
-using JustFight.TankHull;
-using JustFight.TankTurret;
+using JustFight.Tank;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;

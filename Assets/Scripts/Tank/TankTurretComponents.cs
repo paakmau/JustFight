@@ -2,7 +2,7 @@ using System;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace JustFight.TankTurret {
+namespace JustFight.Tank {
 
     [Serializable]
     struct TankTurretTeam : IComponentData {

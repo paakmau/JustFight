@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.TankHull {
+namespace JustFight.Tank {
 
     [RequiresEntityConversion]
     class TankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
