@@ -331,9 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3eb4a778d0041a9b37cf4eb4a65288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 8201406888106953687, guid: 4b05cec68050943cd95378d3fc0fbb90,
+  hullPrefab: {fileID: 6032015425416455473, guid: 87177f26f2f624d79900f94337053bf8,
     type: 3}
-  turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
+  turretPrefab: {fileID: 4685838210898294933, guid: d9a17e56c7fc24915aa718b6bb3765ed,
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}

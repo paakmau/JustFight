@@ -27,25 +27,25 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct SpraySkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, SpraySkill, LocalToWorld> {
+        struct BurstSkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, BurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref SpraySkill spraySkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
-                if (spraySkillCmpt.skillLeftTime > 0) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+                if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
-                    spraySkillCmpt.skillShootRecoveryleftTime -= dT;
-                    if (spraySkillCmpt.skillShootRecoveryleftTime < 0) {
-                        spraySkillCmpt.skillShootRecoveryleftTime += spraySkillCmpt.skillShootRecoveryTime;
-                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, spraySkillCmpt.bulletPrefab);
+                    burstSkillCmpt.skillShootRecoveryleftTime -= dT;
+                    if (burstSkillCmpt.skillShootRecoveryleftTime < 0) {
+                        burstSkillCmpt.skillShootRecoveryleftTime += burstSkillCmpt.skillShootRecoveryTime;
+                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, burstSkillCmpt.bulletPrefab);
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + shootInputCmpt.dir * 1.7f });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * spraySkillCmpt.skillShootSpeed });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * burstSkillCmpt.skillShootSpeed });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                     }
-                    spraySkillCmpt.skillLeftTime -= dT;
+                    burstSkillCmpt.skillLeftTime -= dT;
                 } else if (skillCmpt.isCastTrigger) {
                     // 发动技能
-                    spraySkillCmpt.skillLeftTime += spraySkillCmpt.skillLastTime;
+                    burstSkillCmpt.skillLeftTime += burstSkillCmpt.skillLastTime;
                 }
             }
         }
@@ -107,6 +107,34 @@ namespace JustFight.Skill {
             }
         }
 
+        [BurstCompile]
+        struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, ShotgunBurstSkill, LocalToWorld> {
+            public EntityCommandBuffer.Concurrent ecb;
+            [ReadOnly] public float dT;
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+                if (burstSkillCmpt.skillLeftTime > 0) {
+                    // 技能正在发动
+                    burstSkillCmpt.skillShootRecoveryleftTime -= dT;
+                    if (burstSkillCmpt.skillShootRecoveryleftTime < 0) {
+                        burstSkillCmpt.skillShootRecoveryleftTime += burstSkillCmpt.skillShootRecoveryTime;
+                        var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
+                        for (int i = 0; i < burstSkillCmpt.bulletNumPerShoot; i++) {
+                            var shootDir = shootInputCmpt.dir + random.NextFloat3Direction () * 0.5f;
+                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, burstSkillCmpt.bulletPrefab);
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + shootInputCmpt.dir * 1.7f });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * burstSkillCmpt.skillShootSpeed });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
+                        }
+                    }
+                    burstSkillCmpt.skillLeftTime -= dT;
+                } else if (skillCmpt.isCastTrigger) {
+                    // 发动技能
+                    burstSkillCmpt.skillLeftTime += burstSkillCmpt.skillLastTime;
+                }
+            }
+        }
+
         BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
@@ -119,11 +147,13 @@ namespace JustFight.Skill {
                     rand = new Unity.Mathematics.Random ((uint) (Time.DeltaTime * 10000))
             }.Schedule (this, inputDeps);
             entityCommandBufferSystem.AddJobHandleForProducer (bombSkillJobHandle);
-            var spraySkillJobHandle = new SpraySkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
-            entityCommandBufferSystem.AddJobHandleForProducer (spraySkillJobHandle);
+            var burstSkillJobHandle = new BurstSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
+            entityCommandBufferSystem.AddJobHandleForProducer (burstSkillJobHandle);
             var shadowSkillJobHandle = new ShadowSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
             entityCommandBufferSystem.AddJobHandleForProducer (shadowSkillJobHandle);
-            return JobHandle.CombineDependencies (bombSkillJobHandle, spraySkillJobHandle, shadowSkillJobHandle);
+            var shotgunBurstSkillJobHandle = new ShotgunBurstSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
+            entityCommandBufferSystem.AddJobHandleForProducer (shotgunBurstSkillJobHandle);
+            return JobHandle.CombineDependencies (JobHandle.CombineDependencies (bombSkillJobHandle, burstSkillJobHandle, shadowSkillJobHandle), shotgunBurstSkillJobHandle);
         }
     }
 }

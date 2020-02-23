@@ -25,4 +25,11 @@ namespace JustFight.Weapon {
         public float3 offsetB;
     }
 
+    [Serializable]
+    struct Shotgun : IComponentData {
+        public Entity bulletPrefab;
+        public float bulletShootSpeed;
+        public int bulletNum;
+        public float3 offset;
+    }
 }

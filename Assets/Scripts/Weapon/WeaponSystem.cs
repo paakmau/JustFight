@@ -56,6 +56,29 @@ namespace JustFight.Weapon {
             }
         }
 
+        [BurstCompile]
+        struct ShotgunJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, WeaponState, Shotgun, LocalToWorld> {
+            public EntityCommandBuffer.Concurrent ecb;
+            [ReadOnly] public float dT;
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref Shotgun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+                if (weaponStateCmpt.recoveryLeftTime <= 0) {
+                    if (shootInputCmpt.isShoot) {
+                        weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
+                        var offset = localToWorldCmpt.Right * gunCmpt.offset.x + localToWorldCmpt.Up * gunCmpt.offset.y + localToWorldCmpt.Forward * gunCmpt.offset.z;
+                        var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
+                        for (int i = 0; i < gunCmpt.bulletNum; i++) {
+                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
+                            var shootDir = shootInputCmpt.dir + random.NextFloat3Direction () * 0.3f;
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * gunCmpt.bulletShootSpeed });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
+                        }
+                    }
+                } else weaponStateCmpt.recoveryLeftTime -= dT;
+            }
+        }
+
         BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
@@ -64,8 +87,9 @@ namespace JustFight.Weapon {
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var tankGunJobHandle = new TankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
             var doubleTankGunJobHandle = new DoubleTankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, tankGunJobHandle);
-            entityCommandBufferSystem.AddJobHandleForProducer (doubleTankGunJobHandle);
-            return doubleTankGunJobHandle;
+            var shotgunJobHandle = new ShotgunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, doubleTankGunJobHandle);
+            entityCommandBufferSystem.AddJobHandleForProducer (shotgunJobHandle);
+            return shotgunJobHandle;
         }
     }
 }

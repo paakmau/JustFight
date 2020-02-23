@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5926494535566626389}
   - component: {fileID: 5926494535566626388}
   m_Layer: 0
-  m_Name: NormalBullet
+  m_Name: CheapBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MotionType: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDamping: 0.01
   m_AngularDamping: 0.05
   m_InitialLinearVelocity:
@@ -231,3 +231,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 18
+  destroyTime: 10

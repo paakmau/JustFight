@@ -11,7 +11,7 @@ namespace JustFight.Skill {
     }
 
     [Serializable]
-    struct SpraySkill : IComponentData {
+    struct BurstSkill : IComponentData {
         public float skillShootRecoveryleftTime;
         public float skillShootRecoveryTime;
         public float skillShootSpeed;
@@ -38,5 +38,16 @@ namespace JustFight.Skill {
         public Entity shadowHullInstanceB;
         public Entity shadowTurretInstanceA;
         public Entity shadowTurretInstanceB;
+    }
+
+    [Serializable]
+    struct ShotgunBurstSkill : IComponentData {
+        public float skillShootRecoveryleftTime;
+        public float skillShootRecoveryTime;
+        public float skillShootSpeed;
+        public float skillLeftTime;
+        public float skillLastTime;
+        public int bulletNumPerShoot;
+        public Entity bulletPrefab;
     }
 }
