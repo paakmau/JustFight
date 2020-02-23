@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6264031257864540902}
   - component: {fileID: 430845485007662187}
   m_Layer: 0
-  m_Name: NormalTankTurret
+  m_Name: CheapTankTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 430845485007662186}
-  m_Mesh: {fileID: 1720931250042145908, guid: f889f7d57605d41b49d8b065b6d8c13d, type: 3}
+  m_Mesh: {fileID: -5484590741146473421, guid: 0cfd4ecaf5aef4d57a0c204beabd8372, type: 3}
 --- !u!23 &2145540412115540150
 MeshRenderer:
   m_ObjectHideFlags: 0
