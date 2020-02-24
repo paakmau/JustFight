@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -7959571735368288150}
   - component: {fileID: 1664770518885080562}
   m_Layer: 0
-  m_Name: NormalTankHull
+  m_Name: CheapTankHull
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664770518885080567}
-  m_Mesh: {fileID: 657721999716754663, guid: 5fa5c362ea1ce4cfe85cb62949ff4c71, type: 3}
+  m_Mesh: {fileID: -4276161043252630786, guid: 29e9e3598d0104d3da328bcdabd629cf, type: 3}
 --- !u!23 &1664770518885080565
 MeshRenderer:
   m_ObjectHideFlags: 0

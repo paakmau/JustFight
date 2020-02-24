@@ -36,9 +36,10 @@ namespace JustFight.Skill {
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;
                     if (burstSkillCmpt.skillShootRecoveryleftTime < 0) {
                         burstSkillCmpt.skillShootRecoveryleftTime += burstSkillCmpt.skillShootRecoveryTime;
+                        var offset = localToWorldCmpt.Right * burstSkillCmpt.offset.x + localToWorldCmpt.Up * burstSkillCmpt.offset.y + localToWorldCmpt.Forward * burstSkillCmpt.offset.z;
                         var bulletEntity = ecb.Instantiate (entityInQueryIndex, burstSkillCmpt.bulletPrefab);
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + shootInputCmpt.dir * 1.7f });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * burstSkillCmpt.skillShootSpeed });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                     }

@@ -331,9 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3eb4a778d0041a9b37cf4eb4a65288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 6032015425416455473, guid: 87177f26f2f624d79900f94337053bf8,
+  hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
     type: 3}
-  turretPrefab: {fileID: 4685838210898294933, guid: d9a17e56c7fc24915aa718b6bb3765ed,
+  turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
@@ -609,7 +609,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -763,9 +763,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 3203638689423926593, guid: bf60c5e2973284a39875e80aefc5e9eb,
+  hullPrefab: {fileID: 835339649211828683, guid: 899e63495742a46af987c7c0556b6d86,
     type: 3}
-  turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
+  turretPrefab: {fileID: 3075531947268555054, guid: fe4d73141308f448d837d250f836a944,
     type: 3}
   enemyNum: 3
   restTimePerSpawn: 10

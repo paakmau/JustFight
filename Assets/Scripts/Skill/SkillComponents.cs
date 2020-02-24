@@ -1,5 +1,6 @@
 using System;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace JustFight.Skill {
 
@@ -17,6 +18,7 @@ namespace JustFight.Skill {
         public float skillShootSpeed;
         public float skillLeftTime;
         public float skillLastTime;
+        public float3 offset;
         public Entity bulletPrefab;
     }
 
