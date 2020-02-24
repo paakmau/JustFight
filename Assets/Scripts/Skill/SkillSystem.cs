@@ -13,9 +13,9 @@ namespace JustFight.Skill {
     class SkillSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct SkillJob : IJobForEach<SkillInput, Skill> {
+        struct SkillJob : IJobForEach<AimInput, Skill> {
             [ReadOnly] public float dT;
-            public void Execute ([ReadOnly] ref SkillInput inputCmpt, ref Skill skillCmpt) {
+            public void Execute ([ReadOnly] ref AimInput inputCmpt, ref Skill skillCmpt) {
                 skillCmpt.isCastTrigger = false;
                 if (skillCmpt.leftTime < 0) {
                     if (inputCmpt.isCast) {
@@ -27,10 +27,10 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct BurstSkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, BurstSkill, LocalToWorld> {
+        struct BurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, BurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;
@@ -52,11 +52,11 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct BombSkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, BombSkill, LocalToWorld> {
+        struct BombSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, BombSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
             public Unity.Mathematics.Random rand;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BombSkill bombSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BombSkill bombSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (skillCmpt.isCastTrigger) {
                     var offset = shootInputCmpt.dir * bombSkillCmpt.forwardOffset;
                     var center = localToWorldCmpt.Position + offset + new float3 (0, 6, 0);
@@ -109,10 +109,10 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, Skill, ShotgunBurstSkill, LocalToWorld> {
+        struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, ShotgunBurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;

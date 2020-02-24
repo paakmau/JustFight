@@ -1,5 +1,4 @@
-using JustFight.Enemy;
-using JustFight.Player;
+using JustFight.Input;
 using JustFight.Tank;
 using Unity.Burst;
 using Unity.Collections;

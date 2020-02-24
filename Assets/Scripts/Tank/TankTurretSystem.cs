@@ -11,8 +11,8 @@ namespace JustFight.Tank {
     class TankTurretSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct RotateTurretJob : IJobForEach<ShootInput, Rotation> {
-            public void Execute ([ReadOnly] ref ShootInput shootInputCmpt, ref Rotation rotationCmpt) {
+        struct RotateTurretJob : IJobForEach<AimInput, Rotation> {
+            public void Execute ([ReadOnly] ref AimInput shootInputCmpt, ref Rotation rotationCmpt) {
                 if (shootInputCmpt.dir.x != 0 || shootInputCmpt.dir.z != 0)
                     rotationCmpt.Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ());
             }

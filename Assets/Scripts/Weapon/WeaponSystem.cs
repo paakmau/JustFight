@@ -13,10 +13,10 @@ namespace JustFight.Weapon {
     class WeaponSystem : JobComponentSystem {
 
         [BurstCompile]
-        struct TankGunJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, WeaponState, TankGun, LocalToWorld> {
+        struct TankGunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, TankGun, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref TankGun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref TankGun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (weaponStateCmpt.recoveryLeftTime <= 0) {
                     if (shootInputCmpt.isShoot) {
                         weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
@@ -32,10 +32,10 @@ namespace JustFight.Weapon {
         }
 
         [BurstCompile]
-        struct DoubleTankGunJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, WeaponState, DoubleTankGun, LocalToWorld> {
+        struct DoubleTankGunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, DoubleTankGun, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref DoubleTankGun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref DoubleTankGun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (weaponStateCmpt.recoveryLeftTime <= 0) {
                     if (shootInputCmpt.isShoot) {
                         weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
@@ -57,10 +57,10 @@ namespace JustFight.Weapon {
         }
 
         [BurstCompile]
-        struct ShotgunJob : IJobForEachWithEntity<TankTurretTeam, ShootInput, WeaponState, Shotgun, LocalToWorld> {
+        struct ShotgunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, Shotgun, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref ShootInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref Shotgun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref Shotgun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (weaponStateCmpt.recoveryLeftTime <= 0) {
                     if (shootInputCmpt.isShoot) {
                         weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;

@@ -6,7 +6,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 
-namespace JustFight.Enemy {
+namespace JustFight.Input {
 
     class EnemySystem : JobComponentSystem {
         [BurstCompile]
@@ -24,20 +24,20 @@ namespace JustFight.Enemy {
         }
 
         [BurstCompile]
-        struct EnemyTurretJob : IJobForEach<EnemyTurret, ShootInput, SkillInput> {
+        struct EnemyTurretJob : IJobForEach<EnemyTurret, AimInput> {
             [ReadOnly] public float dT;
-            public void Execute (ref EnemyTurret turretCmpt, ref ShootInput shootInputCmpt, ref SkillInput skillInputCmpt) {
+            public void Execute (ref EnemyTurret turretCmpt, ref AimInput aimInputCmpt) {
                 turretCmpt.rotateLeftTime -= dT;
                 if (turretCmpt.rotateLeftTime <= 0) {
                     turretCmpt.rotateLeftTime += turretCmpt.random.NextFloat (0.2f, 0.4f);
                     turretCmpt.rotateDirection = turretCmpt.random.NextBool ();
-                    shootInputCmpt.isShoot = turretCmpt.random.NextBool ();
-                    skillInputCmpt.isCast = turretCmpt.random.NextBool ();
+                    aimInputCmpt.isShoot = turretCmpt.random.NextBool ();
+                    aimInputCmpt.isCast = turretCmpt.random.NextBool ();
                     // To avoid floating-point error 
-                    shootInputCmpt.dir.y = 0;
-                    shootInputCmpt.dir = math.normalize (shootInputCmpt.dir);
+                    aimInputCmpt.dir.y = 0;
+                    aimInputCmpt.dir = math.normalize (aimInputCmpt.dir);
                 }
-                shootInputCmpt.dir = math.rotate (quaternion.AxisAngle (math.up (), turretCmpt.rotateDirection ? 0.05f : -0.05f), shootInputCmpt.dir);
+                aimInputCmpt.dir = math.rotate (quaternion.AxisAngle (math.up (), turretCmpt.rotateDirection ? 0.05f : -0.05f), aimInputCmpt.dir);
             }
         }
 

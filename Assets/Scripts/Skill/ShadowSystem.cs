@@ -45,7 +45,7 @@ namespace JustFight.Skill {
             // TODO: 如果武器多样化，此处不可扩展，需要修改为拷贝ShootInput
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public ComponentDataFromEntity<TankTurretTeam> tankTurretTeamFromEntity;
-            [ReadOnly] public ComponentDataFromEntity<ShootInput> shootInputFromEntity;
+            [ReadOnly] public ComponentDataFromEntity<AimInput> shootInputFromEntity;
             [ReadOnly] public float dT;
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, [ReadOnly] ref TankGun gunCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 var isTurretEntityValid = shootInputFromEntity.Exists (shadowTurretCmpt.turretEntity);
@@ -93,7 +93,7 @@ namespace JustFight.Skill {
             var shadowShootJobHandle = new ShadowShootJob {
                 ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
                     tankTurretTeamFromEntity = GetComponentDataFromEntity<TankTurretTeam> (),
-                    shootInputFromEntity = GetComponentDataFromEntity<ShootInput> (),
+                    shootInputFromEntity = GetComponentDataFromEntity<AimInput> (),
                     dT = Time.DeltaTime
             }.Schedule (this, moveJobHandle);
             return shadowShootJobHandle;

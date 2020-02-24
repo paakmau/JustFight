@@ -2,7 +2,7 @@ using System;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace JustFight.Enemy {
+namespace JustFight.Input {
 
     [Serializable]
     struct EnemyHull : IComponentData {

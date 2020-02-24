@@ -2,7 +2,7 @@ using System;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.Player {
+namespace JustFight.Input {
     [Serializable]
     struct SelfHull : IComponentData { }
 
