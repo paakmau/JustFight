@@ -207,10 +207,10 @@ MonoBehaviour:
         CombineMode: 2
     m_BelongsTo:
       m_Override: 0
-      m_Value: 0001000000000000000000000000000000000000000000000000000000000000
+      m_Value: 0000000100000000000000000000000000000000000000000000000000000000
     m_CollidesWith:
       m_Override: 0
-      m_Value: 0100010000000000000000000000000000000000000000000000000000000000
+      m_Value: 0101010000000000000000000000000000000000000000000000000000000000
     m_RaisesCollisionEvents:
       m_Override: 0
       m_Value: 1
@@ -230,5 +230,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 497ad6c262a144c319364dce0611719f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 15
-  destroyTime: 0.5
+  damage: 8
+  destroyTime: 1.8
