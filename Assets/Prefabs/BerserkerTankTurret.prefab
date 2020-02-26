@@ -184,11 +184,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 799525878b8a24e0ab5d0ca06e40d9c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillLastTime: 4
-  skillShootRecoveryTime: 0.4
-  skillShootSpeed: 8
-  bulletNumPerShoot: 4
-  spread: 0.3
+  skillLastTime: 5
+  skillShootRecoveryTime: 0.5
+  skillShootSpeed: 12
+  bulletNumPerShoot: 5
+  spread: 0.15
   bulletPrefab: {fileID: 4645193505780586057, guid: f7762d8a12614424ab34df7b0399fcd3,
     type: 3}
   offset:

@@ -6,7 +6,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 
-namespace JustFight.Spawner {
+namespace JustFight.Tank.Spawner {
     // TODO: Add self recover feature and combine the two system
     class EnemySpawnerSystem : JobComponentSystem {
         [BurstCompile]

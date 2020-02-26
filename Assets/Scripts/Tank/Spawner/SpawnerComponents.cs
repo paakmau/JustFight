@@ -2,7 +2,7 @@ using System;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.Spawner {
+namespace JustFight.Tank.Spawner {
     class SelfSpawner : IComponentData {
         public Entity hullPrefab;
         public Entity turretPrefab;

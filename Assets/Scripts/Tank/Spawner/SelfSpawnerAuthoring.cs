@@ -2,24 +2,22 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.Spawner {
+namespace JustFight.Tank.Spawner {
 
     [RequiresEntityConversion]
-    class EnemySpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
+    class SelfSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject hullPrefab = null;
         public GameObject turretPrefab = null;
-        public int enemyNum = 4;
-        public float restTimePerSpawn = 3f;
         public int teamId = 1;
+        public Transform followCameraTransform = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            var enemySpawnCmpt = new EnemySpawner {
+            var selfSpawnerCmpt = new SelfSpawner {
                 hullPrefab = conversionSystem.GetPrimaryEntity (hullPrefab),
                 turretPrefab = conversionSystem.GetPrimaryEntity (turretPrefab),
-                enemyNum = enemyNum,
-                restTimePerSpawn = restTimePerSpawn,
-                teamId = teamId
+                teamId = teamId,
+                followCameraTransform = followCameraTransform
             };
-            dstManager.AddComponentData (entity, enemySpawnCmpt);
+            dstManager.AddComponentData (entity, selfSpawnerCmpt);
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
             referencedPrefabs.Add (hullPrefab);
