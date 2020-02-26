@@ -41,28 +41,16 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct ShadowShootJob : IJobForEachWithEntity<ShadowTurret, TankGun, WeaponState, LocalToWorld> {
-            // TODO: 如果武器多样化，此处不可扩展，需要修改为拷贝ShootInput
+        struct ShadowShootJob : IJobForEachWithEntity<ShadowTurret, AimInput> {
             public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public ComponentDataFromEntity<TankTurretTeam> tankTurretTeamFromEntity;
-            [ReadOnly] public ComponentDataFromEntity<AimInput> shootInputFromEntity;
+            [ReadOnly] public ComponentDataFromEntity<ShadowSkill> shadowSkillFromEntity;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, [ReadOnly] ref TankGun gunCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
-                var isTurretEntityValid = shootInputFromEntity.Exists (shadowTurretCmpt.turretEntity);
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, ref AimInput aimInputCmpt) {
+                var isTurretEntityValid = shadowSkillFromEntity.Exists (shadowTurretCmpt.turretEntity);
                 if (!isTurretEntityValid)
                     ecb.DestroyEntity (entityInQueryIndex, entity);
-                else {
-                    if (weaponStateCmpt.recoveryLeftTime < 0) {
-                        var shootInputCmpt = shootInputFromEntity[shadowTurretCmpt.turretEntity];
-                        weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
-                        var teamId = tankTurretTeamFromEntity[shadowTurretCmpt.turretEntity].id;
-                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + localToWorldCmpt.Forward * 1.7f });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamId });
-                    } else weaponStateCmpt.recoveryLeftTime -= dT;
-                }
+                else
+                    aimInputCmpt.dir = shadowSkillFromEntity[shadowTurretCmpt.turretEntity].aimDir;
             }
         }
 
@@ -90,8 +78,7 @@ namespace JustFight.Skill {
             }.Schedule (group, inputDeps);
             var shadowShootJobHandle = new ShadowShootJob {
                 ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
-                    tankTurretTeamFromEntity = GetComponentDataFromEntity<TankTurretTeam> (),
-                    shootInputFromEntity = GetComponentDataFromEntity<AimInput> (),
+                    shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (),
                     dT = Time.DeltaTime
             }.Schedule (this, moveJobHandle);
             return shadowShootJobHandle;

@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.Tank.Spawner {
+using JustFight.Tank;
+
+namespace JustFight.Spawner {
 
     [RequiresEntityConversion]
     class SelfSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
@@ -10,14 +12,12 @@ namespace JustFight.Tank.Spawner {
         public GameObject turretPrefab = null;
         public GameObject healthBarPrefab = null;
         public int teamId = 1;
-        public Transform followCameraTransform = null;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             var selfSpawnerCmpt = new SelfSpawner {
                 hullPrefab = conversionSystem.GetPrimaryEntity (hullPrefab),
                 turretPrefab = conversionSystem.GetPrimaryEntity (turretPrefab),
                 healthBarPrefab = conversionSystem.GetPrimaryEntity (healthBarPrefab),
-                teamId = teamId,
-                followCameraTransform = followCameraTransform
+                teamId = teamId
             };
             dstManager.AddComponentData (entity, selfSpawnerCmpt);
         }

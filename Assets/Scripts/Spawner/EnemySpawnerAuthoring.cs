@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JustFight.Tank.Spawner {
+using JustFight.Tank;
+
+namespace JustFight.Spawner {
 
     [RequiresEntityConversion]
     class EnemySpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {

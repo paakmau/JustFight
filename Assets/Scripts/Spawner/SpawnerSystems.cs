@@ -1,4 +1,5 @@
 using JustFight.Input;
+using JustFight.Tank;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,9 +7,8 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace JustFight.Tank.Spawner {
-    // TODO: Add self recover feature and combine the two system
-    class EnemySpawnerSystem : JobComponentSystem {
+namespace JustFight.Spawner {
+    class SpawnerSystem : JobComponentSystem {
 
         [BurstCompile]
         struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
@@ -41,6 +41,7 @@ namespace JustFight.Tank.Spawner {
                 } else ecb.DestroyEntity (entityInQueryIndex, entity);
             }
         }
+
         BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
@@ -52,33 +53,43 @@ namespace JustFight.Tank.Spawner {
         }
     }
 
-    class SelfSpawnerSystem : ComponentSystem {
+    class SelfSpawnerSystem : JobComponentSystem {
 
-        protected override void OnUpdate () {
-            // TODO: 在主线程中实例化带有物理相关Authoring的Entity可能会报错
-            // TODO: 强行改成Jobs使用ecb初始化能解决问题
-            Entities.WithAllReadOnly (typeof (Translation), typeof (Rotation)).ForEach ((Entity entity, SelfSpawner spawnerCmpt, ref Translation translationCmpt, ref Rotation rotationCmpt) => {
-                var hullEntity = EntityManager.Instantiate (spawnerCmpt.hullPrefab);
-                EntityManager.SetComponentData (hullEntity, translationCmpt);
-                EntityManager.SetComponentData (hullEntity, rotationCmpt);
-                EntityManager.SetComponentData (hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
-                EntityManager.AddComponentData (hullEntity, new SelfHull ());
-                EntityManager.AddComponentObject (hullEntity, new FollowCamera { transform = spawnerCmpt.followCameraTransform });
+        [BurstCompile]
+        struct SelfSpawnerJob : IJobForEachWithEntity<Translation, Rotation, SelfSpawner> {
+            public EntityCommandBuffer.Concurrent ecb;
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, [ReadOnly] ref Rotation rotationCmpt, ref SelfSpawner spawnerCmpt) {
 
-                var turretEntity = EntityManager.Instantiate (spawnerCmpt.turretPrefab);
-                EntityManager.SetComponentData (turretEntity, rotationCmpt);
-                EntityManager.SetComponentData (turretEntity, new TankHullToFollow { entity = hullEntity });
-                EntityManager.SetComponentData (turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
-                EntityManager.AddComponentData (turretEntity, new SelfTurret ());
+                var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
+                ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);
+                ecb.SetComponent (entityInQueryIndex, hullEntity, rotationCmpt);
+                ecb.SetComponent (entityInQueryIndex, hullEntity, new TankHullTeam { id = spawnerCmpt.teamId });
+                ecb.AddComponent (entityInQueryIndex, hullEntity, new SelfHull { });
 
-                var healthBarEntity = EntityManager.Instantiate (spawnerCmpt.healthBarPrefab);
-                EntityManager.SetComponentData (healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 0, 0) });
+                var turretEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.turretPrefab);
+                ecb.SetComponent (entityInQueryIndex, turretEntity, rotationCmpt);
+                ecb.SetComponent (entityInQueryIndex, turretEntity, new TankHullToFollow { entity = hullEntity });
+                ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
+                ecb.AddComponent (entityInQueryIndex, turretEntity, new SelfTurret { });
 
-                EntityManager.SetComponentData (hullEntity, new TankTurretInstance { entity = turretEntity });
-                EntityManager.SetComponentData (hullEntity, new HealthBarInstance { entity = healthBarEntity });
+                var healthBarEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.healthBarPrefab);
+                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 0, 0) });
 
-                EntityManager.DestroyEntity (entity);
-            });
+                ecb.SetComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
+                ecb.SetComponent (entityInQueryIndex, hullEntity, new HealthBarInstance { entity = healthBarEntity });
+
+                ecb.DestroyEntity (entityInQueryIndex, entity);
+            }
+        }
+
+        BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
+        protected override void OnCreate () {
+            entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+        }
+        protected override JobHandle OnUpdate (JobHandle inputDeps) {
+            var jobHandle = new SelfSpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
+            entityCommandBufferSystem.AddJobHandleForProducer (jobHandle);
+            return jobHandle;
         }
     }
 }

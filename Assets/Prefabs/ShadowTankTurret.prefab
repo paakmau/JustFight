@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2663452670934546041}
   - component: {fileID: 7358755001678075539}
   - component: {fileID: 1013897920717793307}
-  - component: {fileID: 6725678852643188061}
+  - component: {fileID: -382004812595450582}
   - component: {fileID: 3462154938336745217}
   - component: {fileID: 7958849646461479103}
   m_Layer: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootRecoveryTime: 0.4
---- !u!114 &6725678852643188061
+--- !u!114 &-382004812595450582
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,14 +145,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 6329687238415298422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c46ca982c9d58442e9080e4c53b523f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 695f991396e914c70a9ff914c29f2fac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 8567766088047723228, guid: 51fcc58f1935147fab7cde404fbbf85b,
     type: 3}
   bulletShootSpeed: 9
-  offset:
-    x: 0
+  offsetA:
+    x: -0.4
+    y: 0.57
+    z: 1.4
+  offsetB:
+    x: 0.4
     y: 0.57
     z: 1.4
 --- !u!114 &3462154938336745217
@@ -167,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3789a1efd8942079c7a977822673d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoveryTime: 8
+  recoveryTime: 10
 --- !u!114 &7958849646461479103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,4 +188,4 @@ MonoBehaviour:
     type: 3}
   shadowTurretPrefab: {fileID: 8050453458525408637, guid: 3a0345cf4f4c9403dacc19ddaa9feeeb,
     type: 3}
-  skillLastTime: 5
+  skillLastTime: 6

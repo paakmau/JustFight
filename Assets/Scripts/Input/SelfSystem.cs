@@ -1,3 +1,4 @@
+using JustFight.FollowCamera;
 using JustFight.Tank;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -21,8 +22,9 @@ namespace JustFight.Input {
             bool isJump = UnityEngine.Input.GetKey (KeyCode.Space);
             float3 shootDir = math.normalizesafe (new float3 (UnityEngine.Input.mousePosition.x - Screen.width / 2, 0, UnityEngine.Input.mousePosition.y - Screen.height / 2));
             bool isCastSkill = UnityEngine.Input.GetKey (KeyCode.F);
-            Entities.WithAllReadOnly (typeof (SelfHull), typeof (Translation)).ForEach ((FollowCamera followCameraCmpt, ref Translation translationCmpt, ref MoveInput moveInputCmpt, ref JumpInput jumpInputCmpt) => {
-                followCameraCmpt.transform.position = translationCmpt.Value;
+            FollowCameraTransform followCameraTransformCmpt = ComponentSystemBaseManagedComponentExtensions.GetSingleton<FollowCameraTransform> (this);
+            Entities.WithAllReadOnly (typeof (SelfHull), typeof (Translation)).ForEach ((ref Translation translationCmpt, ref MoveInput moveInputCmpt, ref JumpInput jumpInputCmpt) => {
+                followCameraTransformCmpt.transform.position = translationCmpt.Value;
                 moveInputCmpt.dir = moveDir;
                 jumpInputCmpt.isJump = isJump;
             });

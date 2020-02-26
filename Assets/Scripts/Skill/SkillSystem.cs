@@ -30,7 +30,7 @@ namespace JustFight.Skill {
         struct BurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, BurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;
@@ -38,9 +38,9 @@ namespace JustFight.Skill {
                         burstSkillCmpt.skillShootRecoveryleftTime += burstSkillCmpt.skillShootRecoveryTime;
                         var offset = localToWorldCmpt.Right * burstSkillCmpt.offset.x + localToWorldCmpt.Up * burstSkillCmpt.offset.y + localToWorldCmpt.Forward * burstSkillCmpt.offset.z;
                         var bulletEntity = ecb.Instantiate (entityInQueryIndex, burstSkillCmpt.bulletPrefab);
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (aimInputCmpt.dir, math.up ()) });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * burstSkillCmpt.skillShootSpeed });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = aimInputCmpt.dir * burstSkillCmpt.skillShootSpeed });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                     }
                     burstSkillCmpt.skillLeftTime -= dT;
@@ -56,9 +56,9 @@ namespace JustFight.Skill {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
             public Unity.Mathematics.Random rand;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BombSkill bombSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BombSkill bombSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (skillCmpt.isCastTrigger) {
-                    var offset = shootInputCmpt.dir * bombSkillCmpt.forwardOffset;
+                    var offset = aimInputCmpt.dir * bombSkillCmpt.forwardOffset;
                     var center = localToWorldCmpt.Position + offset + new float3 (0, 6, 0);
                     for (int i = 0; i < bombSkillCmpt.bulletNum; i++) {
                         var bulletEntity = ecb.Instantiate (entityInQueryIndex, bombSkillCmpt.bulletPrefab);
@@ -72,13 +72,14 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct ShadowSkillJob : IJobForEachWithEntity<TankTurretTeam, Skill, ShadowSkill, LocalToWorld, TankHullToFollow> {
+        struct ShadowSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, ShadowSkill, LocalToWorld, TankHullToFollow> {
             [ReadOnly] public float dT;
             public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref Skill skillCmpt, ref ShadowSkill shadowSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt, [ReadOnly] ref TankHullToFollow tankHullToFollowCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShadowSkill shadowSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt, [ReadOnly] ref TankHullToFollow tankHullToFollowCmpt) {
                 if (shadowSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     shadowSkillCmpt.skillLeftTime -= dT;
+                    shadowSkillCmpt.aimDir = aimInputCmpt.dir;
                     if (shadowSkillCmpt.skillLeftTime <= 0) {
                         ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceA);
                         ecb.DestroyEntity (entityInQueryIndex, shadowSkillCmpt.shadowTurretInstanceB);
@@ -112,14 +113,14 @@ namespace JustFight.Skill {
         struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, ShotgunBurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;
                     if (burstSkillCmpt.skillShootRecoveryleftTime < 0) {
                         burstSkillCmpt.skillShootRecoveryleftTime += burstSkillCmpt.skillShootRecoveryTime;
                         var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
-                        float3 dir = shootInputCmpt.dir;
+                        float3 dir = aimInputCmpt.dir;
                         if (burstSkillCmpt.upRot != 0)
                             dir = math.rotate (quaternion.AxisAngle (math.cross (dir, math.up ()), burstSkillCmpt.upRot), dir);
                         var offset = localToWorldCmpt.Position + localToWorldCmpt.Right * burstSkillCmpt.offset.x + localToWorldCmpt.Up * burstSkillCmpt.offset.y + localToWorldCmpt.Forward * burstSkillCmpt.offset.z;

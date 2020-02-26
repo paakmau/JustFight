@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &65936059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +158,6 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   teamId: 1
-  followCameraTransform: {fileID: 1380572160}
 --- !u!114 &65936060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,7 +402,6 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   teamId: 1
-  followCameraTransform: {fileID: 1380572160}
 --- !u!1 &194389833
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,7 +419,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &194389834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,7 +485,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &545771223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,7 +571,6 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   teamId: 1
-  followCameraTransform: {fileID: 1380572160}
 --- !u!114 &550615660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,7 +615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &604302122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -635,11 +632,11 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
-  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 45
-  teamId: 2
+  teamId: 1
 --- !u!114 &604302123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -684,7 +681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &608536409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,7 +701,6 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   teamId: 1
-  followCameraTransform: {fileID: 1380572160}
 --- !u!114 &608536410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,7 +940,6 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   teamId: 1
-  followCameraTransform: {fileID: 1380572160}
 --- !u!114 &1105728186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -989,7 +984,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1257094005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,6 +1042,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1380572160}
+  - component: {fileID: 1380572162}
+  - component: {fileID: 1380572161}
   m_Layer: 0
   m_Name: Camera Carrier
   m_TagString: Untagged
@@ -1069,6 +1066,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1380572161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380572159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ae4e7a3b92b14b349504e9b148a5b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1380572162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380572159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
 --- !u!1 &1556891378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,7 +1108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1556891379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,7 +1187,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1906609823
 MonoBehaviour:
   m_ObjectHideFlags: 0

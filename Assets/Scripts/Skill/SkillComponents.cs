@@ -40,6 +40,7 @@ namespace JustFight.Skill {
         public Entity shadowHullInstanceB;
         public Entity shadowTurretInstanceA;
         public Entity shadowTurretInstanceB;
+        public float3 aimDir;
     }
 
     [Serializable]
