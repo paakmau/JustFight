@@ -8,6 +8,7 @@ namespace JustFight.Tank.Spawner {
     class EnemySpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject hullPrefab = null;
         public GameObject turretPrefab = null;
+        public GameObject healthBarPrefab = null;
         public int enemyNum = 4;
         public float restTimePerSpawn = 3f;
         public int teamId = 1;
@@ -15,6 +16,7 @@ namespace JustFight.Tank.Spawner {
             var enemySpawnCmpt = new EnemySpawner {
                 hullPrefab = conversionSystem.GetPrimaryEntity (hullPrefab),
                 turretPrefab = conversionSystem.GetPrimaryEntity (turretPrefab),
+                healthBarPrefab = conversionSystem.GetPrimaryEntity (healthBarPrefab),
                 enemyNum = enemyNum,
                 restTimePerSpawn = restTimePerSpawn,
                 teamId = teamId
@@ -24,6 +26,7 @@ namespace JustFight.Tank.Spawner {
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {
             referencedPrefabs.Add (hullPrefab);
             referencedPrefabs.Add (turretPrefab);
+            referencedPrefabs.Add (healthBarPrefab);
         }
     }
 }

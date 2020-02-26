@@ -6,6 +6,7 @@ namespace JustFight.Tank.Spawner {
     class SelfSpawner : IComponentData {
         public Entity hullPrefab;
         public Entity turretPrefab;
+        public Entity healthBarPrefab;
         public int teamId;
         public Transform followCameraTransform;
     }
@@ -14,6 +15,7 @@ namespace JustFight.Tank.Spawner {
     struct EnemySpawner : IComponentData {
         public Entity hullPrefab;
         public Entity turretPrefab;
+        public Entity healthBarPrefab;
         public int enemyNum;
         public float restTimePerSpawn;
         public float leftRestTime;

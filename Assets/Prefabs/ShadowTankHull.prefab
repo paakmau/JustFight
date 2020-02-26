@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 624050664395741101}
   - component: {fileID: 624050664395741099}
   - component: {fileID: 624050664395741100}
-  - component: {fileID: -6266931764878717662}
   - component: {fileID: 624050664395741095}
   m_Layer: 0
   m_Name: ShadowTankHull
@@ -219,21 +218,6 @@ MonoBehaviour:
       m_Override: 0
       m_Value: 0000000000000000
   m_ConvexRadius_Deprecated: -1
---- !u!114 &-6266931764878717662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 624050664395741090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 692307e0bfbbd4df4821ee638b1a70ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
-    type: 3}
-  maxHealth: 400
 --- !u!114 &624050664395741095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc6ba77d01fa5480ab1d3e721beacab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 500
   moveSpeed: 7
   jumpSpeed: 10
   jumpRecoveryTime: 2

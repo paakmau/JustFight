@@ -4,24 +4,11 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Systems;
 using Unity.Transforms;
 
 namespace JustFight.Tank {
 
-    [UpdateBefore (typeof (BuildPhysicsWorld))]
     class TankHullSystem : JobComponentSystem {
-
-        [BurstCompile]
-        struct InstantiateHealthBarJob : IJobForEachWithEntity<HealthBarPrefab> {
-            public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthBarPrefab healthBarPrefabCmpt) {
-                var healthBarEntity = ecb.Instantiate (entityInQueryIndex, healthBarPrefabCmpt.entity);
-                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = entity, offset = new float3 (-1.8f, 0, 0) });
-                ecb.RemoveComponent<HealthBarPrefab> (entityInQueryIndex, entity);
-                ecb.AddComponent (entityInQueryIndex, entity, new HealthBarInstance { entity = healthBarEntity });
-            }
-        }
 
         [BurstCompile]
         struct DestroyTankJob : IJobForEachWithEntity<HealthPoint, HealthBarInstance, TankTurretInstance> {
@@ -68,13 +55,11 @@ namespace JustFight.Tank {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var instantiateJobHandle = new InstantiateHealthBarJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, inputDeps);
             var moveTankJobHandle = new MoveTankJob ().Schedule (this, jumpTankJobHandle);
-            entityCommandBufferSystem.AddJobHandleForProducer (instantiateJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
-            return JobHandle.CombineDependencies (instantiateJobHandle, destroyTankJobHandle, moveTankJobHandle);
+            return JobHandle.CombineDependencies (destroyTankJobHandle, moveTankJobHandle);
         }
     }
 }

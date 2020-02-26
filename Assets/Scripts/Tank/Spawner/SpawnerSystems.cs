@@ -1,14 +1,15 @@
 using JustFight.Input;
-using JustFight.Tank;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace JustFight.Tank.Spawner {
     // TODO: Add self recover feature and combine the two system
     class EnemySpawnerSystem : JobComponentSystem {
+
         [BurstCompile]
         struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
             public EntityCommandBuffer.Concurrent ecb;
@@ -31,7 +32,11 @@ namespace JustFight.Tank.Spawner {
                         ecb.SetComponent (entityInQueryIndex, turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
                         ecb.AddComponent (entityInQueryIndex, turretEntity, new EnemyTurret { random = new Unity.Mathematics.Random ((uint) (dT * 1000)) });
 
-                        ecb.AddComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
+                        var healthBarEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.healthBarPrefab);
+                        ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 0, 0) });
+
+                        ecb.SetComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
+                        ecb.SetComponent (entityInQueryIndex, hullEntity, new HealthBarInstance { entity = healthBarEntity });
                     }
                 } else ecb.DestroyEntity (entityInQueryIndex, entity);
             }
@@ -64,7 +69,11 @@ namespace JustFight.Tank.Spawner {
                 EntityManager.SetComponentData (turretEntity, new TankTurretTeam { id = spawnerCmpt.teamId });
                 EntityManager.AddComponentData (turretEntity, new SelfTurret ());
 
+                var healthBarEntity = EntityManager.Instantiate (spawnerCmpt.healthBarPrefab);
+                EntityManager.SetComponentData (healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 0, 0) });
+
                 EntityManager.SetComponentData (hullEntity, new TankTurretInstance { entity = turretEntity });
+                EntityManager.SetComponentData (hullEntity, new HealthBarInstance { entity = healthBarEntity });
 
                 EntityManager.DestroyEntity (entity);
             });

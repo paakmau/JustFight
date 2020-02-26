@@ -36,7 +36,7 @@ namespace JustFight.Bullet {
         }
     }
 
-    [UpdateAfter (typeof (EndFramePhysicsSystem))]
+    [UpdateAfter (typeof (StepPhysicsWorld)), UpdateBefore (typeof (EndFramePhysicsSystem))]
     class BulletHitSystem : JobComponentSystem {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
@@ -73,9 +73,11 @@ namespace JustFight.Bullet {
         }
         BuildPhysicsWorld buildPhysicsWorldSystem;
         StepPhysicsWorld stepPhysicsWorldSystem;
+        EndFramePhysicsSystem endFramePhysicsSystem;
         protected override void OnCreate () {
             buildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld> ();
             stepPhysicsWorldSystem = World.GetOrCreateSystem<StepPhysicsWorld> ();
+            endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var hitJobHandle = new HitJob {
@@ -85,6 +87,7 @@ namespace JustFight.Bullet {
                     bulletDestroyTimeFromEntity = GetComponentDataFromEntity<BulletDestroyTime> (),
                     healthFromEntity = GetComponentDataFromEntity<HealthPoint> ()
             }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, inputDeps);
+            endFramePhysicsSystem.HandlesToWaitFor.Add (hitJobHandle);
             return hitJobHandle;
         }
     }

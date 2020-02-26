@@ -10,6 +10,12 @@ namespace JustFight.Tank {
     }
 
     [Serializable]
+    struct HealthPoint : IComponentData {
+        public int value;
+        public int maxValue;
+    }
+
+    [Serializable]
     struct MoveInput : IComponentData {
         public float3 dir;
     }
@@ -33,6 +39,11 @@ namespace JustFight.Tank {
 
     [Serializable]
     struct TankTurretInstance : IComponentData {
+        public Entity entity;
+    }
+
+    [Serializable]
+    struct HealthBarInstance : IComponentData {
         public Entity entity;
     }
 }

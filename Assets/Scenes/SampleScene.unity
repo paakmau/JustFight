@@ -155,6 +155,8 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
+    type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
 --- !u!114 &65936060
@@ -398,6 +400,8 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 4685838210898294933, guid: d9a17e56c7fc24915aa718b6bb3765ed,
     type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
+    type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
 --- !u!1 &194389833
@@ -417,7 +421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &194389834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,6 +437,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
     type: 3}
   turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
+    type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 50
@@ -462,7 +468,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &545771222
 GameObject:
@@ -481,7 +487,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &545771223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +503,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 6032015425416455473, guid: 87177f26f2f624d79900f94337053bf8,
     type: 3}
   turretPrefab: {fileID: 4685838210898294933, guid: d9a17e56c7fc24915aa718b6bb3765ed,
+    type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 50
@@ -526,7 +534,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &550615658
 GameObject:
@@ -545,7 +553,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &550615659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,6 +569,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 8201406888106953687, guid: 4b05cec68050943cd95378d3fc0fbb90,
     type: 3}
   turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
+    type: 3}
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
@@ -608,7 +618,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &604302122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,6 +634,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 624050664395741090, guid: ac9fffc0d8afe441393568ef015c37bc,
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
+    type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 45
@@ -653,7 +665,72 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &608536408
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 608536411}
+  - component: {fileID: 608536410}
+  - component: {fileID: 608536409}
+  m_Layer: 0
+  m_Name: SelfSpawner (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &608536409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608536408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de3eb4a778d0041a9b37cf4eb4a65288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
+    type: 3}
+  turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
+    type: 3}
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
+    type: 3}
+  teamId: 1
+  followCameraTransform: {fileID: 1380572160}
+--- !u!114 &608536410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608536408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
+--- !u!4 &608536411
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608536408}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.41, y: 1, z: -13.98}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -864,6 +941,8 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
     type: 3}
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
+    type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
 --- !u!114 &1105728186
@@ -910,7 +989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1257094005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,6 +1005,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 835339649211828683, guid: 899e63495742a46af987c7c0556b6d86,
     type: 3}
   turretPrefab: {fileID: 3075531947268555054, guid: fe4d73141308f448d837d250f836a944,
+    type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 50
@@ -955,7 +1036,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1380572159
 GameObject:
@@ -1005,7 +1086,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1556891379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,6 +1102,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 3203638689423926593, guid: bf60c5e2973284a39875e80aefc5e9eb,
     type: 3}
   turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
+    type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 60
@@ -1050,7 +1133,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1732645410
 MonoBehaviour:
@@ -1082,7 +1165,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1906609823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1098,6 +1181,8 @@ MonoBehaviour:
   hullPrefab: {fileID: 8201406888106953687, guid: 4b05cec68050943cd95378d3fc0fbb90,
     type: 3}
   turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
+    type: 3}
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 50
@@ -1127,7 +1212,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2080284730
 GameObject:

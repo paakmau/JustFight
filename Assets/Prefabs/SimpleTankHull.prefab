@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 835339649211828676}
   - component: {fileID: 835339649211828674}
   - component: {fileID: 835339649211828677}
-  - component: {fileID: 937910523586948182}
   - component: {fileID: 835339649211828686}
   m_Layer: 0
   m_Name: SimpleTankHull
@@ -219,21 +218,6 @@ MonoBehaviour:
       m_Override: 0
       m_Value: 0000000000000000
   m_ConvexRadius_Deprecated: -1
---- !u!114 &937910523586948182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835339649211828683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 692307e0bfbbd4df4821ee638b1a70ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
-    type: 3}
-  maxHealth: 350
 --- !u!114 &835339649211828686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,6 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc6ba77d01fa5480ab1d3e721beacab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 400
   moveSpeed: 8
   jumpSpeed: 10
   jumpRecoveryTime: 2
