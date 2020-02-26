@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3789a1efd8942079c7a977822673d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recoveryTime: 6
+  recoveryTime: 5
 --- !u!114 &3075531947268555055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7527cc557a4be485d852dafd12bd9df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillLastTime: 1.5
+  skillLastTime: 4
   skillShootRecoveryTime: 0.15
   skillShootSpeed: 20
   offset:
