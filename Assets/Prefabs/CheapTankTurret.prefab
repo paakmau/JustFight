@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae41dab1449b24505a784c46267069cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootRecoveryTime: 0.5
+  shootRecoveryTime: 0.2
 --- !u!114 &1115577580192280129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,11 +150,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 2386571864084404059, guid: b4c6082c371144be69ebe0a83893cc55,
     type: 3}
-  bulletShootSpeed: 12
+  bulletShootSpeed: 10.5
   offset:
     x: 0
-    y: 0.54
-    z: 1.2
+    y: 0.51
+    z: 1.8
 --- !u!114 &6264031257864540902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,11 +181,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillLastTime: 5
-  skillShootRecoveryTime: 0.15
-  skillShootSpeed: 25
+  skillShootRecoveryTime: 0.1
+  skillShootSpeed: 12
   offset:
     x: 1
-    y: 0.65
-    z: 0.8
+    y: 0.68
+    z: 1.8
   bulletPrefab: {fileID: 9119870772814880375, guid: ddd11102dd368443ca589a07105eec73,
     type: 3}

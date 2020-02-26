@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MotionType: 0
-  m_Mass: 10
+  m_Mass: 16.5
   m_LinearDamping: 0.01
   m_AngularDamping: 0.05
   m_InitialLinearVelocity:
@@ -163,9 +163,9 @@ MonoBehaviour:
     y: 0
     z: 0.19263746
   m_PrimitiveSize:
-    x: 0.19999993
-    y: 0.19999996
-    z: 0.38527495
+    x: 0.2
+    y: 0.19
+    z: 0.4
   m_PrimitiveOrientation:
     Value:
       x: -0
@@ -173,15 +173,15 @@ MonoBehaviour:
       z: 0
     RotationOrder: 4
   m_Capsule:
-    Height: 0.38527495
-    Radius: 0.09999998
+    Height: 0.4
+    Radius: 0.1
     Axis: 2
   m_Cylinder:
-    Height: 0.38527495
-    Radius: 0.09999998
+    Height: 0.4
+    Radius: 0.1
     Axis: 2
   m_CylinderSideCount: 20
-  m_SphereRadius: 0.19263747
+  m_SphereRadius: 0.2
   m_MinimumSkinnedVertexWeight: 0.1
   m_ConvexHullGenerationParameters:
     m_SimplificationTolerance: 0.05779125
@@ -230,5 +230,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 497ad6c262a144c319364dce0611719f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 40
+  damage: 8
   destroyTime: 10

@@ -141,11 +141,11 @@ MonoBehaviour:
   offsetA:
     x: -0.4
     y: 0.57
-    z: 1.4
+    z: 1.8
   offsetB:
     x: 0.4
     y: 0.57
-    z: 1.4
+    z: 1.8
 --- !u!114 &8240146599946202775
 MonoBehaviour:
   m_ObjectHideFlags: 0

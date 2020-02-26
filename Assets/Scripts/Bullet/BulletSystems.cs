@@ -48,7 +48,7 @@ namespace JustFight.Bullet {
             void DisableBullet (Entity bulletEntity) {
                 bulletDamageFromEntity[bulletEntity] = new BulletDamage { value = 0 };
                 var destroyTimeCmpt = bulletDestroyTimeFromEntity[bulletEntity];
-                destroyTimeCmpt.value = math.min (destroyTimeCmpt.value, 0.6f);
+                destroyTimeCmpt.value = math.min (destroyTimeCmpt.value, 0.3f);
                 bulletDestroyTimeFromEntity[bulletEntity] = destroyTimeCmpt;
             }
             public void Execute (CollisionEvent collisionEvent) {

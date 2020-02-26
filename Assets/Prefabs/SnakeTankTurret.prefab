@@ -154,7 +154,7 @@ MonoBehaviour:
   offset:
     x: 0
     y: 0.57
-    z: 1.4
+    z: 1.8
 --- !u!114 &8215486605102184275
 MonoBehaviour:
   m_ObjectHideFlags: 0
