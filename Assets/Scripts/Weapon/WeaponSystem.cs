@@ -64,13 +64,13 @@ namespace JustFight.Weapon {
                 if (weaponStateCmpt.recoveryLeftTime <= 0) {
                     if (shootInputCmpt.isShoot) {
                         weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
-                        var offset = localToWorldCmpt.Right * gunCmpt.offset.x + localToWorldCmpt.Up * gunCmpt.offset.y + localToWorldCmpt.Forward * gunCmpt.offset.z;
+                        var pos = localToWorldCmpt.Position + localToWorldCmpt.Right * gunCmpt.offset.x + localToWorldCmpt.Up * gunCmpt.offset.y + localToWorldCmpt.Forward * gunCmpt.offset.z;
                         var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
                         for (int i = 0; i < gunCmpt.bulletNum; i++) {
                             var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
                             var shootDir = shootInputCmpt.dir + random.NextFloat3Direction () * 0.3f;
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = pos });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * gunCmpt.bulletShootSpeed });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                         }

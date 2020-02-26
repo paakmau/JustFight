@@ -31,5 +31,6 @@ namespace JustFight.Weapon {
         public float bulletShootSpeed;
         public int bulletNum;
         public float3 offset;
+        public float3 dir;
     }
 }

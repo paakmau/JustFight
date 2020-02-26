@@ -119,11 +119,15 @@ namespace JustFight.Skill {
                     if (burstSkillCmpt.skillShootRecoveryleftTime < 0) {
                         burstSkillCmpt.skillShootRecoveryleftTime += burstSkillCmpt.skillShootRecoveryTime;
                         var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
+                        float3 dir = shootInputCmpt.dir;
+                        if (burstSkillCmpt.upRot != 0)
+                            dir = math.rotate (quaternion.AxisAngle (math.cross (dir, math.up ()), burstSkillCmpt.upRot), dir);
+                        var offset = localToWorldCmpt.Position + localToWorldCmpt.Right * burstSkillCmpt.offset.x + localToWorldCmpt.Up * burstSkillCmpt.offset.y + localToWorldCmpt.Forward * burstSkillCmpt.offset.z;
                         for (int i = 0; i < burstSkillCmpt.bulletNumPerShoot; i++) {
-                            var shootDir = shootInputCmpt.dir + random.NextFloat3Direction () * 0.5f;
+                            var shootDir = dir + random.NextFloat3Direction () * burstSkillCmpt.spread;
                             var bulletEntity = ecb.Instantiate (entityInQueryIndex, burstSkillCmpt.bulletPrefab);
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + shootInputCmpt.dir * 1.7f });
+                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = offset });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * burstSkillCmpt.skillShootSpeed });
                             ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                         }

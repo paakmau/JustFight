@@ -185,5 +185,11 @@ MonoBehaviour:
   skillShootRecoveryTime: 0.15
   skillShootSpeed: 16
   bulletNumPerShoot: 3
+  spread: 0.5
   bulletPrefab: {fileID: 7769352369761811030, guid: eb23b1573db9b47dc9479116a0b9de87,
     type: 3}
+  offset:
+    x: 0
+    y: 0.57
+    z: 1.4
+  upRot: 0

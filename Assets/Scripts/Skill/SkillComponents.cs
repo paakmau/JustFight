@@ -50,6 +50,9 @@ namespace JustFight.Skill {
         public float skillLeftTime;
         public float skillLastTime;
         public int bulletNumPerShoot;
+        public float spread;
         public Entity bulletPrefab;
+        public float3 offset;
+        public float upRot;
     }
 }
