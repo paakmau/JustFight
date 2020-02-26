@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4645193505780586084}
   - component: {fileID: 4645193505780586085}
   m_Layer: 0
-  m_Name: BerserkerBombBullet
+  m_Name: BerserkerBulletShotgunBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 4645193505780586057}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4645193505780586057}
-  m_Mesh: {fileID: 4711208715938537054, guid: ba385d04fc2be49cfae005fa021f2d8a, type: 3}
+  m_Mesh: {fileID: -6169883497295692001, guid: 403c37324f1a44e87b986462996b1029, type: 3}
 --- !u!23 &4645193505780586107
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -159,13 +159,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShapeType: 0
   m_PrimitiveCenter:
-    x: -0.00000011920929
-    y: 0.000000059604645
-    z: -0.006721854
+    x: -0.000000014901161
+    y: 0.000000014901161
+    z: 0.33131188
   m_PrimitiveSize:
-    x: 1.9999993
-    y: 1.9999996
-    z: 3.8527503
+    x: 0.33915564
+    y: 0.33915567
+    z: 0.66262376
   m_PrimitiveOrientation:
     Value:
       x: -0
@@ -173,19 +173,19 @@ MonoBehaviour:
       z: 0
     RotationOrder: 4
   m_Capsule:
-    Height: 3.8527503
-    Radius: 0.9999998
+    Height: 0.66262376
+    Radius: 0.16957784
     Axis: 2
   m_Cylinder:
-    Height: 3.8527503
-    Radius: 0.9999998
+    Height: 0.66262376
+    Radius: 0.16957784
     Axis: 2
   m_CylinderSideCount: 20
-  m_SphereRadius: 1.9263752
+  m_SphereRadius: 0.33131188
   m_MinimumSkinnedVertexWeight: 0.1
   m_ConvexHullGenerationParameters:
     m_SimplificationTolerance: 0.05779125
-    m_BevelRadius: 0.05
+    m_BevelRadius: 0
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
   m_ForceUnique: 0

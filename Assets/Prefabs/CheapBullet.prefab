@@ -160,8 +160,8 @@ MonoBehaviour:
   m_ShapeType: 0
   m_PrimitiveCenter:
     x: -0.000000007450581
-    y: -0.000000007450581
-    z: 0.044543907
+    y: 0
+    z: 0.19263746
   m_PrimitiveSize:
     x: 0.19999993
     y: 0.19999996
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_MinimumSkinnedVertexWeight: 0.1
   m_ConvexHullGenerationParameters:
     m_SimplificationTolerance: 0.05779125
-    m_BevelRadius: 0.019999994
+    m_BevelRadius: 0
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
   m_ForceUnique: 0
