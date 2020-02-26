@@ -50,6 +50,8 @@ namespace JustFight.Tank.Spawner {
     class SelfSpawnerSystem : ComponentSystem {
 
         protected override void OnUpdate () {
+            // TODO: 在主线程中实例化带有物理相关Authoring的Entity可能会报错
+            // TODO: 强行改成Jobs使用ecb初始化能解决问题
             Entities.WithAllReadOnly (typeof (Translation), typeof (Rotation)).ForEach ((Entity entity, SelfSpawner spawnerCmpt, ref Translation translationCmpt, ref Rotation rotationCmpt) => {
                 var hullEntity = EntityManager.Instantiate (spawnerCmpt.hullPrefab);
                 EntityManager.SetComponentData (hullEntity, translationCmpt);
