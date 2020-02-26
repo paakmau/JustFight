@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &65936059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,9 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de3eb4a778d0041a9b37cf4eb4a65288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 835339649211828683, guid: 899e63495742a46af987c7c0556b6d86,
+  hullPrefab: {fileID: 1664770518885080567, guid: 44f7142b6b1a64a7fa5d20568139f194,
     type: 3}
-  turretPrefab: {fileID: 3075531947268555054, guid: fe4d73141308f448d837d250f836a944,
+  turretPrefab: {fileID: 430845485007662186, guid: 703845f0f71314d45a05b17e5146de20,
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
@@ -354,7 +354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &192909358
 Transform:
   m_ObjectHideFlags: 0
@@ -400,6 +400,70 @@ MonoBehaviour:
     type: 3}
   teamId: 1
   followCameraTransform: {fileID: 1380572160}
+--- !u!1 &545771222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 545771225}
+  - component: {fileID: 545771224}
+  - component: {fileID: 545771223}
+  m_Layer: 0
+  m_Name: EnemySpawnerD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &545771223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545771222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hullPrefab: {fileID: 6032015425416455473, guid: 87177f26f2f624d79900f94337053bf8,
+    type: 3}
+  turretPrefab: {fileID: 4685838210898294933, guid: d9a17e56c7fc24915aa718b6bb3765ed,
+    type: 3}
+  enemyNum: 5
+  restTimePerSpawn: 50
+  teamId: 2
+--- !u!114 &545771224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545771222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
+--- !u!4 &545771225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545771222}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.53, y: 1, z: 2.83}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &550615658
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,8 +561,8 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
-  enemyNum: 1
-  restTimePerSpawn: 12
+  enemyNum: 5
+  restTimePerSpawn: 45
   teamId: 2
 --- !u!114 &604302123
 MonoBehaviour:
@@ -765,6 +829,70 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1257094004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1257094007}
+  - component: {fileID: 1257094006}
+  - component: {fileID: 1257094005}
+  m_Layer: 0
+  m_Name: EnemySpawnerE
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1257094005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257094004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hullPrefab: {fileID: 835339649211828683, guid: 899e63495742a46af987c7c0556b6d86,
+    type: 3}
+  turretPrefab: {fileID: 3075531947268555054, guid: fe4d73141308f448d837d250f836a944,
+    type: 3}
+  enemyNum: 5
+  restTimePerSpawn: 50
+  teamId: 2
+--- !u!114 &1257094006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257094004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
+--- !u!4 &1257094007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257094004}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.53, y: 1, z: 2.83}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1380572159
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,12 +954,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84cd97bc0dce043eb8df20b8e2ae62bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullPrefab: {fileID: 835339649211828683, guid: 899e63495742a46af987c7c0556b6d86,
+  hullPrefab: {fileID: 3203638689423926593, guid: bf60c5e2973284a39875e80aefc5e9eb,
     type: 3}
-  turretPrefab: {fileID: 3075531947268555054, guid: fe4d73141308f448d837d250f836a944,
+  turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
     type: 3}
-  enemyNum: 3
-  restTimePerSpawn: 10
+  enemyNum: 5
+  restTimePerSpawn: 60
   teamId: 2
 --- !u!114 &1556891380
 MonoBehaviour:
@@ -907,8 +1035,8 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 3070893245364863705, guid: bfdd2e7452f33474090a447aaf1e286a,
     type: 3}
-  enemyNum: 1
-  restTimePerSpawn: 15
+  enemyNum: 5
+  restTimePerSpawn: 50
   teamId: 2
 --- !u!114 &1906609824
 MonoBehaviour:

@@ -20,7 +20,6 @@ namespace JustFight.Input {
             moveDir = math.normalizesafe (moveDir);
             bool isJump = UnityEngine.Input.GetKey (KeyCode.Space);
             float3 shootDir = math.normalizesafe (new float3 (UnityEngine.Input.mousePosition.x - Screen.width / 2, 0, UnityEngine.Input.mousePosition.y - Screen.height / 2));
-            bool isShoot = UnityEngine.Input.GetMouseButton (0);
             bool isCastSkill = UnityEngine.Input.GetKey (KeyCode.F);
             Entities.WithAllReadOnly (typeof (SelfHull), typeof (Translation)).ForEach ((FollowCamera followCameraCmpt, ref Translation translationCmpt, ref MoveInput moveInputCmpt, ref JumpInput jumpInputCmpt) => {
                 followCameraCmpt.transform.position = translationCmpt.Value;
@@ -29,7 +28,6 @@ namespace JustFight.Input {
             });
             Entities.WithAllReadOnly (typeof (SelfTurret)).ForEach ((ref AimInput aimInputCmpt) => {
                 aimInputCmpt.dir = shootDir;
-                aimInputCmpt.isShoot = isShoot;
                 aimInputCmpt.isCast = isCastSkill;
             });
         }

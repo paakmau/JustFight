@@ -54,15 +54,13 @@ namespace JustFight.Skill {
                 else {
                     if (weaponStateCmpt.recoveryLeftTime < 0) {
                         var shootInputCmpt = shootInputFromEntity[shadowTurretCmpt.turretEntity];
-                        if (shootInputCmpt.isShoot) {
-                            weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
-                            var teamId = tankTurretTeamFromEntity[shadowTurretCmpt.turretEntity].id;
-                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + localToWorldCmpt.Forward * 1.7f });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamId });
-                        }
+                        weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
+                        var teamId = tankTurretTeamFromEntity[shadowTurretCmpt.turretEntity].id;
+                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + localToWorldCmpt.Forward * 1.7f });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamId });
                     } else weaponStateCmpt.recoveryLeftTime -= dT;
                 }
             }

@@ -31,7 +31,6 @@ namespace JustFight.Input {
                 if (turretCmpt.rotateLeftTime <= 0) {
                     turretCmpt.rotateLeftTime += turretCmpt.random.NextFloat (0.2f, 0.4f);
                     turretCmpt.rotateDirection = turretCmpt.random.NextBool ();
-                    aimInputCmpt.isShoot = turretCmpt.random.NextBool ();
                     aimInputCmpt.isCast = turretCmpt.random.NextBool ();
                     // To avoid floating-point error 
                     aimInputCmpt.dir.y = 0;

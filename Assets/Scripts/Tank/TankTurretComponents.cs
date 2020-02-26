@@ -11,7 +11,6 @@ namespace JustFight.Tank {
 
     [Serializable]
     struct AimInput : IComponentData {
-        public bool isShoot;
         public bool isCast;
         public float3 dir;
     }
