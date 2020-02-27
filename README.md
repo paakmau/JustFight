@@ -1,5 +1,7 @@
-# 简介
+# Just Fight
+
+![Demo](Documentation/images/demo.gif)
 
 简单的多角色坦克乱斗游戏  
 本项目基于Unity DOTS，使用ECS架构  
-具有良好的多线程优化，内存优化  
+基于Jobs实现并行优化  
