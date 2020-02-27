@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae41dab1449b24505a784c46267069cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootRecoveryTime: 0.2
+  shootRecoveryTime: 0.4
 --- !u!114 &4912171184812436801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,8 +185,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillLastTime: 5
-  skillShootRecoveryTime: 0.15
-  skillShootSpeed: 12
+  skillShootRecoveryTime: 0.28
+  skillShootSpeed: 11
   offset:
     x: 0
     y: 0.53

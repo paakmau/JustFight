@@ -39,14 +39,14 @@ namespace JustFight.Tank {
 
         [BurstCompile]
         struct MoveTankJob : IJobForEach<MoveSpeed, MoveInput, Rotation, PhysicsVelocity> {
+            [ReadOnly] public float dT;
             public void Execute ([ReadOnly] ref MoveSpeed moveSpeedCmpt, [ReadOnly] ref MoveInput moveInputCmpt, ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt) {
                 var dir = moveInputCmpt.dir;
                 if (dir.x != 0 || dir.z != 0)
                     rotationCmpt.Value = quaternion.LookRotation (dir, math.up ());
-                var v = moveSpeedCmpt.value * dir;
-                v.y = velocityCmpt.Linear.y;
-                velocityCmpt.Linear = v;
-                // TODO: 需要参考UnityPhysicsSample中的CharacterController
+                var dV = moveSpeedCmpt.value * dir * dT; // TODO:
+                velocityCmpt.Linear += dV;
+                // TODO: 尝试用冲量解决问题
             }
         }
 
@@ -57,7 +57,7 @@ namespace JustFight.Tank {
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
             var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, inputDeps);
-            var moveTankJobHandle = new MoveTankJob ().Schedule (this, jumpTankJobHandle);
+            var moveTankJobHandle = new MoveTankJob { dT = Time.DeltaTime }.Schedule (this, jumpTankJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
             return JobHandle.CombineDependencies (destroyTankJobHandle, moveTankJobHandle);
         }
