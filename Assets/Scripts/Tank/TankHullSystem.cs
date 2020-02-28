@@ -42,12 +42,8 @@ namespace JustFight.Tank {
             [ReadOnly] public float dT;
             public void Execute ([ReadOnly] ref MoveSpeed moveSpeedCmpt, [ReadOnly] ref MoveInput moveInputCmpt, ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt) {
                 var dir = moveInputCmpt.dir;
-                var curDir = math.forward (rotationCmpt.Value) + new float3 (0.00001f, 0, 0.00001f);
-                var lookDirSmooth = dir;
-                if (math.lengthsq (curDir - dir) > 0.001)
-                    lookDirSmooth = math.lerp (curDir, dir, dT * 6);
                 if (dir.x != 0 || dir.z != 0)
-                    rotationCmpt.Value = quaternion.LookRotation (lookDirSmooth, math.up ());
+                    rotationCmpt.Value = math.slerp(rotationCmpt.Value, quaternion.LookRotation (dir, math.up ()), dT * 5);
                 var dV = moveSpeedCmpt.value * dir * dT;
                 velocityCmpt.Linear += dV;
             }
