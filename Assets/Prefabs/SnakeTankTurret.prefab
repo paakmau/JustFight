@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae41dab1449b24505a784c46267069cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootRecoveryTime: 0.25
+  shootRecoveryTime: 0.2
 --- !u!114 &6617654509340410197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
   bulletShootSpeed: 9
   offset:
     x: 0
-    y: 0.57
+    y: 0.25
     z: 1.8
 --- !u!114 &8215486605102184275
 MonoBehaviour:

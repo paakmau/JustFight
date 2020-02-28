@@ -111,8 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MotionType: 0
   m_Mass: 15
-  m_LinearDamping: 0.01
-  m_AngularDamping: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0
   m_InitialLinearVelocity:
     x: 0
     y: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  m_GravityFactor: 0.01
+  m_GravityFactor: 0
   m_OverrideDefaultMassDistribution: 0
   m_CenterOfMass:
     x: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
     z: -0.006721854
   m_PrimitiveSize:
     x: 1.9999993
-    y: 1.9999996
+    y: 4.8
     z: 3.8527503
   m_PrimitiveOrientation:
     Value:
@@ -174,15 +174,15 @@ MonoBehaviour:
       z: 0
     RotationOrder: 4
   m_Capsule:
-    Height: 3.8527503
-    Radius: 0.9999998
-    Axis: 2
+    Height: 4.8
+    Radius: 1.9263752
+    Axis: 1
   m_Cylinder:
-    Height: 3.8527503
-    Radius: 0.9999998
-    Axis: 2
+    Height: 1.9999993
+    Radius: 2.4
+    Axis: 0
   m_CylinderSideCount: 20
-  m_SphereRadius: 1.9263752
+  m_SphereRadius: 2.4
   m_MinimumSkinnedVertexWeight: 0.1
   m_ConvexHullGenerationParameters:
     m_SimplificationTolerance: 0.05779125
@@ -199,12 +199,12 @@ MonoBehaviour:
     m_Friction:
       m_Override: 0
       m_Value:
-        Value: 0.5
+        Value: 0
         CombineMode: 0
     m_Restitution:
       m_Override: 0
       m_Value:
-        Value: 0
+        Value: 1
         CombineMode: 2
     m_BelongsTo:
       m_Override: 0
