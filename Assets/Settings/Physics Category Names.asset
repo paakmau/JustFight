@@ -16,9 +16,9 @@ MonoBehaviour:
   - Tank
   - Bullet
   - Map
-  - SmallBullet
-  - 
-  - 
+  - ShotgunBullet
+  - BombBullet
+  - ShadowBullet
   - 
   - 
   - 
