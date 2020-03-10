@@ -13,63 +13,70 @@ namespace JustFight.Weapon {
     class WeaponSystem : SystemBase {
 
         [BurstCompile]
+        struct WeaponStateJob : IJobForEach<WeaponState> {
+            [ReadOnly] public float dT;
+            public void Execute (ref WeaponState weaponState) {
+                weaponState.isShootTrigger = false;
+                if (weaponState.recoveryLeftTime <= 0) {
+                    weaponState.isShootTrigger = true;
+                    weaponState.recoveryLeftTime = weaponState.recoveryTime;
+                } else weaponState.recoveryLeftTime -= dT;
+            }
+        }
+
+        [BurstCompile]
         struct TankGunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, TankGun, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref TankGun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
-                if (weaponStateCmpt.recoveryLeftTime <= 0) {
-                    weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
-                    var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                    var offset = localToWorldCmpt.Right * gunCmpt.offset.x + localToWorldCmpt.Up * gunCmpt.offset.y + localToWorldCmpt.Forward * gunCmpt.offset.z;
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
-                } else weaponStateCmpt.recoveryLeftTime -= dT;
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam team, [ReadOnly] ref AimInput shootInput, [ReadOnly] ref WeaponState weaponState, [ReadOnly] ref TankGun gun, [ReadOnly] ref LocalToWorld localToWorld) {
+                if (weaponState.isShootTrigger) {
+                    var bulletEntity = ecb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInput.dir, math.up ()) });
+                    var offset = localToWorld.Right * gun.offset.x + localToWorld.Up * gun.offset.y + localToWorld.Forward * gun.offset.z;
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position + offset });
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInput.dir * gun.bulletShootSpeed });
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = team.id });
+                }
             }
         }
 
         [BurstCompile]
         struct DoubleTankGunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, DoubleTankGun, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref DoubleTankGun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
-                if (weaponStateCmpt.recoveryLeftTime <= 0) {
-                    weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
-                    var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                    var offset = localToWorldCmpt.Right * gunCmpt.offsetA.x + localToWorldCmpt.Up * gunCmpt.offsetA.y + localToWorldCmpt.Forward * gunCmpt.offsetA.z;
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
-                    bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInputCmpt.dir, math.up ()) });
-                    offset = localToWorldCmpt.Right * gunCmpt.offsetB.x + localToWorldCmpt.Up * gunCmpt.offsetB.y + localToWorldCmpt.Forward * gunCmpt.offsetB.z;
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorldCmpt.Position + offset });
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInputCmpt.dir * gunCmpt.bulletShootSpeed });
-                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
-                } else weaponStateCmpt.recoveryLeftTime -= dT;
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam team, [ReadOnly] ref AimInput shootInput, [ReadOnly] ref WeaponState weaponState, [ReadOnly] ref DoubleTankGun gun, [ReadOnly] ref LocalToWorld localToWorld) {
+                if (weaponState.isShootTrigger) {
+                    var bulletEntity = ecb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInput.dir, math.up ()) });
+                    var offset = localToWorld.Right * gun.offsetA.x + localToWorld.Up * gun.offsetA.y + localToWorld.Forward * gun.offsetA.z;
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position + offset });
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInput.dir * gun.bulletShootSpeed });
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = team.id });
+                    bulletEntity = ecb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootInput.dir, math.up ()) });
+                    offset = localToWorld.Right * gun.offsetB.x + localToWorld.Up * gun.offsetB.y + localToWorld.Forward * gun.offsetB.z;
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position + offset });
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootInput.dir * gun.bulletShootSpeed });
+                    ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = team.id });
+                }
             }
         }
 
         [BurstCompile]
         struct ShotgunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, Shotgun, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput shootInputCmpt, ref WeaponState weaponStateCmpt, [ReadOnly] ref Shotgun gunCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
-                if (weaponStateCmpt.recoveryLeftTime <= 0) {
-                    weaponStateCmpt.recoveryLeftTime += weaponStateCmpt.recoveryTime;
-                    var pos = localToWorldCmpt.Position + localToWorldCmpt.Right * gunCmpt.offset.x + localToWorldCmpt.Up * gunCmpt.offset.y + localToWorldCmpt.Forward * gunCmpt.offset.z;
+            public float dT;
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam team, [ReadOnly] ref AimInput shootInput, [ReadOnly] ref WeaponState weaponState, [ReadOnly] ref Shotgun gun, [ReadOnly] ref LocalToWorld localToWorld) {
+                if (weaponState.isShootTrigger) {
+                    var pos = localToWorld.Position + localToWorld.Right * gun.offset.x + localToWorld.Up * gun.offset.y + localToWorld.Forward * gun.offset.z;
                     var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
-                    for (int i = 0; i < gunCmpt.bulletNum; i++) {
-                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, gunCmpt.bulletPrefab);
-                        var shootDir = shootInputCmpt.dir + random.NextFloat3Direction () * 0.1f;
+                    for (int i = 0; i < gun.bulletNum; i++) {
+                        var bulletEntity = ecb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
+                        var shootDir = shootInput.dir + random.NextFloat3Direction () * 0.1f;
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = pos });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * gunCmpt.bulletShootSpeed });
-                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * gun.bulletShootSpeed });
+                        ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = team.id });
                     }
-                } else weaponStateCmpt.recoveryLeftTime -= dT;
+                }
             }
         }
 
@@ -79,11 +86,12 @@ namespace JustFight.Weapon {
         }
 
         protected override void OnUpdate () {
-            var tankGunJobHandle = new TankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
-            var doubleTankGunJobHandle = new DoubleTankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, tankGunJobHandle);
-            var shotgunJobHandle = new ShotgunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, doubleTankGunJobHandle);
-            entityCommandBufferSystem.AddJobHandleForProducer (shotgunJobHandle);
-            Dependency = shotgunJobHandle;
+            Dependency = new WeaponStateJob { dT = Time.DeltaTime }.Schedule (this, Dependency);
+            var tankGunJobHandle = new TankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, Dependency);
+            var doubleTankGunJobHandle = new DoubleTankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, Dependency);
+            var shotgunJobHandle = new ShotgunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
+            Dependency = JobHandle.CombineDependencies (tankGunJobHandle, doubleTankGunJobHandle, shotgunJobHandle);
+            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 }

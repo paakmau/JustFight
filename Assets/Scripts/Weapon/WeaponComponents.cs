@@ -8,6 +8,7 @@ namespace JustFight.Weapon {
     struct WeaponState : IComponentData {
         public float recoveryLeftTime;
         public float recoveryTime;
+        public bool isShootTrigger;
     }
 
     [Serializable]
