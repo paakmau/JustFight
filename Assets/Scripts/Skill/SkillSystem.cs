@@ -1,5 +1,6 @@
 using JustFight.Bullet;
 using JustFight.Tank;
+using JustFight.Weapon;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -10,6 +11,7 @@ using Unity.Transforms;
 
 namespace JustFight.Skill {
 
+    [UpdateBefore (typeof (WeaponSystem))]
     class SkillSystem : JobComponentSystem {
 
         [BurstCompile]
@@ -27,10 +29,10 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct BurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, BurstSkill, LocalToWorld> {
+        struct BurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, WeaponState, BurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref WeaponState weaponStateCmpt, ref BurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;
@@ -44,6 +46,8 @@ namespace JustFight.Skill {
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
                     }
                     burstSkillCmpt.skillLeftTime -= dT;
+                    // 禁止武器
+                    weaponStateCmpt.recoveryLeftTime = weaponStateCmpt.recoveryTime;
                 } else if (skillCmpt.isCastTrigger) {
                     // 发动技能
                     burstSkillCmpt.skillLeftTime += burstSkillCmpt.skillLastTime;
@@ -110,10 +114,10 @@ namespace JustFight.Skill {
         }
 
         [BurstCompile]
-        struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, ShotgunBurstSkill, LocalToWorld> {
+        struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, WeaponState, ShotgunBurstSkill, LocalToWorld> {
             public EntityCommandBuffer.Concurrent ecb;
             [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInputCmpt, [ReadOnly] ref Skill skillCmpt, ref WeaponState weaponStateCmpt, ref ShotgunBurstSkill burstSkillCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
                 if (burstSkillCmpt.skillLeftTime > 0) {
                     // 技能正在发动
                     burstSkillCmpt.skillShootRecoveryleftTime -= dT;
@@ -134,6 +138,8 @@ namespace JustFight.Skill {
                         }
                     }
                     burstSkillCmpt.skillLeftTime -= dT;
+                    // 禁用武器
+                    weaponStateCmpt.recoveryLeftTime = weaponStateCmpt.recoveryTime;
                 } else if (skillCmpt.isCastTrigger) {
                     // 发动技能
                     burstSkillCmpt.skillLeftTime += burstSkillCmpt.skillLastTime;
@@ -157,7 +163,7 @@ namespace JustFight.Skill {
             entityCommandBufferSystem.AddJobHandleForProducer (burstSkillJobHandle);
             var shadowSkillJobHandle = new ShadowSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
             entityCommandBufferSystem.AddJobHandleForProducer (shadowSkillJobHandle);
-            var shotgunBurstSkillJobHandle = new ShotgunBurstSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
+            var shotgunBurstSkillJobHandle = new ShotgunBurstSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, burstSkillJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (shotgunBurstSkillJobHandle);
             return JobHandle.CombineDependencies (JobHandle.CombineDependencies (bombSkillJobHandle, burstSkillJobHandle, shadowSkillJobHandle), shotgunBurstSkillJobHandle);
         }

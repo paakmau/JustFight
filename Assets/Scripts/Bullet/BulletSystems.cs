@@ -40,7 +40,9 @@ namespace JustFight.Bullet {
     class BulletHitSystem : JobComponentSystem {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
+            [ReadOnly]
             public ComponentDataFromEntity<TankHullTeam> hullTeamFromEntity;
+            [ReadOnly]
             public ComponentDataFromEntity<BulletTeam> bulletTeamFromEntity;
             public ComponentDataFromEntity<BulletDamage> bulletDamageFromEntity;
             public ComponentDataFromEntity<BulletDestroyTime> bulletDestroyTimeFromEntity;
@@ -81,8 +83,8 @@ namespace JustFight.Bullet {
         }
         protected override JobHandle OnUpdate (JobHandle inputDeps) {
             var hitJobHandle = new HitJob {
-                hullTeamFromEntity = GetComponentDataFromEntity<TankHullTeam> (),
-                    bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> (),
+                hullTeamFromEntity = GetComponentDataFromEntity<TankHullTeam> (true),
+                    bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> (true),
                     bulletDamageFromEntity = GetComponentDataFromEntity<BulletDamage> (),
                     bulletDestroyTimeFromEntity = GetComponentDataFromEntity<BulletDestroyTime> (),
                     healthFromEntity = GetComponentDataFromEntity<HealthPoint> ()

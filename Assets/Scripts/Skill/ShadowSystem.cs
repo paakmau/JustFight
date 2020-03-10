@@ -1,6 +1,4 @@
-using JustFight.Bullet;
 using JustFight.Tank;
-using JustFight.Weapon;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -78,9 +76,9 @@ namespace JustFight.Skill {
             }.Schedule (group, inputDeps);
             var shadowShootJobHandle = new ShadowShootJob {
                 ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
-                    shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (),
+                    shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (true),
                     dT = Time.DeltaTime
-            }.Schedule (this, moveJobHandle);
+            }.ScheduleSingle (this, moveJobHandle);
             return shadowShootJobHandle;
         }
     }

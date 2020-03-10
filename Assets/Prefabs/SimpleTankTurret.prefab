@@ -153,11 +153,11 @@ MonoBehaviour:
   bulletShootSpeed: 9.5
   offsetA:
     x: -0.75
-    y: 0.25
+    y: 0.5
     z: 1.8
   offsetB:
     x: 0.75
-    y: 0.25
+    y: 0.5
     z: 1.8
 --- !u!114 &8771490972397551522
 MonoBehaviour:
@@ -185,11 +185,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillLastTime: 5
-  skillShootRecoveryTime: 0.28
-  skillShootSpeed: 11
+  skillShootRecoveryTime: 0.12
+  skillShootSpeed: 15
   offset:
     x: 0
-    y: 0.75
+    y: 0.5
     z: 1.8
   bulletPrefab: {fileID: 3370791576760702623, guid: f84a3bb4f7caa480198b3de54ecaa21d,
     type: 3}
