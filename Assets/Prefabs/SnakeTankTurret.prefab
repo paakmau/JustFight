@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 6962358664401173147}
   - component: {fileID: -3231490421940852807}
   - component: {fileID: 6617654509340410197}
-  - component: {fileID: 8215486605102184275}
   - component: {fileID: 5878713794976838021}
   m_Layer: 0
   m_Name: SnakeTankTurret
@@ -155,19 +154,6 @@ MonoBehaviour:
     x: 0
     y: 0.5
     z: 1.8
---- !u!114 &8215486605102184275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5861252393933013886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da3789a1efd8942079c7a977822673d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recoveryTime: 5
 --- !u!114 &5878713794976838021
 MonoBehaviour:
   m_ObjectHideFlags: 0

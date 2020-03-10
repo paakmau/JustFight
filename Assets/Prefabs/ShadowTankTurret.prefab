@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 7358755001678075539}
   - component: {fileID: 1013897920717793307}
   - component: {fileID: -382004812595450582}
-  - component: {fileID: 3462154938336745217}
   - component: {fileID: 7958849646461479103}
   m_Layer: 0
   m_Name: ShadowTankTurret
@@ -159,19 +158,6 @@ MonoBehaviour:
     x: 0.5
     y: 0.5
     z: 1.8
---- !u!114 &3462154938336745217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6329687238415298422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da3789a1efd8942079c7a977822673d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recoveryTime: 10
 --- !u!114 &7958849646461479103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,8 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3e89192a65040e3b8adba2009c083b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recoveryTime: 8
   shadowHullPrefab: {fileID: 8451589720270783070, guid: 0d784dec41fb94de896a172eb62174a5,
     type: 3}
   shadowTurretPrefab: {fileID: 8050453458525408637, guid: 3a0345cf4f4c9403dacc19ddaa9feeeb,
     type: 3}
-  skillLastTime: 6
+  skillLastTime: 5

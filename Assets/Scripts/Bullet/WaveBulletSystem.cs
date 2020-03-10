@@ -7,7 +7,7 @@ using Unity.Physics;
 
 namespace JustFight.Bullet {
 
-    class WaveBulletSystem : JobComponentSystem {
+    class WaveBulletSystem : SystemBase {
 
         [BurstCompile]
         struct WaveJob : IJobForEach<WaveBulletState, PhysicsVelocity> {
@@ -28,11 +28,10 @@ namespace JustFight.Bullet {
             }
         }
 
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var waveJobHandle = new WaveJob {
+        protected override void OnUpdate () {
+            Dependency = new WaveJob {
                 dT = Time.DeltaTime
-            }.Schedule (this, inputDeps);
-            return waveJobHandle;
+            }.Schedule (this, Dependency);
         }
     }
 }

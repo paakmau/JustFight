@@ -8,7 +8,7 @@ using Unity.Physics;
 
 namespace JustFight.Input {
 
-    class EnemySystem : JobComponentSystem {
+    class EnemySystem : SystemBase {
         [BurstCompile]
         struct EnemyHullJob : IJobForEach<EnemyHull, MoveInput> {
             [ReadOnly] public float dT;
@@ -40,8 +40,8 @@ namespace JustFight.Input {
             }
         }
 
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            return JobHandle.CombineDependencies (new EnemyHullJob { dT = Time.DeltaTime }.Schedule (this, inputDeps), new EnemyTurretJob { dT = Time.DeltaTime }.Schedule (this, inputDeps));
+        protected override void OnUpdate () {
+            Dependency = JobHandle.CombineDependencies (new EnemyHullJob { dT = Time.DeltaTime }.Schedule (this, Dependency), new EnemyTurretJob { dT = Time.DeltaTime }.Schedule (this, Dependency));
         }
     }
 }

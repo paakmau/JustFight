@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace JustFight.Input {
 
-    class SelfSystem : ComponentSystem {
+    class SelfSystem : SystemBase {
         protected override void OnUpdate () {
             float3 moveDir = float3.zero;
             if (UnityEngine.Input.GetKey (KeyCode.A))
@@ -22,15 +22,15 @@ namespace JustFight.Input {
             bool isJump = UnityEngine.Input.GetKey (KeyCode.Space);
             float3 shootDir = math.normalizesafe (new float3 (UnityEngine.Input.mousePosition.x - Screen.width / 2, 0, UnityEngine.Input.mousePosition.y - Screen.height / 2));
             bool isCastSkill = UnityEngine.Input.GetKey (KeyCode.F);
-            FollowCameraTransform followCameraTransformCmpt = ComponentSystemBaseManagedComponentExtensions.GetSingleton<FollowCameraTransform> (this);
-            Entities.WithAllReadOnly (typeof (SelfHull), typeof (Translation)).ForEach ((ref Translation translationCmpt, ref MoveInput moveInputCmpt, ref JumpInput jumpInputCmpt) => {
-                followCameraTransformCmpt.transform.position = translationCmpt.Value;
-                moveInputCmpt.dir = moveDir;
-                jumpInputCmpt.isJump = isJump;
+            FollowCameraTransform followCameraTransform = ComponentSystemBaseManagedComponentExtensions.GetSingleton<FollowCameraTransform> (this);
+            Entities.ForEach ((ref MoveInput moveInput, ref JumpInput jumpInput, in SelfHull selfHull, in Translation translation) => {
+                followCameraTransform.transform.position = translation.Value;
+                moveInput.dir = moveDir;
+                jumpInput.isJump = isJump;
             });
-            Entities.WithAllReadOnly (typeof (SelfTurret)).ForEach ((ref AimInput aimInputCmpt) => {
-                aimInputCmpt.dir = shootDir;
-                aimInputCmpt.isCast = isCastSkill;
+            Entities.ForEach ((ref AimInput aimInput, in SelfTurret selfTurret) => {
+                aimInput.dir = shootDir;
+                aimInput.isCast = isCastSkill;
             });
         }
     }

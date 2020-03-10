@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 8128835325041361264}
   - component: {fileID: 6123291934555566267}
   - component: {fileID: 4685838210898294930}
-  - component: {fileID: 7321534471790102488}
   - component: {fileID: 8164883196299238330}
   m_Layer: 0
   m_Name: ButcherTankTurret
@@ -156,19 +155,6 @@ MonoBehaviour:
     x: 0
     y: 0.57
     z: 1.8
---- !u!114 &7321534471790102488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4685838210898294933}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da3789a1efd8942079c7a977822673d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recoveryTime: 8
 --- !u!114 &8164883196299238330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 799525878b8a24e0ab5d0ca06e40d9c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recoveryTime: 8
   skillLastTime: 3.2
   skillShootRecoveryTime: 0.2
   skillShootSpeed: 8

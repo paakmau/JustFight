@@ -9,7 +9,7 @@ using Unity.Physics.Systems;
 
 namespace JustFight.Bullet {
 
-    class BulletLiftTimeSystem : JobComponentSystem {
+    class BulletLiftTimeSystem : SystemBase {
 
         [BurstCompile]
         struct DestroyJob : IJobForEachWithEntity<BulletDestroyTime> {
@@ -27,17 +27,16 @@ namespace JustFight.Bullet {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
 
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var destroyJobHandle = new DestroyJob {
+        protected override void OnUpdate () {
+            Dependency = new DestroyJob {
                 ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime
-            }.Schedule (this, inputDeps);
-            entityCommandBufferSystem.AddJobHandleForProducer (destroyJobHandle);
-            return destroyJobHandle;
+            }.Schedule (this, Dependency);
+            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 
     [UpdateAfter (typeof (StepPhysicsWorld)), UpdateBefore (typeof (EndFramePhysicsSystem))]
-    class BulletHitSystem : JobComponentSystem {
+    class BulletHitSystem : SystemBase {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
             [ReadOnly]
@@ -81,16 +80,15 @@ namespace JustFight.Bullet {
             stepPhysicsWorldSystem = World.GetOrCreateSystem<StepPhysicsWorld> ();
             endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
         }
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var hitJobHandle = new HitJob {
+        protected override void OnUpdate () {
+            Dependency = new HitJob {
                 hullTeamFromEntity = GetComponentDataFromEntity<TankHullTeam> (true),
                     bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> (true),
                     bulletDamageFromEntity = GetComponentDataFromEntity<BulletDamage> (),
                     bulletDestroyTimeFromEntity = GetComponentDataFromEntity<BulletDestroyTime> (),
                     healthFromEntity = GetComponentDataFromEntity<HealthPoint> ()
-            }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, inputDeps);
-            endFramePhysicsSystem.HandlesToWaitFor.Add (hitJobHandle);
-            return hitJobHandle;
+            }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, Dependency);
+            endFramePhysicsSystem.HandlesToWaitFor.Add (Dependency);
         }
     }
 }

@@ -6,9 +6,13 @@ namespace JustFight.Skill {
 
     [Serializable]
     struct Skill : IComponentData {
-        public float leftTime;
+        public float recoveryLeftTime;
         public float recoveryTime;
         public bool isCastTrigger;
+        public float lastLeftTime;
+        public float lastTime;
+        public bool isDisableWeapon;
+        public bool isEndTrigger;
     }
 
     [Serializable]
@@ -16,8 +20,6 @@ namespace JustFight.Skill {
         public float skillShootRecoveryleftTime;
         public float skillShootRecoveryTime;
         public float skillShootSpeed;
-        public float skillLeftTime;
-        public float skillLastTime;
         public float3 offset;
         public Entity bulletPrefab;
     }
@@ -34,8 +36,6 @@ namespace JustFight.Skill {
     struct ShadowSkill : IComponentData {
         public Entity shadowHullPrefab;
         public Entity shadowTurretPrefab;
-        public float skillLeftTime;
-        public float skillLastTime;
         public Entity shadowHullInstanceA;
         public Entity shadowHullInstanceB;
         public Entity shadowTurretInstanceA;
@@ -48,8 +48,6 @@ namespace JustFight.Skill {
         public float skillShootRecoveryleftTime;
         public float skillShootRecoveryTime;
         public float skillShootSpeed;
-        public float skillLeftTime;
-        public float skillLastTime;
         public int bulletNumPerShoot;
         public float spread;
         public Entity bulletPrefab;

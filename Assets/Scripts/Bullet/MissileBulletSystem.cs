@@ -1,4 +1,3 @@
-using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -11,7 +10,7 @@ using Unity.Transforms;
 namespace JustFight.Bullet {
 
     [UpdateAfter (typeof (EndFramePhysicsSystem))]
-    class MissileBulletSystem : JobComponentSystem {
+    class MissileBulletSystem : SystemBase {
 
         [BurstCompile]
         struct MissileJob : IJobForEach<MissileBullet, PhysicsVelocity, Rotation, LocalToWorld> {
@@ -47,11 +46,10 @@ namespace JustFight.Bullet {
             );
             buildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld> ();
         }
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var missileJobHandle = new MissileJob {
+        protected override void OnUpdate () {
+            Dependency = new MissileJob {
                 dT = Time.DeltaTime, collisionWorld = buildPhysicsWorldSystem.PhysicsWorld.CollisionWorld, sphereCollider = sphereCollider
-            }.Schedule (this, inputDeps);
-            return missileJobHandle;
+            }.Schedule (this, Dependency);
         }
     }
 }
