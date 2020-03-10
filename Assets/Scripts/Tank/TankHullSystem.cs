@@ -8,7 +8,7 @@ using Unity.Transforms;
 
 namespace JustFight.Tank {
 
-    class TankHullSystem : JobComponentSystem {
+    class TankHullSystem : SystemBase {
 
         [BurstCompile]
         struct DestroyTankJob : IJobForEachWithEntity<HealthPoint, HealthBarInstance, TankTurretInstance> {
@@ -53,12 +53,12 @@ namespace JustFight.Tank {
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
-            var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, inputDeps);
+        protected override void OnUpdate () {
+            var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, Dependency);
+            var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, Dependency);
             var moveTankJobHandle = new MoveTankJob { dT = Time.DeltaTime }.Schedule (this, jumpTankJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
-            return JobHandle.CombineDependencies (destroyTankJobHandle, moveTankJobHandle);
+            Dependency = JobHandle.CombineDependencies (destroyTankJobHandle, moveTankJobHandle);
         }
     }
 }

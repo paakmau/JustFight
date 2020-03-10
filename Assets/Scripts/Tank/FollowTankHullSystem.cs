@@ -9,7 +9,7 @@ using Unity.Transforms;
 namespace JustFight.Tank {
 
     [UpdateInGroup (typeof (TransformSystemGroup))]
-    class FollowTankHullSystem : JobComponentSystem {
+    class FollowTankHullSystem : SystemBase {
 
         [BurstCompile]
         struct MoveJob : IJobChunk {
@@ -47,15 +47,14 @@ namespace JustFight.Tank {
             });
         }
 
-        protected override JobHandle OnUpdate (Unity.Jobs.JobHandle inputDeps) {
-            var moveJobHandle = new MoveJob {
+        protected override void OnUpdate () {
+            Dependency = new MoveJob {
                 translationFromEntity = GetComponentDataFromEntity<Translation> (true),
                     tankToFollowType = GetArchetypeChunkComponentType<TankHullToFollow> (true),
                     rotationType = GetArchetypeChunkComponentType<Rotation> (true),
                     nonUniformScaleType = GetArchetypeChunkComponentType<NonUniformScale> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
-            }.Schedule (group, inputDeps);
-            return moveJobHandle;
+            }.Schedule (group, Dependency);
         }
     }
 }

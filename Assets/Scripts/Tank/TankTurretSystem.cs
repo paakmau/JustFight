@@ -8,7 +8,7 @@ using Unity.Transforms;
 
 namespace JustFight.Tank {
 
-    class TankTurretSystem : JobComponentSystem {
+    class TankTurretSystem : SystemBase {
 
         [BurstCompile]
         struct RotateTurretJob : IJobForEach<AimInput, Rotation> {
@@ -18,8 +18,8 @@ namespace JustFight.Tank {
             }
         }
 
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            return new RotateTurretJob ().Schedule (this, inputDeps);
+        protected override void OnUpdate () {
+            Dependency = new RotateTurretJob ().Schedule (this, Dependency);
         }
     }
 }

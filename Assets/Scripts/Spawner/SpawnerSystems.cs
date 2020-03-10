@@ -8,7 +8,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace JustFight.Spawner {
-    class SpawnerSystem : JobComponentSystem {
+    class EnemySpawnerSystem : SystemBase {
 
         [BurstCompile]
         struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
@@ -46,14 +46,13 @@ namespace JustFight.Spawner {
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var jobHandle = new EnemySpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
-            entityCommandBufferSystem.AddJobHandleForProducer (jobHandle);
-            return jobHandle;
+        protected override void OnUpdate () {
+            Dependency = new EnemySpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
+            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 
-    class SelfSpawnerSystem : JobComponentSystem {
+    class SelfSpawnerSystem : SystemBase {
 
         [BurstCompile]
         struct SelfSpawnerJob : IJobForEachWithEntity<Translation, Rotation, SelfSpawner> {
@@ -86,10 +85,9 @@ namespace JustFight.Spawner {
         protected override void OnCreate () {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var jobHandle = new SelfSpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, inputDeps);
-            entityCommandBufferSystem.AddJobHandleForProducer (jobHandle);
-            return jobHandle;
+        protected override void OnUpdate () {
+            Dependency = new SelfSpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, Dependency);
+            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 }

@@ -10,7 +10,7 @@ using Unity.Transforms;
 
 namespace JustFight.Weapon {
 
-    class WeaponSystem : JobComponentSystem {
+    class WeaponSystem : SystemBase {
 
         [BurstCompile]
         struct TankGunJob : IJobForEachWithEntity<TankTurretTeam, AimInput, WeaponState, TankGun, LocalToWorld> {
@@ -78,12 +78,12 @@ namespace JustFight.Weapon {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
 
-        protected override JobHandle OnUpdate (JobHandle inputDeps) {
-            var tankGunJobHandle = new TankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, inputDeps);
+        protected override void OnUpdate () {
+            var tankGunJobHandle = new TankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
             var doubleTankGunJobHandle = new DoubleTankGunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, tankGunJobHandle);
             var shotgunJobHandle = new ShotgunJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, doubleTankGunJobHandle);
             entityCommandBufferSystem.AddJobHandleForProducer (shotgunJobHandle);
-            return shotgunJobHandle;
+            Dependency = shotgunJobHandle;
         }
     }
 }

@@ -7,7 +7,7 @@ using Unity.Transforms;
 
 namespace JustFight.Tank {
 
-    class HealthBarSystem : JobComponentSystem {
+    class HealthBarSystem : SystemBase {
 
         [BurstCompile]
         struct ScaleHealthBarJob : IJobForEach<HealthBar, TankHullToFollow, NonUniformScale> {
@@ -17,9 +17,8 @@ namespace JustFight.Tank {
                 // TODO: 在模型中设定锚点，使血条起点对齐
             }
         }
-        protected override JobHandle OnUpdate (Unity.Jobs.JobHandle inputDeps) {
-            var scaleHealthBarJobHandle = new ScaleHealthBarJob { healthCmpts = GetComponentDataFromEntity<HealthPoint> (true) }.Schedule (this, inputDeps);
-            return scaleHealthBarJobHandle;
+        protected override void OnUpdate () {
+            Dependency = new ScaleHealthBarJob { healthCmpts = GetComponentDataFromEntity<HealthPoint> (true) }.Schedule (this, Dependency);
         }
     }
 }

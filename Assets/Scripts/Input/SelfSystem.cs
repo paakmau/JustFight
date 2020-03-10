@@ -23,15 +23,15 @@ namespace JustFight.Input {
             float3 shootDir = math.normalizesafe (new float3 (UnityEngine.Input.mousePosition.x - Screen.width / 2, 0, UnityEngine.Input.mousePosition.y - Screen.height / 2));
             bool isCastSkill = UnityEngine.Input.GetKey (KeyCode.F);
             FollowCameraTransform followCameraTransform = ComponentSystemBaseManagedComponentExtensions.GetSingleton<FollowCameraTransform> (this);
-            Entities.ForEach ((ref MoveInput moveInput, ref JumpInput jumpInput, in SelfHull selfHull, in Translation translation) => {
+            Entities.WithoutBurst().ForEach ((ref MoveInput moveInput, ref JumpInput jumpInput, in SelfHull selfHull, in Translation translation) => {
                 followCameraTransform.transform.position = translation.Value;
                 moveInput.dir = moveDir;
                 jumpInput.isJump = isJump;
-            });
+            }).Run();
             Entities.ForEach ((ref AimInput aimInput, in SelfTurret selfTurret) => {
                 aimInput.dir = shootDir;
                 aimInput.isCast = isCastSkill;
-            });
+            }).Run();
         }
     }
 }
