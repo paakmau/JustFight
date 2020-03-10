@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recoveryTime: 6
+  isDisableSkill: 1
 --- !u!114 &430845485007662187
 MonoBehaviour:
   m_ObjectHideFlags: 0
