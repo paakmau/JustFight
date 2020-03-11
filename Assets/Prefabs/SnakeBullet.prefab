@@ -164,7 +164,7 @@ MonoBehaviour:
     y: -0.000000029802322
     z: 0.36570513
   m_PrimitiveSize:
-    x: 0.25
+    x: 0.3
     y: 0.8
     z: 0.8
   m_PrimitiveOrientation:
@@ -178,7 +178,7 @@ MonoBehaviour:
     Radius: 0.4
     Axis: 2
   m_Cylinder:
-    Height: 0.25
+    Height: 0.3
     Radius: 0.4
     Axis: 0
   m_CylinderSideCount: 20

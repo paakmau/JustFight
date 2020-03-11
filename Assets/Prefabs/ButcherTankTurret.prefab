@@ -149,12 +149,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7769352369761811030, guid: eb23b1573db9b47dc9479116a0b9de87,
     type: 3}
-  bulletShootSpeed: 8
+  bulletShootSpeed: 12
   bulletNum: 6
   offset:
     x: 0
     y: 0.57
-    z: 1.8
+    z: 2.4
 --- !u!114 &8164883196299238330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,15 +168,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recoveryTime: 8
-  skillLastTime: 3.2
-  skillShootRecoveryTime: 0.2
-  skillShootSpeed: 8
-  bulletNumPerShoot: 6
-  spread: 0.2
+  skillLastTime: 2.8
+  skillShootRecoveryTime: 0.1
+  skillShootSpeed: 9
+  bulletNumPerShoot: 3
+  spread: 0.3
   bulletPrefab: {fileID: 7769352369761811030, guid: eb23b1573db9b47dc9479116a0b9de87,
     type: 3}
   offset:
     x: 0
     y: 0.57
-    z: 1.8
+    z: 2.4
   upRot: 0
