@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5548614933642169017}
   - component: {fileID: 5548614933642169016}
   m_Layer: 0
-  m_Name: SnakeBombBullet
+  m_Name: SnakeBulletBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 4476946314682438583}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4476946314682438583}
-  m_Mesh: {fileID: 4711208715938537054, guid: ba385d04fc2be49cfae005fa021f2d8a, type: 3}
+  m_Mesh: {fileID: 117462060855630876, guid: e4895e01a967f4ccfbcdca75ba978a75, type: 3}
 --- !u!23 &2746519541784127339
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -157,15 +157,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShapeType: 0
+  m_ShapeType: 2
   m_PrimitiveCenter:
-    x: -0.000000059604645
-    y: 0.000000059604645
-    z: -0.0067219734
+    x: 0.000000059604645
+    y: 0.000000029802322
+    z: 0.31743106
   m_PrimitiveSize:
-    x: 1.9999993
-    y: 1.9999995
-    z: 3.8527498
+    x: 0.8
+    y: 0.8
+    z: 0.8
   m_PrimitiveOrientation:
     Value:
       x: -0
@@ -173,19 +173,19 @@ MonoBehaviour:
       z: 0
     RotationOrder: 4
   m_Capsule:
-    Height: 3.8527498
-    Radius: 0.99999976
+    Height: 0.8
+    Radius: 0.4
     Axis: 2
   m_Cylinder:
-    Height: 3.8527498
-    Radius: 0.99999976
+    Height: 0.8
+    Radius: 0.4
     Axis: 2
   m_CylinderSideCount: 20
-  m_SphereRadius: 1.9263749
+  m_SphereRadius: 0.4
   m_MinimumSkinnedVertexWeight: 0.1
   m_ConvexHullGenerationParameters:
     m_SimplificationTolerance: 0.05779125
-    m_BevelRadius: 0
+    m_BevelRadius: 0.05
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
   m_ForceUnique: 0
@@ -203,8 +203,8 @@ MonoBehaviour:
     m_Restitution:
       m_Override: 0
       m_Value:
-        Value: 1
-        CombineMode: 2
+        Value: 0
+        CombineMode: 1
     m_BelongsTo:
       m_Override: 0
       m_Value: 0000000001000000000000000000000000000000000000000000000000000000

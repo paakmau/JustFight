@@ -171,8 +171,8 @@ MonoBehaviour:
   skillLastTime: 3.2
   skillShootRecoveryTime: 0.2
   skillShootSpeed: 8
-  bulletNumPerShoot: 4
-  spread: 0.4
+  bulletNumPerShoot: 6
+  spread: 0.2
   bulletPrefab: {fileID: 7769352369761811030, guid: eb23b1573db9b47dc9479116a0b9de87,
     type: 3}
   offset:

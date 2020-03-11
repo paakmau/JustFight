@@ -69,7 +69,7 @@ namespace JustFight.Skill {
             public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInput, [ReadOnly] ref Skill skill, ref BombSkill bombskill, [ReadOnly] ref LocalToWorld localToWorld) {
                 if (skill.isCastTrigger) {
                     var offset = aimInput.dir * bombskill.forwardOffset;
-                    var center = localToWorld.Position + offset + new float3 (0, 6, 0);
+                    var center = localToWorld.Position + offset + new float3 (0, 15, 0);
                     for (int i = 0; i < bombskill.bulletNum; i++) {
                         var bulletEntity = ecb.Instantiate (entityInQueryIndex, bombskill.bulletPrefab);
                         ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
