@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae41dab1449b24505a784c46267069cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootRecoveryTime: 0.8
+  shootRecoveryTime: 0.42
 --- !u!114 &4685838210898294930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,9 +168,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recoveryTime: 8
-  skillLastTime: 2.8
+  skillLastTime: 2
   skillShootRecoveryTime: 0.1
-  skillShootSpeed: 9
+  skillShootSpeed: 12
   bulletNumPerShoot: 3
   spread: 0.3
   bulletPrefab: {fileID: 7769352369761811030, guid: eb23b1573db9b47dc9479116a0b9de87,

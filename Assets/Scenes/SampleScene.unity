@@ -202,7 +202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &192909358
 Transform:
   m_ObjectHideFlags: 0
@@ -413,11 +413,11 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 4685838210898294933, guid: d9a17e56c7fc24915aa718b6bb3765ed,
     type: 3}
-  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 50
-  teamId: 2
+  teamId: 1
 --- !u!114 &545771224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &550615659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,11 +696,11 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 6329687238415298422, guid: 483c145d44857427c82768a45f19634c,
     type: 3}
-  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
+  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 45
-  teamId: 1
+  teamId: 2
 --- !u!114 &604302123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1342,11 +1342,11 @@ MonoBehaviour:
     type: 3}
   turretPrefab: {fileID: 5861252393933013886, guid: 037d828a9536240ecb66594088f80d88,
     type: 3}
-  healthBarPrefab: {fileID: 53405642736281294, guid: eca69a5fd813e41b98ffb2c89b44b576,
+  healthBarPrefab: {fileID: 8884578567452247919, guid: f48fe222219a89f4fb9ae99abf51a9a8,
     type: 3}
   enemyNum: 5
   restTimePerSpawn: 60
-  teamId: 2
+  teamId: 1
 --- !u!114 &1556891380
 MonoBehaviour:
   m_ObjectHideFlags: 0
