@@ -13,8 +13,7 @@ namespace JustFight.Tank {
         struct ScaleHealthBarJob : IJobForEach<HealthBar, TankHullToFollow, NonUniformScale> {
             [ReadOnly] public ComponentDataFromEntity<HealthPoint> healthCmpts;
             public void Execute ([ReadOnly] ref HealthBar Cmpt, [ReadOnly] ref TankHullToFollow tankToFollowCmpt, ref NonUniformScale scaleCmpt) {
-                scaleCmpt.Value.y = (float) healthCmpts[tankToFollowCmpt.entity].value / (float) healthCmpts[tankToFollowCmpt.entity].maxValue;
-                // TODO: 在模型中设定锚点，使血条起点对齐
+                scaleCmpt.Value.z = (float) healthCmpts[tankToFollowCmpt.entity].value / (float) healthCmpts[tankToFollowCmpt.entity].maxValue;
             }
         }
         protected override void OnUpdate () {
