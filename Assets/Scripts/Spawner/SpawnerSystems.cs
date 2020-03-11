@@ -33,7 +33,7 @@ namespace JustFight.Spawner {
                         ecb.AddComponent (entityInQueryIndex, turretEntity, new EnemyTurret { random = new Unity.Mathematics.Random ((uint) (dT * 10000)) });
 
                         var healthBarEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.healthBarPrefab);
-                        ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 1.8f, -1) });
+                        ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 1.8f, -2) });
 
                         ecb.SetComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
                         ecb.SetComponent (entityInQueryIndex, hullEntity, new HealthBarInstance { entity = healthBarEntity });
@@ -72,7 +72,7 @@ namespace JustFight.Spawner {
                 ecb.AddComponent (entityInQueryIndex, turretEntity, new SelfTurret { });
 
                 var healthBarEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.healthBarPrefab);
-                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 0, 0) });
+                ecb.SetComponent (entityInQueryIndex, healthBarEntity, new TankHullToFollow { entity = hullEntity, offset = new float3 (-1.8f, 1.8f, -2) });
 
                 ecb.SetComponent (entityInQueryIndex, hullEntity, new TankTurretInstance { entity = turretEntity });
                 ecb.SetComponent (entityInQueryIndex, hullEntity, new HealthBarInstance { entity = healthBarEntity });
