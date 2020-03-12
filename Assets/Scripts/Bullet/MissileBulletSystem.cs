@@ -39,14 +39,17 @@ namespace JustFight.Bullet {
 
         BlobAssetReference<Unity.Physics.Collider> sphereCollider;
         BuildPhysicsWorld buildPhysicsWorldSystem;
+        EndFramePhysicsSystem endFramePhysicsSystem;
         protected override void OnCreate () {
             sphereCollider = Unity.Physics.SphereCollider.Create (
                 new SphereGeometry { Center = float3.zero, Radius = 4 },
                 new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1u, GroupIndex = 0 }
             );
             buildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld> ();
+            endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
         }
         protected override void OnUpdate () {
+            Dependency = JobHandle.CombineDependencies(endFramePhysicsSystem.FinalJobHandle, Dependency);
             Dependency = new MissileJob {
                 dT = Time.DeltaTime, collisionWorld = buildPhysicsWorldSystem.PhysicsWorld.CollisionWorld, sphereCollider = sphereCollider
             }.Schedule (this, Dependency);
