@@ -35,7 +35,7 @@ namespace JustFight.Bullet {
         }
     }
 
-    [UpdateAfter (typeof (StepPhysicsWorld)), UpdateBefore (typeof (EndFramePhysicsSystem))]
+    [UpdateAfter (typeof (EndFramePhysicsSystem))]
     class BulletHitSystem : SystemBase {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
@@ -81,6 +81,7 @@ namespace JustFight.Bullet {
             endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
         }
         protected override void OnUpdate () {
+            Dependency = JobHandle.CombineDependencies (Dependency, endFramePhysicsSystem.FinalJobHandle);
             Dependency = new HitJob {
                 hullTeamFromEntity = GetComponentDataFromEntity<TankHullTeam> (true),
                     bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> (true),

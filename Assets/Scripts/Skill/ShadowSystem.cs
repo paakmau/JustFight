@@ -10,7 +10,7 @@ using Unity.Transforms;
 namespace JustFight.Skill {
 
     [UpdateInGroup (typeof (TransformSystemGroup))]
-    class ShadowSystem : JobComponentSystem {
+    class ShadowSystem : SystemBase {
 
         [BurstCompile]
         struct ShadowMoveJob : IJobChunk {
@@ -38,20 +38,6 @@ namespace JustFight.Skill {
             }
         }
 
-        [BurstCompile]
-        struct ShadowShootJob : IJobForEachWithEntity<ShadowTurret, AimInput> {
-            public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public ComponentDataFromEntity<ShadowSkill> shadowSkillFromEntity;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref ShadowTurret shadowTurretCmpt, ref AimInput aimInputCmpt) {
-                var isTurretEntityValid = shadowSkillFromEntity.Exists (shadowTurretCmpt.turretEntity);
-                if (!isTurretEntityValid)
-                    ecb.DestroyEntity (entityInQueryIndex, entity);
-                else
-                    aimInputCmpt.dir = shadowSkillFromEntity[shadowTurretCmpt.turretEntity].aimDir;
-            }
-        }
-
         private EntityQuery group;
         private BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
 
@@ -65,21 +51,26 @@ namespace JustFight.Skill {
             entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
 
-        protected override JobHandle OnUpdate (Unity.Jobs.JobHandle inputDeps) {
-            var moveJobHandle = new ShadowMoveJob {
+        protected override void OnUpdate () {
+            Dependency = new ShadowMoveJob {
                 ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
                     translationFromEntity = GetComponentDataFromEntity<Translation> (true),
                     rotationFromEntity = GetComponentDataFromEntity<Rotation> (true),
                     entityType = GetArchetypeChunkEntityType (),
                     shadowType = GetArchetypeChunkComponentType<Shadow> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
-            }.Schedule (group, inputDeps);
-            var shadowShootJobHandle = new ShadowShootJob {
-                ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
-                    shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (true),
-                    dT = Time.DeltaTime
-            }.ScheduleSingle (this, moveJobHandle);
-            return shadowShootJobHandle;
+            }.Schedule (group, Dependency);
+
+            var shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (true);
+            var dT = Time.DeltaTime;
+            var shadowShootJobEcb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            Dependency = Entities.WithReadOnly (shadowSkillFromEntity).ForEach ((Entity entity, int entityInQueryIndex, ref AimInput aimInputCmpt, in ShadowTurret shadowTurretCmpt) => {
+                var isTurretEntityValid = shadowSkillFromEntity.Exists (shadowTurretCmpt.turretEntity);
+                if (!isTurretEntityValid)
+                    shadowShootJobEcb.DestroyEntity (entityInQueryIndex, entity);
+                else
+                    aimInputCmpt.dir = shadowSkillFromEntity[shadowTurretCmpt.turretEntity].aimDir;
+            }).ScheduleParallel(Dependency);
         }
     }
 }
