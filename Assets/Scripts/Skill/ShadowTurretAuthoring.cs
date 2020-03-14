@@ -1,6 +1,5 @@
 using Unity.Entities;
 using UnityEngine;
-using Unity.Transforms;
 
 namespace JustFight.Skill {
 

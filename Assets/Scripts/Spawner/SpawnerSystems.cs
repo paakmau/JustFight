@@ -1,7 +1,5 @@
 using JustFight.Input;
 using JustFight.Tank;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;

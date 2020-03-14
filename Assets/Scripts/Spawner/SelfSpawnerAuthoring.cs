@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-using JustFight.Tank;
-
 namespace JustFight.Spawner {
 
     [RequiresEntityConversion]
