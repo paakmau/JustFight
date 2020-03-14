@@ -12,12 +12,22 @@ namespace JustFight.Bullet {
     [UpdateAfter (typeof (EndFramePhysicsSystem))]
     class MissileBulletSystem : SystemBase {
 
-        [BurstCompile]
-        struct MissileJob : IJobForEach<MissileBullet, PhysicsVelocity, Rotation, LocalToWorld> {
-            [ReadOnly] public float dT;
-            [ReadOnly] public CollisionWorld collisionWorld;
-            [ReadOnly] public BlobAssetReference<Unity.Physics.Collider> sphereCollider;
-            public unsafe void Execute ([ReadOnly] ref MissileBullet missileBulletTargetCmpt, ref PhysicsVelocity velocityCmpt, ref Rotation rotationCmpt, [ReadOnly] ref LocalToWorld localToWorldCmpt) {
+        BlobAssetReference<Unity.Physics.Collider> m_sphereCollider;
+        BuildPhysicsWorld m_buildPhysicsWorldSystem;
+        EndFramePhysicsSystem m_endFramePhysicsSystem;
+        protected override void OnCreate () {
+            m_sphereCollider = Unity.Physics.SphereCollider.Create (
+                new SphereGeometry { Center = float3.zero, Radius = 4 },
+                new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1u, GroupIndex = 0 }
+            );
+            m_buildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld> ();
+            m_endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
+        }
+        protected override unsafe void OnUpdate () {
+            var collisionWorld = m_buildPhysicsWorldSystem.PhysicsWorld.CollisionWorld;
+            var sphereCollider = m_sphereCollider;
+            Dependency = JobHandle.CombineDependencies (m_endFramePhysicsSystem.FinalJobHandle, Dependency);
+            Dependency = Entities.WithReadOnly (collisionWorld).ForEach ((ref PhysicsVelocity velocityCmpt, ref Rotation rotationCmpt, in MissileBullet missileBulletTargetCmpt, in LocalToWorld localToWorldCmpt) => {
                 var pos = localToWorldCmpt.Position;
                 var forward = localToWorldCmpt.Forward;
                 var vL = math.length (velocityCmpt.Linear);
@@ -34,25 +44,7 @@ namespace JustFight.Bullet {
                     velocityCmpt.Linear = math.normalize (velocityCmpt.Linear + dir) * vL;
                     rotationCmpt.Value = quaternion.LookRotation (vDir, math.up ());
                 }
-            }
-        }
-
-        BlobAssetReference<Unity.Physics.Collider> sphereCollider;
-        BuildPhysicsWorld buildPhysicsWorldSystem;
-        EndFramePhysicsSystem endFramePhysicsSystem;
-        protected override void OnCreate () {
-            sphereCollider = Unity.Physics.SphereCollider.Create (
-                new SphereGeometry { Center = float3.zero, Radius = 4 },
-                new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1u, GroupIndex = 0 }
-            );
-            buildPhysicsWorldSystem = World.GetOrCreateSystem<BuildPhysicsWorld> ();
-            endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
-        }
-        protected override void OnUpdate () {
-            Dependency = JobHandle.CombineDependencies(endFramePhysicsSystem.FinalJobHandle, Dependency);
-            Dependency = new MissileJob {
-                dT = Time.DeltaTime, collisionWorld = buildPhysicsWorldSystem.PhysicsWorld.CollisionWorld, sphereCollider = sphereCollider
-            }.Schedule (this, Dependency);
+            }).ScheduleParallel (Dependency);
         }
     }
 }

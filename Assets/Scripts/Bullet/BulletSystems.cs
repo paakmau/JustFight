@@ -11,27 +11,20 @@ namespace JustFight.Bullet {
 
     class BulletLiftTimeSystem : SystemBase {
 
-        [BurstCompile]
-        struct DestroyJob : IJobForEachWithEntity<BulletDestroyTime> {
-            public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, ref BulletDestroyTime destroyTimeCmpt) {
-                destroyTimeCmpt.value -= dT;
-                if (destroyTimeCmpt.value <= 0)
-                    ecb.DestroyEntity (entityInQueryIndex, entity);
-            }
-        }
-
-        BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
+        BeginInitializationEntityCommandBufferSystem m_entityCommandBufferSystem;
         protected override void OnCreate () {
-            entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+            m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
 
         protected override void OnUpdate () {
-            Dependency = new DestroyJob {
-                ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime
-            }.Schedule (this, Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var dT = Time.DeltaTime;
+            Dependency = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BulletDestroyTime destroyTimeCmpt) => {
+                destroyTimeCmpt.value -= dT;
+                if (destroyTimeCmpt.value <= 0)
+                    ecb.DestroyEntity (entityInQueryIndex, entity);
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 
@@ -89,7 +82,6 @@ namespace JustFight.Bullet {
                     bulletDestroyTimeFromEntity = GetComponentDataFromEntity<BulletDestroyTime> (),
                     healthFromEntity = GetComponentDataFromEntity<HealthPoint> ()
             }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, Dependency);
-            endFramePhysicsSystem.HandlesToWaitFor.Add (Dependency);
         }
     }
 }

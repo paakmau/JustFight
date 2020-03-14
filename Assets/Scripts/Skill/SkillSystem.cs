@@ -1,8 +1,6 @@
 using JustFight.Bullet;
 using JustFight.Tank;
 using JustFight.Weapon;
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -14,74 +12,20 @@ namespace JustFight.Skill {
     [UpdateBefore (typeof (WeaponSystem))]
     class SkillSystem : SystemBase {
 
-        [BurstCompile]
-        struct ShadowSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, ShadowSkill, LocalToWorld, TankHullToFollow> {
-            [ReadOnly] public float dT;
-            public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInput, [ReadOnly] ref Skill skill, ref ShadowSkill shadowskill, [ReadOnly] ref LocalToWorld localToWorld, [ReadOnly] ref TankHullToFollow tankHullToFollowCmpt) {
-                if (skill.lastLeftTime > 0)
-                    shadowskill.aimDir = aimInput.dir;
-                if (skill.isCastTrigger) {
-                    var offset = math.normalize (math.cross (localToWorld.Forward, math.up ())) * 3;
-                    var hullInstanceA = ecb.Instantiate (entityInQueryIndex, shadowskill.shadowHullPrefab);
-                    var hullInstanceB = ecb.Instantiate (entityInQueryIndex, shadowskill.shadowHullPrefab);
-                    var turretInstanceA = ecb.Instantiate (entityInQueryIndex, shadowskill.shadowTurretPrefab);
-                    var turretInstanceB = ecb.Instantiate (entityInQueryIndex, shadowskill.shadowTurretPrefab);
-                    ecb.SetComponent (entityInQueryIndex, hullInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = offset });
-                    ecb.SetComponent (entityInQueryIndex, hullInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = -offset });
-                    ecb.SetComponent (entityInQueryIndex, turretInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = offset });
-                    ecb.SetComponent (entityInQueryIndex, turretInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = -offset });
-                    ecb.SetComponent (entityInQueryIndex, turretInstanceA, new ShadowTurret { turretEntity = entity });
-                    ecb.SetComponent (entityInQueryIndex, turretInstanceB, new ShadowTurret { turretEntity = entity });
-                    var newShadowskill = shadowskill;
-                    newShadowskill.shadowHullInstanceA = hullInstanceA;
-                    newShadowskill.shadowHullInstanceB = hullInstanceB;
-                    newShadowskill.shadowTurretInstanceA = turretInstanceA;
-                    newShadowskill.shadowTurretInstanceB = turretInstanceB;
-                    ecb.SetComponent (entityInQueryIndex, entity, newShadowskill);
-                }
-                if (skill.isEndTrigger) {
-                    ecb.DestroyEntity (entityInQueryIndex, shadowskill.shadowTurretInstanceA);
-                    ecb.DestroyEntity (entityInQueryIndex, shadowskill.shadowTurretInstanceB);
-                    ecb.DestroyEntity (entityInQueryIndex, shadowskill.shadowHullInstanceA);
-                    ecb.DestroyEntity (entityInQueryIndex, shadowskill.shadowHullInstanceB);
-                }
-            }
-        }
+        Random m_random;
 
-        [BurstCompile]
-        struct ShotgunBurstSkillJob : IJobForEachWithEntity<TankTurretTeam, AimInput, Skill, ShotgunBurstSkill, LocalToWorld> {
-            public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref TankTurretTeam teamCmpt, [ReadOnly] ref AimInput aimInput, [ReadOnly] ref Skill skill, ref ShotgunBurstSkill burstskill, [ReadOnly] ref LocalToWorld localToWorld) {
-                if (skill.lastLeftTime > 0) {
-                    // 技能正在发动
-                    burstskill.skillShootRecoveryleftTime -= dT;
-                    if (burstskill.skillShootRecoveryleftTime < 0) {
-                        burstskill.skillShootRecoveryleftTime += burstskill.skillShootRecoveryTime;
-                        var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
-                        float3 dir = aimInput.dir;
-                        if (burstskill.upRot != 0)
-                            dir = math.rotate (quaternion.AxisAngle (math.cross (dir, math.up ()), burstskill.upRot), dir);
-                        var offset = localToWorld.Position + localToWorld.Right * burstskill.offset.x + localToWorld.Up * burstskill.offset.y + localToWorld.Forward * burstskill.offset.z;
-                        for (int i = 0; i < burstskill.bulletNumPerShoot; i++) {
-                            var shootDir = dir + random.NextFloat3Direction () * burstskill.spread;
-                            var bulletEntity = ecb.Instantiate (entityInQueryIndex, burstskill.bulletPrefab);
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = offset });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * burstskill.skillShootSpeed });
-                            ecb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
-                        }
-                    }
-                }
-            }
-        }
+        BeginInitializationEntityCommandBufferSystem m_entityCommandBufferSystem;
 
-        BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
         protected override void OnCreate () {
-            entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+            m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+            m_random = new Random(19990922);
         }
+
         protected override void OnUpdate () {
+            // 保证随机均匀
+            m_random.NextUInt();
+            var random = m_random;
+
             // 处理技能冷却与持续
             var dT = Time.DeltaTime;
             Dependency = Entities.ForEach ((ref Skill skill, ref WeaponState weaponState, in AimInput input) => {
@@ -107,7 +51,7 @@ namespace JustFight.Skill {
             }).ScheduleParallel (Dependency);
 
             // 处理速射技能
-            var burstSkillJobEcb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var burstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
             var burstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BurstSkill burstskill, in LocalToWorld localToWorld, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill) => {
                 if (skill.lastLeftTime > 0) {
                     // 技能正在发动
@@ -123,12 +67,12 @@ namespace JustFight.Skill {
                     }
                 }
             }).ScheduleParallel (Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (burstSkillJobHandle);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (burstSkillJobHandle);
 
             // 处理轰炸技能
-            var bombSkillJobEcb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
-            var rand = new Unity.Mathematics.Random ((uint) (dT * 10000));
-            var bombSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BombSkill bombskill, in LocalToWorld localToWorld, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill)=> {
+            var bombSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var bombSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BombSkill bombskill, in LocalToWorld localToWorld, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill) => {
+                var rand = random;
                 if (skill.isCastTrigger) {
                     var offset = aimInput.dir * bombskill.forwardOffset;
                     var center = localToWorld.Position + offset + new float3 (0, 15, 0);
@@ -139,14 +83,68 @@ namespace JustFight.Skill {
                         bombSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = center + new float3 (randDir.x, 0, randDir.y) });
                     }
                 }
-            }).ScheduleParallel(Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (bombSkillJobHandle);
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (bombSkillJobHandle);
 
+            // 处理影分身技能
+            var shadowSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var shadowSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShadowSkill shadowskill, in LocalToWorld localToWorld, in TankHullToFollow tankHullToFollowCmpt, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill) => {
+                if (skill.lastLeftTime > 0)
+                    shadowskill.aimDir = aimInput.dir;
+                if (skill.isCastTrigger) {
+                    var offset = math.normalize (math.cross (localToWorld.Forward, math.up ())) * 3;
+                    var hullInstanceA = shadowSkillJobEcb.Instantiate (entityInQueryIndex, shadowskill.shadowHullPrefab);
+                    var hullInstanceB = shadowSkillJobEcb.Instantiate (entityInQueryIndex, shadowskill.shadowHullPrefab);
+                    var turretInstanceA = shadowSkillJobEcb.Instantiate (entityInQueryIndex, shadowskill.shadowTurretPrefab);
+                    var turretInstanceB = shadowSkillJobEcb.Instantiate (entityInQueryIndex, shadowskill.shadowTurretPrefab);
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, hullInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = offset });
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, hullInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = tankHullToFollowCmpt.entity, offset = -offset });
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceA, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = offset });
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = -offset });
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceA, new ShadowTurret { turretEntity = entity });
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceB, new ShadowTurret { turretEntity = entity });
+                    var newShadowskill = shadowskill;
+                    newShadowskill.shadowHullInstanceA = hullInstanceA;
+                    newShadowskill.shadowHullInstanceB = hullInstanceB;
+                    newShadowskill.shadowTurretInstanceA = turretInstanceA;
+                    newShadowskill.shadowTurretInstanceB = turretInstanceB;
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, entity, newShadowskill);
+                }
+                if (skill.isEndTrigger) {
+                    shadowSkillJobEcb.DestroyEntity (entityInQueryIndex, shadowskill.shadowTurretInstanceA);
+                    shadowSkillJobEcb.DestroyEntity (entityInQueryIndex, shadowskill.shadowTurretInstanceB);
+                    shadowSkillJobEcb.DestroyEntity (entityInQueryIndex, shadowskill.shadowHullInstanceA);
+                    shadowSkillJobEcb.DestroyEntity (entityInQueryIndex, shadowskill.shadowHullInstanceB);
+                }
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (shadowSkillJobHandle);
 
-            var shadowSkillJobHandle = new ShadowSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (shadowSkillJobHandle);
-            var shotgunBurstSkillJobHandle = new ShotgunBurstSkillJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (shotgunBurstSkillJobHandle);
+            // 处理霰弹枪技能
+            var shotgunBurstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var shotgunBurstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShotgunBurstSkill burstskill, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill, in LocalToWorld localToWorld) => {
+                if (skill.lastLeftTime > 0) {
+                    // 技能正在发动
+                    burstskill.skillShootRecoveryleftTime -= dT;
+                    if (burstskill.skillShootRecoveryleftTime < 0) {
+                        burstskill.skillShootRecoveryleftTime += burstskill.skillShootRecoveryTime;
+                        var rand = random;
+                        float3 dir = aimInput.dir;
+                        if (burstskill.upRot != 0)
+                            dir = math.rotate (quaternion.AxisAngle (math.cross (dir, math.up ()), burstskill.upRot), dir);
+                        var offset = localToWorld.Position + localToWorld.Right * burstskill.offset.x + localToWorld.Up * burstskill.offset.y + localToWorld.Forward * burstskill.offset.z;
+                        for (int i = 0; i < burstskill.bulletNumPerShoot; i++) {
+                            var shootDir = dir + rand.NextFloat3Direction () * burstskill.spread;
+                            var bulletEntity = shotgunBurstSkillJobEcb.Instantiate (entityInQueryIndex, burstskill.bulletPrefab);
+                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
+                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = offset });
+                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * burstskill.skillShootSpeed });
+                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { id = teamCmpt.id });
+                        }
+                    }
+                }
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (shotgunBurstSkillJobHandle);
+
             Dependency = JobHandle.CombineDependencies (JobHandle.CombineDependencies (bombSkillJobHandle, burstSkillJobHandle, shadowSkillJobHandle), shotgunBurstSkillJobHandle);
         }
     }

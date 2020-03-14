@@ -9,10 +9,9 @@ namespace JustFight.Bullet {
 
     class WaveBulletSystem : SystemBase {
 
-        [BurstCompile]
-        struct WaveJob : IJobForEach<WaveBulletState, PhysicsVelocity> {
-            [ReadOnly] public float dT;
-            public void Execute (ref WaveBulletState stateCmpt, ref PhysicsVelocity velocityCmpt) {
+        protected override void OnUpdate () {
+            var dT = Time.DeltaTime;
+            Dependency = Entities.ForEach((ref WaveBulletState stateCmpt, ref PhysicsVelocity velocityCmpt) => {
                 if (stateCmpt.leftRecoveryTime <= 0) {
                     stateCmpt.leftRecoveryTime = stateCmpt.recoveryTime;
                     float impulse = 5;
@@ -25,13 +24,7 @@ namespace JustFight.Bullet {
                     velocityCmpt.Linear += stateCmpt.forward * impulse * stateCmpt.factor;
                     stateCmpt.factor = -stateCmpt.factor;
                 } else stateCmpt.leftRecoveryTime -= dT;
-            }
-        }
-
-        protected override void OnUpdate () {
-            Dependency = new WaveJob {
-                dT = Time.DeltaTime
-            }.Schedule (this, Dependency);
+            }).ScheduleParallel(Dependency);
         }
     }
 }

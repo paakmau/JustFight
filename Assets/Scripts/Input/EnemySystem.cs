@@ -9,10 +9,10 @@ using Unity.Physics;
 namespace JustFight.Input {
 
     class EnemySystem : SystemBase {
-        [BurstCompile]
-        struct EnemyHullJob : IJobForEach<EnemyHull, MoveInput> {
-            [ReadOnly] public float dT;
-            public void Execute (ref EnemyHull hullCmp, ref MoveInput moveInputCmpt) {
+
+        protected override void OnUpdate () {
+            var dT = Time.DeltaTime;
+            var enemyHullJobHandle = Entities.ForEach ((ref EnemyHull hullCmp, ref MoveInput moveInputCmpt) => {
                 hullCmp.moveLeftTime -= dT;
                 if (hullCmp.moveLeftTime <= 0) {
                     hullCmp.moveLeftTime += hullCmp.random.NextFloat (0.5f, 1.2f);
@@ -20,13 +20,8 @@ namespace JustFight.Input {
                     hullCmp.moveDirction = new float3 (dir.x, 0, dir.y);
                     moveInputCmpt.dir = hullCmp.moveDirction;
                 }
-            }
-        }
-
-        [BurstCompile]
-        struct EnemyTurretJob : IJobForEach<EnemyTurret, AimInput> {
-            [ReadOnly] public float dT;
-            public void Execute (ref EnemyTurret turretCmpt, ref AimInput aimInputCmpt) {
+            }).ScheduleParallel (Dependency);
+            var enemyTurretJobHandle = Entities.ForEach ((ref EnemyTurret turretCmpt, ref AimInput aimInputCmpt) => {
                 turretCmpt.rotateLeftTime -= dT;
                 if (turretCmpt.rotateLeftTime <= 0) {
                     turretCmpt.rotateLeftTime += turretCmpt.random.NextFloat (0.2f, 0.4f);
@@ -37,11 +32,8 @@ namespace JustFight.Input {
                     aimInputCmpt.dir = math.normalize (aimInputCmpt.dir);
                 }
                 aimInputCmpt.dir = math.rotate (quaternion.AxisAngle (math.up (), turretCmpt.rotateDirection ? 0.05f : -0.05f), aimInputCmpt.dir);
-            }
-        }
-
-        protected override void OnUpdate () {
-            Dependency = JobHandle.CombineDependencies (new EnemyHullJob { dT = Time.DeltaTime }.Schedule (this, Dependency), new EnemyTurretJob { dT = Time.DeltaTime }.Schedule (this, Dependency));
+            }).ScheduleParallel (Dependency);
+            Dependency = JobHandle.CombineDependencies (enemyHullJobHandle, enemyTurretJobHandle);
         }
     }
 }

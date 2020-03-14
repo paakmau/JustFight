@@ -10,11 +10,14 @@ using Unity.Transforms;
 namespace JustFight.Spawner {
     class EnemySpawnerSystem : SystemBase {
 
-        [BurstCompile]
-        struct EnemySpawnerJob : IJobForEachWithEntity<Translation, Rotation, EnemySpawner> {
-            public EntityCommandBuffer.Concurrent ecb;
-            [ReadOnly] public float dT;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, [ReadOnly] ref Rotation rotationCmpt, ref EnemySpawner spawnerCmpt) {
+        BeginInitializationEntityCommandBufferSystem m_entityCommandBufferSystem;
+        protected override void OnCreate () {
+            m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+        }
+        protected override void OnUpdate () {
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var dT = Time.DeltaTime;
+            Dependency = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref EnemySpawner spawnerCmpt, in Translation translationCmpt, in Rotation rotationCmpt) => {
                 spawnerCmpt.leftRestTime -= dT;
                 if (spawnerCmpt.enemyNum > 0) {
                     if (spawnerCmpt.leftRestTime <= 0) {
@@ -39,26 +42,20 @@ namespace JustFight.Spawner {
                         ecb.SetComponent (entityInQueryIndex, hullEntity, new HealthBarInstance { entity = healthBarEntity });
                     }
                 } else ecb.DestroyEntity (entityInQueryIndex, entity);
-            }
-        }
-
-        BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
-        protected override void OnCreate () {
-            entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
-        }
-        protected override void OnUpdate () {
-            Dependency = new EnemySpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (), dT = Time.DeltaTime }.Schedule (this, Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 
     class SelfSpawnerSystem : SystemBase {
 
-        [BurstCompile]
-        struct SelfSpawnerJob : IJobForEachWithEntity<Translation, Rotation, SelfSpawner> {
-            public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref Translation translationCmpt, [ReadOnly] ref Rotation rotationCmpt, ref SelfSpawner spawnerCmpt) {
-
+        BeginInitializationEntityCommandBufferSystem m_entityCommandBufferSystem;
+        protected override void OnCreate () {
+            m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+        }
+        protected override void OnUpdate () {
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            Dependency = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref SelfSpawner spawnerCmpt, in Translation translationCmpt, in Rotation rotationCmpt) => {
                 var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
                 ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);
                 ecb.SetComponent (entityInQueryIndex, hullEntity, rotationCmpt);
@@ -78,16 +75,8 @@ namespace JustFight.Spawner {
                 ecb.SetComponent (entityInQueryIndex, hullEntity, new HealthBarInstance { entity = healthBarEntity });
 
                 ecb.DestroyEntity (entityInQueryIndex, entity);
-            }
-        }
-
-        BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
-        protected override void OnCreate () {
-            entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
-        }
-        protected override void OnUpdate () {
-            Dependency = new SelfSpawnerJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, Dependency);
-            entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (Dependency);
         }
     }
 }

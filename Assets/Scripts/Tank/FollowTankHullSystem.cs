@@ -54,7 +54,7 @@ namespace JustFight.Tank {
                     rotationType = GetArchetypeChunkComponentType<Rotation> (true),
                     nonUniformScaleType = GetArchetypeChunkComponentType<NonUniformScale> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
-            }.Schedule (group, Dependency);
+            }.ScheduleParallel (group, Dependency);
         }
     }
 }

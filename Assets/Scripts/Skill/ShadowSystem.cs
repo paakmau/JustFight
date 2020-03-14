@@ -59,7 +59,7 @@ namespace JustFight.Skill {
                     entityType = GetArchetypeChunkEntityType (),
                     shadowType = GetArchetypeChunkComponentType<Shadow> (true),
                     localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
-            }.Schedule (group, Dependency);
+            }.ScheduleParallel (group, Dependency);
 
             var shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (true);
             var dT = Time.DeltaTime;

@@ -9,15 +9,11 @@ namespace JustFight.Tank {
 
     class HealthBarSystem : SystemBase {
 
-        [BurstCompile]
-        struct ScaleHealthBarJob : IJobForEach<HealthBar, TankHullToFollow, NonUniformScale> {
-            [ReadOnly] public ComponentDataFromEntity<HealthPoint> healthCmpts;
-            public void Execute ([ReadOnly] ref HealthBar Cmpt, [ReadOnly] ref TankHullToFollow tankToFollowCmpt, ref NonUniformScale scaleCmpt) {
-                scaleCmpt.Value.z = (float) healthCmpts[tankToFollowCmpt.entity].value / (float) healthCmpts[tankToFollowCmpt.entity].maxValue;
-            }
-        }
         protected override void OnUpdate () {
-            Dependency = new ScaleHealthBarJob { healthCmpts = GetComponentDataFromEntity<HealthPoint> (true) }.Schedule (this, Dependency);
+            var healthFromEntity = GetComponentDataFromEntity<HealthPoint> (true);
+            Dependency = Entities.WithReadOnly(healthFromEntity).ForEach ((ref NonUniformScale scaleCmpt, in HealthBar Cmpt, in TankHullToFollow tankToFollowCmpt) => {
+                scaleCmpt.Value.z = (float) healthFromEntity[tankToFollowCmpt.entity].value / (float) healthFromEntity[tankToFollowCmpt.entity].maxValue;
+            }).ScheduleParallel (Dependency);
         }
     }
 }

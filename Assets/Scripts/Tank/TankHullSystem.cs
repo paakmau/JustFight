@@ -1,5 +1,3 @@
-using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -10,22 +8,25 @@ namespace JustFight.Tank {
 
     class TankHullSystem : SystemBase {
 
-        [BurstCompile]
-        struct DestroyTankJob : IJobForEachWithEntity<HealthPoint, HealthBarInstance, TankTurretInstance> {
-            public EntityCommandBuffer.Concurrent ecb;
-            public void Execute (Entity entity, int entityInQueryIndex, [ReadOnly] ref HealthPoint healthCmpt, [ReadOnly] ref HealthBarInstance healthBarInstanceCmpt, [ReadOnly] ref TankTurretInstance turretInstanceCmpt) {
+        BeginInitializationEntityCommandBufferSystem m_entityCommandBufferSystem;
+        protected override void OnCreate () {
+            m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
+        }
+        protected override void OnUpdate () {
+            // 销毁坦克
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var destroyTankJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, in HealthPoint healthCmpt, in HealthBarInstance healthBarInstanceCmpt, in TankTurretInstance turretInstanceCmpt) => {
                 if (healthCmpt.value <= 0) {
                     ecb.DestroyEntity (entityInQueryIndex, healthBarInstanceCmpt.entity);
                     ecb.DestroyEntity (entityInQueryIndex, turretInstanceCmpt.entity);
                     ecb.DestroyEntity (entityInQueryIndex, entity);
                 }
-            }
-        }
+            }).ScheduleParallel (Dependency);
+            m_entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
 
-        [BurstCompile]
-        struct JumpTankJob : IJobForEach<JumpInput, JumpState, PhysicsVelocity> {
-            [ReadOnly] public float dT;
-            public void Execute ([ReadOnly] ref JumpInput jumpInputCmpt, ref JumpState jumpStateCmpt, ref PhysicsVelocity velocityCmpt) {
+            // 坦克跳跃
+            var dT = Time.DeltaTime;
+            var jumpTankJobHandle = Entities.ForEach ((ref JumpState jumpStateCmpt, ref PhysicsVelocity velocityCmpt, in JumpInput jumpInputCmpt) => {
                 if (jumpStateCmpt.leftRecoveryTime > 0) {
                     jumpStateCmpt.leftRecoveryTime -= dT;
                 } else {
@@ -34,30 +35,17 @@ namespace JustFight.Tank {
                         jumpStateCmpt.leftRecoveryTime = jumpStateCmpt.recoveryTime;
                     }
                 }
-            }
-        }
+            }).ScheduleParallel (Dependency);
 
-        [BurstCompile]
-        struct MoveTankJob : IJobForEach<MoveSpeed, MoveInput, Rotation, PhysicsVelocity> {
-            [ReadOnly] public float dT;
-            public void Execute ([ReadOnly] ref MoveSpeed moveSpeedCmpt, [ReadOnly] ref MoveInput moveInputCmpt, ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt) {
+            // 坦克移动
+            var moveTankJobHandle = Entities.ForEach ((ref Rotation rotationCmpt, ref PhysicsVelocity velocityCmpt, in MoveSpeed moveSpeedCmpt, in MoveInput moveInputCmpt) => {
                 var dir = moveInputCmpt.dir;
                 if (dir.x != 0 || dir.z != 0)
-                    rotationCmpt.Value = math.slerp(rotationCmpt.Value, quaternion.LookRotation (dir, math.up ()), dT * 5);
+                    rotationCmpt.Value = math.slerp (rotationCmpt.Value, quaternion.LookRotation (dir, math.up ()), dT * 5);
                 var dV = moveSpeedCmpt.value * dir * dT;
                 velocityCmpt.Linear += dV;
-            }
-        }
+            }).ScheduleParallel (jumpTankJobHandle);
 
-        BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
-        protected override void OnCreate () {
-            entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
-        }
-        protected override void OnUpdate () {
-            var destroyTankJobHandle = new DestroyTankJob { ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent () }.Schedule (this, Dependency);
-            var jumpTankJobHandle = new JumpTankJob { dT = Time.DeltaTime }.Schedule (this, Dependency);
-            var moveTankJobHandle = new MoveTankJob { dT = Time.DeltaTime }.Schedule (this, jumpTankJobHandle);
-            entityCommandBufferSystem.AddJobHandleForProducer (destroyTankJobHandle);
             Dependency = JobHandle.CombineDependencies (destroyTankJobHandle, moveTankJobHandle);
         }
     }
