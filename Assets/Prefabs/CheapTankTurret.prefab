@@ -153,7 +153,7 @@ MonoBehaviour:
   offset:
     x: 0
     y: 0.5
-    z: 1.8
+    z: 0
 --- !u!114 &430845485007662187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +173,6 @@ MonoBehaviour:
   offset:
     x: 1
     y: 0.5
-    z: 1.8
+    z: 0
   bulletPrefab: {fileID: 9119870772814880375, guid: ddd11102dd368443ca589a07105eec73,
     type: 3}

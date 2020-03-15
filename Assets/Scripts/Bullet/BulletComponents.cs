@@ -6,6 +6,7 @@ namespace JustFight.Bullet {
 
     [Serializable]
     struct BulletTeam : IComponentData {
+        public Entity hull;
         public int id;
     }
 

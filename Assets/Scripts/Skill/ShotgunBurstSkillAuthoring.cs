@@ -16,8 +16,9 @@ namespace JustFight.Skill {
         public GameObject bulletPrefab = null;
         public float3 offset = default;
         public float upRot = 0;
+        public bool isDisableWeapon = true;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
-            dstManager.AddComponentData (entity, new Skill { recoveryLeftTime = recoveryTime, recoveryTime = recoveryTime, lastTime = skillLastTime, isDisableWeapon = true });
+            dstManager.AddComponentData (entity, new Skill { recoveryLeftTime = recoveryTime, recoveryTime = recoveryTime, lastTime = skillLastTime, isDisableWeapon = isDisableWeapon });
             dstManager.AddComponentData (entity, new ShotgunBurstSkill {
                 skillShootRecoveryTime = skillShootRecoveryTime,
                     skillShootSpeed = skillShootSpeed,

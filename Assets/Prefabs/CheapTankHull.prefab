@@ -231,6 +231,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 200
-  moveSpeed: 60
+  moveSpeed: 68
   jumpSpeed: 10
   jumpRecoveryTime: 2
