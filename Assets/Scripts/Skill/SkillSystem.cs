@@ -58,7 +58,7 @@ namespace JustFight.Skill {
                     burstskill.skillShootRecoveryleftTime -= dT;
                     if (burstskill.skillShootRecoveryleftTime < 0) {
                         burstskill.skillShootRecoveryleftTime += burstskill.skillShootRecoveryTime;
-                        var offset = localToWorld.Right * burstskill.offset.x + localToWorld.Up * burstskill.offset.y + localToWorld.Forward * burstskill.offset.z;
+                        var offset = localToWorld.Right * burstskill.offsetX;
                         var bulletEntity = burstSkillJobEcb.Instantiate (entityInQueryIndex, burstskill.bulletPrefab);
                         burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (aimInput.dir, math.up ()) });
                         burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position + offset });

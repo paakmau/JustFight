@@ -20,7 +20,7 @@ namespace JustFight.Skill {
         public float skillShootRecoveryleftTime;
         public float skillShootRecoveryTime;
         public float skillShootSpeed;
-        public float3 offset;
+        public float offsetX;
         public Entity bulletPrefab;
     }
 
