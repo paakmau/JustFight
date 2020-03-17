@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -382004812595450582}
   - component: {fileID: 7958849646461479103}
   m_Layer: 0
-  m_Name: ShadowTankTurret
+  m_Name: ShadowTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

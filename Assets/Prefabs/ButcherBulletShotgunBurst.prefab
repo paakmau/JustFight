@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4476946314682438583
+--- !u!1 &3987333704009621490
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,27 +8,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 610826181011497380}
-  - component: {fileID: 8440046503828773778}
-  - component: {fileID: 2746519541784127339}
-  - component: {fileID: 5548614933642169019}
-  - component: {fileID: 5548614933642169018}
-  - component: {fileID: 5548614933642169017}
-  - component: {fileID: 5548614933642169016}
+  - component: {fileID: 3987333704009621497}
+  - component: {fileID: 3987333704009621447}
+  - component: {fileID: 3987333704009621440}
+  - component: {fileID: 3987333704009621409}
+  - component: {fileID: 3987333704009621408}
+  - component: {fileID: 3987333704009621471}
+  - component: {fileID: 3987333704009621470}
   m_Layer: 0
-  m_Name: SnakeBulletBomb
+  m_Name: ButcherBulletShotgunBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &610826181011497380
+--- !u!4 &3987333704009621497
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
+  m_GameObject: {fileID: 3987333704009621490}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -36,21 +36,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8440046503828773778
+--- !u!33 &3987333704009621447
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
-  m_Mesh: {fileID: 117462060855630876, guid: e9f0f1aa47cdb40c4b867ac7462a1843, type: 3}
---- !u!23 &2746519541784127339
+  m_GameObject: {fileID: 3987333704009621490}
+  m_Mesh: {fileID: 1904562623930587232, guid: 7221ae36afeda480c9ca5b2582f024c4, type: 3}
+--- !u!23 &3987333704009621440
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
+  m_GameObject: {fileID: 3987333704009621490}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 78b077560bc364b9aa11236d5d633b63, type: 2}
+  - {fileID: 2100000, guid: f099defcf2bb745ef9237ad2b2dd5370, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,35 +83,35 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5548614933642169019
+--- !u!114 &3987333704009621409
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
+  m_GameObject: {fileID: 3987333704009621490}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
---- !u!114 &5548614933642169018
+--- !u!114 &3987333704009621408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
+  m_GameObject: {fileID: 3987333704009621490}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccea9ea98e38942e0b0938c27ed1903e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_MotionType: 0
-  m_Mass: 4
-  m_LinearDamping: 0
-  m_AngularDamping: 0
+  m_Mass: 2
+  m_LinearDamping: 0.01
+  m_AngularDamping: 0.05
   m_InitialLinearVelocity:
     x: 0
     y: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
-  m_GravityFactor: 1
+  m_GravityFactor: 0.01
   m_OverrideDefaultMassDistribution: 0
   m_CenterOfMass:
     x: 0
@@ -145,13 +145,13 @@ MonoBehaviour:
     Tag05: 0
     Tag06: 0
     Tag07: 0
---- !u!114 &5548614933642169017
+--- !u!114 &3987333704009621471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
+  m_GameObject: {fileID: 3987333704009621490}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b275e5f92732148048d7b77e264ac30e, type: 3}
@@ -159,13 +159,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShapeType: 2
   m_PrimitiveCenter:
-    x: 0.000000059604645
-    y: 0.000000029802322
-    z: 0.31743106
+    x: 0.000000029802322
+    y: -0.000000029802322
+    z: 0.19202308
   m_PrimitiveSize:
-    x: 0.6348621
-    y: 0.6348621
-    z: 0.6348621
+    x: 0.38404617
+    y: 0.38404617
+    z: 0.38404617
   m_PrimitiveOrientation:
     Value:
       x: -0
@@ -173,19 +173,19 @@ MonoBehaviour:
       z: 0
     RotationOrder: 4
   m_Capsule:
-    Height: 0.6348621
-    Radius: 0.31743106
+    Height: 0.38404617
+    Radius: 0.19202308
     Axis: 2
   m_Cylinder:
-    Height: 0.6348621
-    Radius: 0.31743106
+    Height: 0.38404617
+    Radius: 0.19202308
     Axis: 2
   m_CylinderSideCount: 20
-  m_SphereRadius: 0.31743106
+  m_SphereRadius: 0.19202308
   m_MinimumSkinnedVertexWeight: 0.1
   m_ConvexHullGenerationParameters:
     m_SimplificationTolerance: 0.05779125
-    m_BevelRadius: 0.05
+    m_BevelRadius: 0.033259377
     m_MinimumAngle: 2.5000002
   m_CustomMesh: {fileID: 0}
   m_ForceUnique: 0
@@ -204,7 +204,7 @@ MonoBehaviour:
       m_Override: 0
       m_Value:
         Value: 0
-        CombineMode: 1
+        CombineMode: 2
     m_BelongsTo:
       m_Override: 0
       m_Value: 0001000000000000000000000000000000000000000000000000000000000000
@@ -218,17 +218,17 @@ MonoBehaviour:
       m_Override: 0
       m_Value: 0000000000000000
   m_ConvexRadius_Deprecated: -1
---- !u!114 &5548614933642169016
+--- !u!114 &3987333704009621470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4476946314682438583}
+  m_GameObject: {fileID: 3987333704009621490}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 497ad6c262a144c319364dce0611719f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 12
-  destroyTime: 10
+  damage: 5
+  destroyTime: 1.5

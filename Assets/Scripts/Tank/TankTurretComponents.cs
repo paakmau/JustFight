@@ -7,6 +7,7 @@ namespace JustFight.Tank {
     [Serializable]
     struct TankTurretTeam : IComponentData {
         public int id;
+        public Entity hull;
     }
 
     [Serializable]

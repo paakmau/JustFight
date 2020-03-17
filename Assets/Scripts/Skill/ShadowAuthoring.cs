@@ -9,7 +9,7 @@ namespace JustFight.Skill {
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponent<Shadow> (entity);
             dstManager.RemoveComponent<Translation> (entity);
-            dstManager.RemoveChunkComponent<Rotation> (entity);
+            dstManager.RemoveComponent<Rotation> (entity);
         }
     }
 }

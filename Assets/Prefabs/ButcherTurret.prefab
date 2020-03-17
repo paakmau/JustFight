@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4685838210898294930}
   - component: {fileID: 8164883196299238330}
   m_Layer: 0
-  m_Name: ButcherTankTurret
+  m_Name: ButcherTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   skillShootSpeed: 12
   bulletNumPerShoot: 3
   spread: 0.3
-  bulletPrefab: {fileID: 7769352369761811030, guid: eb23b1573db9b47dc9479116a0b9de87,
+  bulletPrefab: {fileID: 3987333704009621490, guid: a1c368e9ea3384294a85bf94b0083f7a,
     type: 3}
   offset:
     x: 0
