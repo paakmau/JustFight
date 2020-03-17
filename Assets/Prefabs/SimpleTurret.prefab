@@ -176,7 +176,7 @@ MonoBehaviour:
   skillShootSpeed: 18
   offset:
     x: 0
-    y: 0.5
+    y: 0
     z: 1.8
   bulletPrefab: {fileID: 3370791576760702623, guid: f84a3bb4f7caa480198b3de54ecaa21d,
     type: 3}

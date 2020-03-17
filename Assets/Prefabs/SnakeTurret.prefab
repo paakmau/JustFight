@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6617654509340410197}
   - component: {fileID: 5878713794976838021}
   m_Layer: 0
-  m_Name: SnakeTankTurret
+  m_Name: SnakeTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   bulletShootSpeed: 10
   offset:
     x: 0
-    y: 0.5
+    y: 0
     z: 0
 --- !u!114 &5878713794976838021
 MonoBehaviour:

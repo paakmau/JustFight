@@ -39,6 +39,7 @@ namespace JustFight.Bullet {
                 if (hasTarget) {
                     var targetDir = math.normalize (closestHit.Position - pos);
                     var dir = targetDir - vDir;
+                    dir.y = 0;
                     velocityCmpt.Linear = math.normalize (velocityCmpt.Linear + dir) * vL;
                     rotationCmpt.Value = quaternion.LookRotation (vDir, math.up ());
                 }
