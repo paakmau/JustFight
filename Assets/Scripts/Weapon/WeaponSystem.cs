@@ -66,7 +66,8 @@ namespace JustFight.Weapon {
                     var random = new Unity.Mathematics.Random ((uint) (dT * 10000));
                     for (int i = 0; i < gun.bulletNum; i++) {
                         var bulletEntity = shotgunJobEcb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
-                        var shootDir = shootInput.dir + random.NextFloat3Direction () * 0.1f;
+                        var randDir = random.NextFloat2Direction () * 0.1f;
+                        var shootDir = shootInput.dir + new float3 ( randDir.x, 0, randDir.y);
                         shotgunJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
                         shotgunJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = pos });
                         shotgunJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * gun.bulletShootSpeed });

@@ -133,7 +133,12 @@ namespace JustFight.Skill {
                             dir = math.rotate (quaternion.AxisAngle (math.cross (dir, math.up ()), burstskill.upRot), dir);
                         var offset = localToWorld.Position + localToWorld.Right * burstskill.offset.x + localToWorld.Up * burstskill.offset.y + localToWorld.Forward * burstskill.offset.z;
                         for (int i = 0; i < burstskill.bulletNumPerShoot; i++) {
-                            var shootDir = dir + rand.NextFloat3Direction () * burstskill.spread;
+                            float3 randDir;
+                            if (burstskill.isFlat) {
+                                float2 temp = rand.NextFloat2Direction ();
+                                randDir = new float3 (temp.x, 0, temp.y);
+                            } else randDir = rand.NextFloat3Direction ();
+                            var shootDir = dir + randDir * burstskill.spread;
                             var bulletEntity = shotgunBurstSkillJobEcb.Instantiate (entityInQueryIndex, burstskill.bulletPrefab);
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = offset });

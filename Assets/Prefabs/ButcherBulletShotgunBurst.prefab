@@ -109,9 +109,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MotionType: 0
-  m_Mass: 2
-  m_LinearDamping: 0.01
-  m_AngularDamping: 0.05
+  m_Mass: 1.5
+  m_LinearDamping: 0
+  m_AngularDamping: 0
   m_InitialLinearVelocity:
     x: 0
     y: 0
@@ -231,4 +231,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 5
-  destroyTime: 1.5
+  destroyTime: 0.4

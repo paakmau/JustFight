@@ -53,5 +53,6 @@ namespace JustFight.Skill {
         public Entity bulletPrefab;
         public float3 offset;
         public float upRot;
+        public bool isFlat;
     }
 }

@@ -153,8 +153,8 @@ MonoBehaviour:
   bulletNum: 6
   offset:
     x: 0
-    y: 0.57
-    z: 2.4
+    y: 0.5
+    z: 0
 --- !u!114 &8164883196299238330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,16 +168,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recoveryTime: 8
-  skillLastTime: 2
-  skillShootRecoveryTime: 0.1
+  skillLastTime: 3.2
+  skillShootRecoveryTime: 0.12
   skillShootSpeed: 12
-  bulletNumPerShoot: 3
+  bulletNumPerShoot: 4
   spread: 0.3
   bulletPrefab: {fileID: 3987333704009621490, guid: a1c368e9ea3384294a85bf94b0083f7a,
     type: 3}
   offset:
     x: 0
-    y: 0.57
+    y: 0.5
     z: 0
   upRot: 0
   isDisableWeapon: 1
+  isFlat: 1

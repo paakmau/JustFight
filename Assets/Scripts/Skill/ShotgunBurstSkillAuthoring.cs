@@ -17,6 +17,7 @@ namespace JustFight.Skill {
         public float3 offset = default;
         public float upRot = 0;
         public bool isDisableWeapon = true;
+        public bool isFlat = false;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponentData (entity, new Skill { recoveryLeftTime = recoveryTime, recoveryTime = recoveryTime, lastTime = skillLastTime, isDisableWeapon = isDisableWeapon });
             dstManager.AddComponentData (entity, new ShotgunBurstSkill {
@@ -26,7 +27,8 @@ namespace JustFight.Skill {
                     spread = spread,
                     bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab),
                     offset = offset,
-                    upRot = upRot
+                    upRot = upRot,
+                    isFlat = isFlat
             });
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {

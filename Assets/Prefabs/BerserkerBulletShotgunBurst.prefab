@@ -110,8 +110,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MotionType: 0
   m_Mass: 20
-  m_LinearDamping: 0.01
-  m_AngularDamping: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0
   m_InitialLinearVelocity:
     x: 0
     y: 0
