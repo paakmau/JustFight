@@ -131,7 +131,6 @@ namespace JustFight.Skill {
                         float3 dir = aimInput.dir;
                         if (burstskill.upRot != 0)
                             dir = math.rotate (quaternion.AxisAngle (math.cross (dir, math.up ()), burstskill.upRot), dir);
-                        var offset = localToWorld.Position + localToWorld.Right * burstskill.offset.x + localToWorld.Up * burstskill.offset.y + localToWorld.Forward * burstskill.offset.z;
                         for (int i = 0; i < burstskill.bulletNumPerShoot; i++) {
                             float3 randDir;
                             if (burstskill.isFlat) {
@@ -141,7 +140,7 @@ namespace JustFight.Skill {
                             var shootDir = dir + randDir * burstskill.spread;
                             var bulletEntity = shotgunBurstSkillJobEcb.Instantiate (entityInQueryIndex, burstskill.bulletPrefab);
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
-                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = offset });
+                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position });
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * burstskill.skillShootSpeed });
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = teamCmpt.id });
                         }

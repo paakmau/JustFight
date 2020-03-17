@@ -9,12 +9,10 @@ namespace JustFight.Weapon {
     class TankGunAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject bulletPrefab = null;
         public float bulletShootSpeed = 15;
-        public float3 offset = default;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponentData (entity, new TankGun {
                 bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab),
-                    bulletShootSpeed = bulletShootSpeed,
-                    offset = offset
+                    bulletShootSpeed = bulletShootSpeed
             });
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {

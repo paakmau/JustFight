@@ -10,13 +10,11 @@ namespace JustFight.Weapon {
         public GameObject bulletPrefab = null;
         public float bulletShootSpeed = 15;
         public int bulletNum = 8;
-        public float3 offset = default;
         public void Convert (Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem) {
             dstManager.AddComponentData (entity, new Shotgun {
                 bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab),
                     bulletShootSpeed = bulletShootSpeed,
-                    bulletNum = bulletNum,
-                    offset = offset
+                    bulletNum = bulletNum
             });
         }
         public void DeclareReferencedPrefabs (List<GameObject> referencedPrefabs) {

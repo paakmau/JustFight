@@ -177,6 +177,6 @@ MonoBehaviour:
   offset:
     x: 0
     y: 0
-    z: 1.8
+    z: 0
   bulletPrefab: {fileID: 3370791576760702623, guid: f84a3bb4f7caa480198b3de54ecaa21d,
     type: 3}

@@ -1,6 +1,5 @@
 using System;
 using Unity.Entities;
-using Unity.Mathematics;
 
 namespace JustFight.Weapon {
 
@@ -15,15 +14,14 @@ namespace JustFight.Weapon {
     struct TankGun : IComponentData {
         public Entity bulletPrefab;
         public float bulletShootSpeed;
-        public float3 offset;
     }
 
     [Serializable]
     struct DoubleTankGun : IComponentData {
         public Entity bulletPrefab;
         public float bulletShootSpeed;
-        public float3 offsetA;
-        public float3 offsetB;
+        public float offsetAX;
+        public float offsetBX;
     }
 
     [Serializable]
@@ -31,6 +29,5 @@ namespace JustFight.Weapon {
         public Entity bulletPrefab;
         public float bulletShootSpeed;
         public int bulletNum;
-        public float3 offset;
     }
 }

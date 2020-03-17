@@ -14,7 +14,6 @@ namespace JustFight.Skill {
         public int bulletNumPerShoot = 8;
         public float spread = 0.5f;
         public GameObject bulletPrefab = null;
-        public float3 offset = default;
         public float upRot = 0;
         public bool isDisableWeapon = true;
         public bool isFlat = false;
@@ -26,7 +25,6 @@ namespace JustFight.Skill {
                     bulletNumPerShoot = bulletNumPerShoot,
                     spread = spread,
                     bulletPrefab = conversionSystem.GetPrimaryEntity (bulletPrefab),
-                    offset = offset,
                     upRot = upRot,
                     isFlat = isFlat
             });
