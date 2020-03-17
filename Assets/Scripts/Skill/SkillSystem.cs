@@ -52,7 +52,7 @@ namespace JustFight.Skill {
 
             // 处理速射技能
             var burstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
-            var burstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BurstSkill burstskill, in LocalToWorld localToWorld, in TankHullToFollow hullToFollow, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill) => {
+            var burstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BurstSkill burstskill, in LocalToWorld localToWorld, in TankHullToFollow hullToFollow, in TankTurretTeam team, in AimInput aimInput, in Skill skill) => {
                 if (skill.lastLeftTime > 0) {
                     // 技能正在发动
                     burstskill.skillShootRecoveryleftTime -= dT;
@@ -63,7 +63,7 @@ namespace JustFight.Skill {
                         burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (aimInput.dir, math.up ()) });
                         burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position + offset });
                         burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = aimInput.dir * burstskill.skillShootSpeed });
-                        burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = teamCmpt.id });
+                        burstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = team.id });
                     }
                 }
             }).ScheduleParallel (Dependency);
@@ -71,14 +71,14 @@ namespace JustFight.Skill {
 
             // 处理轰炸技能
             var bombSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
-            var bombSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BombSkill bombskill, in LocalToWorld localToWorld, in TankHullToFollow hullToFollow, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill) => {
+            var bombSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BombSkill bombskill, in LocalToWorld localToWorld, in TankHullToFollow hullToFollow, in TankTurretTeam team, in AimInput aimInput, in Skill skill) => {
                 var rand = random;
                 if (skill.isCastTrigger) {
                     var offset = aimInput.dir * bombskill.forwardOffset;
                     var center = localToWorld.Position + offset + new float3 (0, 15, 0);
                     for (int i = 0; i < bombskill.bulletNum; i++) {
                         var bulletEntity = bombSkillJobEcb.Instantiate (entityInQueryIndex, bombskill.bulletPrefab);
-                        bombSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = teamCmpt.id });
+                        bombSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = team.id });
                         var randDir = (rand.NextFloat2Direction () * rand.NextFloat (bombskill.radius));
                         bombSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = center + new float3 (randDir.x, 0, randDir.y) });
                     }
@@ -88,7 +88,7 @@ namespace JustFight.Skill {
 
             // 处理影分身技能
             var shadowSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
-            var shadowSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShadowSkill shadowskill, in LocalToWorld localToWorld, in TankHullToFollow tankHullToFollowCmpt, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill) => {
+            var shadowSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShadowSkill shadowskill, in LocalToWorld localToWorld, in TankHullToFollow tankHullToFollowCmpt, in TankTurretTeam team, in AimInput aimInput, in Skill skill) => {
                 if (skill.lastLeftTime > 0)
                     shadowskill.aimDir = aimInput.dir;
                 if (skill.isCastTrigger) {
@@ -103,6 +103,8 @@ namespace JustFight.Skill {
                     shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceB, new Shadow { translationEntity = tankHullToFollowCmpt.entity, rotationEntity = entity, offset = -offset });
                     shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceA, new ShadowTurret { turretEntity = entity });
                     shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceB, new ShadowTurret { turretEntity = entity });
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceA, team);
+                    shadowSkillJobEcb.SetComponent (entityInQueryIndex, turretInstanceB, team);
                     var newShadowskill = shadowskill;
                     newShadowskill.shadowHullInstanceA = hullInstanceA;
                     newShadowskill.shadowHullInstanceB = hullInstanceB;
@@ -121,7 +123,7 @@ namespace JustFight.Skill {
 
             // 处理霰弹枪技能
             var shotgunBurstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
-            var shotgunBurstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShotgunBurstSkill burstskill, in TankHullToFollow hullToFollow, in TankTurretTeam teamCmpt, in AimInput aimInput, in Skill skill, in LocalToWorld localToWorld) => {
+            var shotgunBurstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShotgunBurstSkill burstskill, in TankHullToFollow hullToFollow, in TankTurretTeam team, in AimInput aimInput, in Skill skill, in LocalToWorld localToWorld) => {
                 if (skill.lastLeftTime > 0) {
                     // 技能正在发动
                     burstskill.skillShootRecoveryleftTime -= dT;
@@ -142,7 +144,7 @@ namespace JustFight.Skill {
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Rotation { Value = quaternion.LookRotation (shootDir, math.up ()) });
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new Translation { Value = localToWorld.Position });
                             shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new PhysicsVelocity { Linear = shootDir * burstskill.skillShootSpeed });
-                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = teamCmpt.id });
+                            shotgunBurstSkillJobEcb.SetComponent (entityInQueryIndex, bulletEntity, new BulletTeam { hull = hullToFollow.entity, id = team.id });
                         }
                     }
                 }
