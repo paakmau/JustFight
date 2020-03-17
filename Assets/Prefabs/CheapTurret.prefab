@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1115577580192280129}
   - component: {fileID: 430845485007662187}
   m_Layer: 0
-  m_Name: CheapTankTurret
+  m_Name: CheapTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   bulletShootSpeed: 12.5
   offset:
     x: 0
-    y: 0.5
+    y: 0
     z: 0
 --- !u!114 &430845485007662187
 MonoBehaviour:
@@ -172,7 +172,7 @@ MonoBehaviour:
   skillShootSpeed: 15
   offset:
     x: 1
-    y: 0.5
+    y: 0
     z: 0
   bulletPrefab: {fileID: 9119870772814880375, guid: ddd11102dd368443ca589a07105eec73,
     type: 3}

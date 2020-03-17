@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4912171184812436801}
   - component: {fileID: 3075531947268555055}
   m_Layer: 0
-  m_Name: SimpleTankTurret
+  m_Name: SimpleTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,11 +152,11 @@ MonoBehaviour:
   bulletShootSpeed: 12
   offsetA:
     x: -0.75
-    y: 0.5
+    y: 0
     z: 0
   offsetB:
     x: 0.75
-    y: 0.5
+    y: 0
     z: 0
 --- !u!114 &3075531947268555055
 MonoBehaviour:

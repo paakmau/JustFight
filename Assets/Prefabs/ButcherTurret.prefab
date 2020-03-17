@@ -153,7 +153,7 @@ MonoBehaviour:
   bulletNum: 6
   offset:
     x: 0
-    y: 0.5
+    y: 0
     z: 0
 --- !u!114 &8164883196299238330
 MonoBehaviour:
@@ -177,7 +177,7 @@ MonoBehaviour:
     type: 3}
   offset:
     x: 0
-    y: 0.5
+    y: 0
     z: 0
   upRot: 0
   isDisableWeapon: 1

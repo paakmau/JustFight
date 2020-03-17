@@ -152,11 +152,11 @@ MonoBehaviour:
   bulletShootSpeed: 14
   offsetA:
     x: 0.4
-    y: 0.5
+    y: 0
     z: 0
   offsetB:
     x: -0.4
-    y: 0.5
+    y: 0
     z: 0
 --- !u!114 &4897918859452362157
 MonoBehaviour:
@@ -184,3 +184,4 @@ MonoBehaviour:
     z: 0
   upRot: 1.57
   isDisableWeapon: 0
+  isFlat: 0

@@ -152,11 +152,11 @@ MonoBehaviour:
   bulletShootSpeed: 9
   offsetA:
     x: -0.5
-    y: 0.5
+    y: 0
     z: 0
   offsetB:
     x: 0.5
-    y: 0.5
+    y: 0
     z: 0
 --- !u!114 &7958849646461479103
 MonoBehaviour:
