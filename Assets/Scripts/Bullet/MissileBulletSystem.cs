@@ -14,7 +14,7 @@ namespace JustFight.Bullet {
         BuildPhysicsWorld m_buildPhysicsWorldSystem;
         EndFramePhysicsSystem m_endFramePhysicsSystem;
         protected override void OnCreate () {
-            m_sphereCollider = Unity.Physics.SphereCollider.Create (
+            m_sphereCollider = SphereCollider.Create (
                 new SphereGeometry { Center = float3.zero, Radius = 4 },
                 new CollisionFilter { BelongsTo = ~0u, CollidesWith = 1u, GroupIndex = 0 }
             );
