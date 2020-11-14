@@ -14,7 +14,7 @@ namespace JustFight.Tank {
         }
         protected override void OnUpdate () {
             // 销毁坦克
-            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var destroyTankJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, in HealthPoint healthCmpt, in HealthBarInstance healthBarInstanceCmpt, in TankTurretInstance turretInstanceCmpt) => {
                 if (healthCmpt.value <= 0) {
                     ecb.DestroyEntity (entityInQueryIndex, healthBarInstanceCmpt.entity);

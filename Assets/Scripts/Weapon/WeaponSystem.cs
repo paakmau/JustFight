@@ -27,7 +27,7 @@ namespace JustFight.Weapon {
             }).ScheduleParallel (Dependency);
 
             // 坦克炮
-            var tankGunJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var tankGunJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var tankGunJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, in TankTurretTeam team, in AimInput shootInput, in WeaponState weaponState, in TankGun gun, in LocalToWorld localToWorld) => {
                 if (weaponState.isShootTrigger) {
                     var bulletEntity = tankGunJobEcb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
@@ -39,7 +39,7 @@ namespace JustFight.Weapon {
             }).ScheduleParallel (Dependency);
 
             // 双管坦克炮
-            var doubleTankGunJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var doubleTankGunJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var doubleTankGunJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, in TankTurretTeam team, in AimInput shootInput, in WeaponState weaponState, in DoubleTankGun gun, in LocalToWorld localToWorld) => {
                 if (weaponState.isShootTrigger) {
                     var bulletEntity = doubleTankGunJobEcb.Instantiate (entityInQueryIndex, gun.bulletPrefab);
@@ -58,7 +58,7 @@ namespace JustFight.Weapon {
             }).ScheduleParallel (Dependency);
 
             // 霰弹枪
-            var shotgunJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var shotgunJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var shotgunJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, in TankTurretTeam team, in AimInput shootInput, in WeaponState weaponState, in Shotgun gun, in LocalToWorld localToWorld) => {
                 if (weaponState.isShootTrigger) {
                     var random = new Unity.Mathematics.Random ((uint) (dT * 10000));

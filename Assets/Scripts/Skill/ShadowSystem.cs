@@ -13,19 +13,19 @@ namespace JustFight.Skill {
 
         [BurstCompile]
         struct ShadowMoveJob : IJobChunk {
-            public EntityCommandBuffer.Concurrent ecb;
+            public EntityCommandBuffer.ParallelWriter ecb;
             [ReadOnly] public ComponentDataFromEntity<Translation> translationFromEntity;
             [ReadOnly] public ComponentDataFromEntity<Rotation> rotationFromEntity;
-            [ReadOnly] public ArchetypeChunkEntityType entityType;
-            [ReadOnly] public ArchetypeChunkComponentType<Shadow> shadowType;
-            public ArchetypeChunkComponentType<LocalToWorld> localToWorldType;
+            [ReadOnly] public EntityTypeHandle entityType;
+            [ReadOnly] public ComponentTypeHandle<Shadow> shadowType;
+            public ComponentTypeHandle<LocalToWorld> localToWorldType;
             public void Execute (ArchetypeChunk chunk, int chunkIndex, int entityOffset) {
                 var chunkEntity = chunk.GetNativeArray (entityType);
                 var chunkShadow = chunk.GetNativeArray (shadowType);
                 var chunkLocalToWorld = chunk.GetNativeArray (localToWorldType);
                 for (int i = 0; i < chunk.Count; i++) {
-                    var isTranslationEntityValid = translationFromEntity.Exists (chunkShadow[i].translationEntity);
-                    var isRotationEntityValid = rotationFromEntity.Exists (chunkShadow[i].rotationEntity);
+                    var isTranslationEntityValid = translationFromEntity.HasComponent (chunkShadow[i].translationEntity);
+                    var isRotationEntityValid = rotationFromEntity.HasComponent (chunkShadow[i].rotationEntity);
                     if (isTranslationEntityValid && isRotationEntityValid) {
                         var translation = translationFromEntity[chunkShadow[i].translationEntity].Value;
                         var rotation = rotationFromEntity[chunkShadow[i].rotationEntity].Value;
@@ -52,19 +52,19 @@ namespace JustFight.Skill {
 
         protected override void OnUpdate () {
             Dependency = new ShadowMoveJob {
-                ecb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
+                ecb = entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter (),
                     translationFromEntity = GetComponentDataFromEntity<Translation> (true),
                     rotationFromEntity = GetComponentDataFromEntity<Rotation> (true),
-                    entityType = GetArchetypeChunkEntityType (),
-                    shadowType = GetArchetypeChunkComponentType<Shadow> (true),
-                    localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
+                    entityType = GetEntityTypeHandle (),
+                    shadowType = GetComponentTypeHandle<Shadow> (true),
+                    localToWorldType = GetComponentTypeHandle<LocalToWorld> ()
             }.ScheduleParallel (group, Dependency);
 
             var shadowSkillFromEntity = GetComponentDataFromEntity<ShadowSkill> (true);
             var dT = Time.DeltaTime;
-            var shadowShootJobEcb = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var shadowShootJobEcb = entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             Dependency = Entities.WithReadOnly (shadowSkillFromEntity).ForEach ((Entity entity, int entityInQueryIndex, ref AimInput aimInputCmpt, in ShadowTurret shadowTurretCmpt) => {
-                var isTurretEntityValid = shadowSkillFromEntity.Exists (shadowTurretCmpt.turretEntity);
+                var isTurretEntityValid = shadowSkillFromEntity.HasComponent (shadowTurretCmpt.turretEntity);
                 if (!isTurretEntityValid)
                     shadowShootJobEcb.DestroyEntity (entityInQueryIndex, entity);
                 else

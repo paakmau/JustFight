@@ -17,7 +17,7 @@ namespace JustFight.Bullet {
         }
 
         protected override void OnUpdate () {
-            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var dT = Time.DeltaTime;
             Dependency = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BulletDestroyTime destroyTimeCmpt) => {
                 destroyTimeCmpt.value -= dT;
@@ -28,24 +28,25 @@ namespace JustFight.Bullet {
         }
     }
 
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateBefore (typeof (StepPhysicsWorld))]
     class BulletDisableCollisionSystem : SystemBase {
         struct BulletDisableCollisionJob : IBodyPairsJob {
             [ReadOnly]
             public ComponentDataFromEntity<BulletTeam> bulletTeamFromEntity;
             public void Execute (ref ModifiableBodyPair pair) {
-                bool isEntityABullet = bulletTeamFromEntity.Exists (pair.Entities.EntityA);
-                bool isEntityBBullet = bulletTeamFromEntity.Exists (pair.Entities.EntityB);
+                bool isEntityABullet = bulletTeamFromEntity.HasComponent (pair.EntityA);
+                bool isEntityBBullet = bulletTeamFromEntity.HasComponent (pair.EntityB);
                 // 自己的子弹之间不会碰撞
                 if (isEntityABullet && isEntityBBullet) {
-                    if (bulletTeamFromEntity[pair.Entities.EntityA].hull == bulletTeamFromEntity[pair.Entities.EntityB].hull)
+                    if (bulletTeamFromEntity[pair.EntityA].hull == bulletTeamFromEntity[pair.EntityB].hull)
                         pair.Disable ();
                 }
                 // 自己与自己的子弹不会碰撞
                 else if (isEntityABullet || isEntityBBullet) {
-                    var bulletEntity = isEntityABullet ? pair.Entities.EntityA : pair.Entities.EntityB;
-                    var theOtherEntity = isEntityABullet ? pair.Entities.EntityB : pair.Entities.EntityA;
-                    if (bulletTeamFromEntity[pair.Entities.EntityA].hull == theOtherEntity)
+                    var bulletEntity = isEntityABullet ? pair.EntityA : pair.EntityB;
+                    var theOtherEntity = isEntityABullet ? pair.EntityB : pair.EntityA;
+                    if (bulletTeamFromEntity[pair.EntityA].hull == theOtherEntity)
                         pair.Disable ();
                 }
             }
@@ -60,13 +61,16 @@ namespace JustFight.Bullet {
             if (m_stepPhysicsWorld.Simulation.Type == SimulationType.NoPhysics) return;
             // TODO: 有GC等官方示例更新
             SimulationCallbacks.Callback callback = (ref ISimulation simulation, ref PhysicsWorld world, JobHandle inDeps) => {
+                inDeps.Complete();
                 return new BulletDisableCollisionJob { bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> () }.Schedule (simulation, ref world, inDeps);
             };
             m_stepPhysicsWorld.EnqueueCallback (SimulationCallbacks.Phase.PostCreateDispatchPairs, callback);
         }
     }
 
-    [UpdateAfter (typeof (EndFramePhysicsSystem))]
+    [UpdateInGroup (typeof (FixedStepSimulationSystemGroup))]
+    [UpdateAfter (typeof (ExportPhysicsWorld))]
+    [UpdateBefore (typeof (EndFramePhysicsSystem))]
     class BulletHitSystem : SystemBase {
         [BurstCompile]
         struct HitJob : ICollisionEventsJob {
@@ -85,15 +89,15 @@ namespace JustFight.Bullet {
             }
             public void Execute (CollisionEvent collisionEvent) {
                 // TODO: shit
-                var entityA = collisionEvent.Entities.EntityA;
-                var entityB = collisionEvent.Entities.EntityB;
-                bool isEntityABullet = bulletDamageFromEntity.Exists (entityA);
-                bool isEntityBBullet = bulletDamageFromEntity.Exists (entityB);
+                var entityA = collisionEvent.EntityA;
+                var entityB = collisionEvent.EntityB;
+                bool isEntityABullet = bulletDamageFromEntity.HasComponent (entityA);
+                bool isEntityBBullet = bulletDamageFromEntity.HasComponent (entityB);
                 var bulletEntity = isEntityABullet ? entityA : entityB;
                 var hullEntity = isEntityABullet ? entityB : entityA;
-                var bulletBodyId = isEntityABullet ? collisionEvent.BodyIndices.BodyAIndex : collisionEvent.BodyIndices.BodyBIndex;
+                var bulletBodyId = isEntityABullet ? collisionEvent.BodyIndexA : collisionEvent.BodyIndexB;
 
-                if (healthFromEntity.Exists (hullEntity) && bulletTeamFromEntity[bulletEntity].id != hullTeamFromEntity[hullEntity].id) {
+                if (healthFromEntity.HasComponent (hullEntity) && bulletTeamFromEntity[bulletEntity].id != hullTeamFromEntity[hullEntity].id) {
                     var dmgCmpt = bulletDamageFromEntity[bulletEntity];
                     var healthCmpt = healthFromEntity[hullEntity];
                     healthCmpt.value -= dmgCmpt.value;
@@ -112,7 +116,6 @@ namespace JustFight.Bullet {
             endFramePhysicsSystem = World.GetOrCreateSystem<EndFramePhysicsSystem> ();
         }
         protected override void OnUpdate () {
-            Dependency = JobHandle.CombineDependencies (Dependency, endFramePhysicsSystem.FinalJobHandle);
             Dependency = new HitJob {
                 hullTeamFromEntity = GetComponentDataFromEntity<TankHullTeam> (true),
                     bulletTeamFromEntity = GetComponentDataFromEntity<BulletTeam> (true),
@@ -120,6 +123,7 @@ namespace JustFight.Bullet {
                     bulletDestroyTimeFromEntity = GetComponentDataFromEntity<BulletDestroyTime> (),
                     healthFromEntity = GetComponentDataFromEntity<HealthPoint> ()
             }.Schedule (stepPhysicsWorldSystem.Simulation, ref buildPhysicsWorldSystem.PhysicsWorld, Dependency);
+            endFramePhysicsSystem.AddInputDependency (Dependency);
         }
     }
 }

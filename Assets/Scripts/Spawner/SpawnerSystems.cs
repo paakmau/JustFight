@@ -13,7 +13,7 @@ namespace JustFight.Spawner {
             m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
         protected override void OnUpdate () {
-            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var dT = Time.DeltaTime;
             Dependency = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref EnemySpawner spawnerCmpt, in Translation translationCmpt, in Rotation rotationCmpt) => {
                 spawnerCmpt.leftRestTime -= dT;
@@ -52,7 +52,7 @@ namespace JustFight.Spawner {
             m_entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
         }
         protected override void OnUpdate () {
-            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var ecb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             Dependency = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref SelfSpawner spawnerCmpt, in Translation translationCmpt, in Rotation rotationCmpt) => {
                 var hullEntity = ecb.Instantiate (entityInQueryIndex, spawnerCmpt.hullPrefab);
                 ecb.SetComponent (entityInQueryIndex, hullEntity, translationCmpt);

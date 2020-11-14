@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace JustFight.Skill {
 
-    [RequiresEntityConversion]
     class BombSkillAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public float recoveryTime = 6;
         public float bombForwarOffset = 0;

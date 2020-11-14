@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace JustFight.Skill {
 
-    [RequiresEntityConversion]
     class BurstSkillAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public float recoveryTime = 4;
         public float skillLastTime = 2.5f;

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace JustFight.Spawner {
 
-    [RequiresEntityConversion]
     class SelfSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject hullPrefab = null;
         public GameObject turretPrefab = null;

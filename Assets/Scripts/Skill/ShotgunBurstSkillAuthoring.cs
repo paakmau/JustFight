@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace JustFight.Skill {
 
-    [RequiresEntityConversion]
     class ShotgunBurstSkillAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public float recoveryTime = 8;
         public float skillLastTime = 2.5f;

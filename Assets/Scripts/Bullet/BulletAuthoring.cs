@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace JustFight.Bullet {
 
-    [RequiresEntityConversion]
     class BulletAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public int damage = 10;
         public float destroyTime = 10;

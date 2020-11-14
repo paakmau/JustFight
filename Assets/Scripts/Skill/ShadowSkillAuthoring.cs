@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace JustFight.Skill {
 
-    [RequiresEntityConversion]
     class ShadowSkillAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public float recoveryTime = 8;
         public GameObject shadowHullPrefab = null;

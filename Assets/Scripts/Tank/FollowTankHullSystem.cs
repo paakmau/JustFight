@@ -13,10 +13,10 @@ namespace JustFight.Tank {
         [BurstCompile]
         struct MoveJob : IJobChunk {
             [ReadOnly] public ComponentDataFromEntity<Translation> translationFromEntity;
-            [ReadOnly] public ArchetypeChunkComponentType<TankHullToFollow> tankToFollowType;
-            [ReadOnly] public ArchetypeChunkComponentType<Rotation> rotationType;
-            [ReadOnly] public ArchetypeChunkComponentType<NonUniformScale> nonUniformScaleType;
-            public ArchetypeChunkComponentType<LocalToWorld> localToWorldType;
+            [ReadOnly] public ComponentTypeHandle<TankHullToFollow> tankToFollowType;
+            [ReadOnly] public ComponentTypeHandle<Rotation> rotationType;
+            [ReadOnly] public ComponentTypeHandle<NonUniformScale> nonUniformScaleType;
+            public ComponentTypeHandle<LocalToWorld> localToWorldType;
             public void Execute (ArchetypeChunk chunk, int chunkIndex, int entityOffset) {
                 var chunkTankToFollow = chunk.GetNativeArray (tankToFollowType);
                 var chunkRotation = chunk.GetNativeArray (rotationType);
@@ -49,10 +49,10 @@ namespace JustFight.Tank {
         protected override void OnUpdate () {
             Dependency = new MoveJob {
                 translationFromEntity = GetComponentDataFromEntity<Translation> (true),
-                    tankToFollowType = GetArchetypeChunkComponentType<TankHullToFollow> (true),
-                    rotationType = GetArchetypeChunkComponentType<Rotation> (true),
-                    nonUniformScaleType = GetArchetypeChunkComponentType<NonUniformScale> (true),
-                    localToWorldType = GetArchetypeChunkComponentType<LocalToWorld> ()
+                    tankToFollowType = GetComponentTypeHandle<TankHullToFollow> (true),
+                    rotationType = GetComponentTypeHandle<Rotation> (true),
+                    nonUniformScaleType = GetComponentTypeHandle<NonUniformScale> (true),
+                    localToWorldType = GetComponentTypeHandle<LocalToWorld> ()
             }.ScheduleParallel (group, Dependency);
         }
     }

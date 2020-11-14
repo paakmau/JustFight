@@ -51,7 +51,7 @@ namespace JustFight.Skill {
             }).ScheduleParallel (Dependency);
 
             // 处理速射技能
-            var burstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var burstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var burstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BurstSkill burstskill, in LocalToWorld localToWorld, in TankHullToFollow hullToFollow, in TankTurretTeam team, in AimInput aimInput, in Skill skill) => {
                 if (skill.lastLeftTime > 0) {
                     // 技能正在发动
@@ -70,7 +70,7 @@ namespace JustFight.Skill {
             m_entityCommandBufferSystem.AddJobHandleForProducer (burstSkillJobHandle);
 
             // 处理轰炸技能
-            var bombSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var bombSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var bombSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref BombSkill bombskill, in LocalToWorld localToWorld, in TankHullToFollow hullToFollow, in TankTurretTeam team, in AimInput aimInput, in Skill skill) => {
                 var rand = random;
                 if (skill.isCastTrigger) {
@@ -87,7 +87,7 @@ namespace JustFight.Skill {
             m_entityCommandBufferSystem.AddJobHandleForProducer (bombSkillJobHandle);
 
             // 处理影分身技能
-            var shadowSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var shadowSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var shadowSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShadowSkill shadowskill, in LocalToWorld localToWorld, in TankHullToFollow tankHullToFollowCmpt, in TankTurretTeam team, in AimInput aimInput, in Skill skill) => {
                 if (skill.lastLeftTime > 0)
                     shadowskill.aimDir = aimInput.dir;
@@ -122,7 +122,7 @@ namespace JustFight.Skill {
             m_entityCommandBufferSystem.AddJobHandleForProducer (shadowSkillJobHandle);
 
             // 处理霰弹枪技能
-            var shotgunBurstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent ();
+            var shotgunBurstSkillJobEcb = m_entityCommandBufferSystem.CreateCommandBuffer ().AsParallelWriter ();
             var shotgunBurstSkillJobHandle = Entities.ForEach ((Entity entity, int entityInQueryIndex, ref ShotgunBurstSkill burstskill, in TankHullToFollow hullToFollow, in TankTurretTeam team, in AimInput aimInput, in Skill skill, in LocalToWorld localToWorld) => {
                 if (skill.lastLeftTime > 0) {
                     // 技能正在发动

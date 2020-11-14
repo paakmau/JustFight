@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace JustFight.Weapon {
 
-    [RequiresEntityConversion]
     class TankGunAuthoring : MonoBehaviour, IConvertGameObjectToEntity, IDeclareReferencedPrefabs {
         public GameObject bulletPrefab = null;
         public float bulletShootSpeed = 15;

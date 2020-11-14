@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace JustFight.Tank {
 
-    [RequiresEntityConversion]
     class TankHullAuthoring : MonoBehaviour, IConvertGameObjectToEntity {
         public int maxHealth = 100;
         public float moveSpeed = 7;
